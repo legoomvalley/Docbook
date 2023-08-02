@@ -1,0 +1,11 @@
+.patientAppointmentHome {
+    box-shadow: 0 .125rem .25rem rgba(black, .075);
+    transition: 0.5s ease;
+    background-color: rgba(255, 255, 255, 0.5);
+
+    &:hover {
+        box-shadow: 0 1rem 3rem rgba(black, .175);
+    }
+}
+
+// }
