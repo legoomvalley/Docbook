@@ -1,10 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:getwidget/getwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_docbook/utils/config.dart';
+
+import '../components/doctor_home_list_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,41 +14,41 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class CardItem {
-  final String urlImg;
-  final String title;
-  final String specialist;
+// class CardItem {
+//   final String urlImg;
+//   final String title;
+//   final String specialist;
 
-  const CardItem({
-    required this.urlImg,
-    required this.title,
-    required this.specialist,
-  });
-}
+//   const CardItem({
+//     required this.urlImg,
+//     required this.title,
+//     required this.specialist,
+//   });
+// }
 
 class _HomePageState extends State<HomePage> {
-  List<CardItem> doctorCardLists = [
-    CardItem(
-      urlImg: 'assets/doctor.jpg',
-      title: "doctor 1",
-      specialist: "specialist",
-    ),
-    CardItem(
-      urlImg: 'assets/doctor.jpg',
-      title: "doctor 2",
-      specialist: "specialist",
-    ),
-    CardItem(
-      urlImg: 'assets/doctor.jpg',
-      title: "doctor 3",
-      specialist: "specialist",
-    ),
-    CardItem(
-      urlImg: 'assets/doctor.jpg',
-      title: "doctor 4",
-      specialist: "specialist",
-    ),
-  ];
+  // List<CardItem> doctorCardLists = [
+  //   CardItem(
+  //     urlImg: 'assets/doctor.jpg',
+  //     title: "doctor 1",
+  //     specialist: "specialist",
+  //   ),
+  //   CardItem(
+  //     urlImg: 'assets/doctor.jpg',
+  //     title: "doctor 2",
+  //     specialist: "specialist",
+  //   ),
+  //   CardItem(
+  //     urlImg: 'assets/doctor.jpg',
+  //     title: "doctor 3",
+  //     specialist: "specialist",
+  //   ),
+  //   CardItem(
+  //     urlImg: 'assets/doctor.jpg',
+  //     title: "doctor 4",
+  //     specialist: "specialist",
+  //   ),
+  // ];
 
   // this controller will store the value of the search bar
   final TextEditingController _searchController = TextEditingController();
@@ -284,8 +285,8 @@ class _HomePageState extends State<HomePage> {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       // separatorBuilder: (context, _) => SizedBox(width: 10),
-                      itemBuilder: (context, index) => doctorHomeListCard(
-                        doctorCardList: doctorCardLists[index],
+                      itemBuilder: (context, index) => DoctorHomeListCard(
+                        route: 'doc_specific_appointment',
                       ),
                       itemCount: 4,
                     ),
@@ -300,48 +301,48 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-Widget doctorHomeListCard({required CardItem doctorCardList}) => Container(
-      padding: EdgeInsets.only(left: 19, bottom: 25),
-      child: SizedBox(
-        child: Material(
-          elevation: 10,
-          borderRadius: BorderRadius.circular(10),
-          child: Column(
-            children: [
-              Expanded(
-                child: AspectRatio(
-                  aspectRatio: 4 / 4,
-                  child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(10.0)),
-                    child: Image.asset(
-                      doctorCardList.urlImg,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
+// Widget doctorHomeListCard({required CardItem doctorCardList}) => Container(
+//       padding: EdgeInsets.only(left: 19, bottom: 25),
+//       child: SizedBox(
+//         child: Material(
+//           elevation: 10,
+//           borderRadius: BorderRadius.circular(10),
+//           child: Column(
+//             children: [
+//               Expanded(
+//                 child: AspectRatio(
+//                   aspectRatio: 4 / 4,
+//                   child: ClipRRect(
+//                     borderRadius:
+//                         BorderRadius.vertical(top: Radius.circular(10.0)),
+//                     child: Image.asset(
+//                       doctorCardList.urlImg,
+//                       fit: BoxFit.cover,
+//                     ),
+//                   ),
+//                 ),
+//               ),
 
-              // const SizedBox(height: 4),
-              SizedBox(height: 8),
-              Text(doctorCardList.title,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-              SizedBox(height: 5),
-              Text(
-                doctorCardList.specialist,
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              SizedBox(height: 5),
-            ],
-          ),
-        ),
-      ),
-    );
+//               // const SizedBox(height: 4),
+//               SizedBox(height: 8),
+//               Text(doctorCardList.title,
+//                   style: TextStyle(
+//                     fontSize: 18,
+//                     fontWeight: FontWeight.bold,
+//                   )),
+//               SizedBox(height: 5),
+//               Text(
+//                 doctorCardList.specialist,
+//                 style: TextStyle(
+//                   fontSize: 12,
+//                 ),
+//               ),
+//               SizedBox(height: 5),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
 
 // islogin boolean,
 // list view

@@ -2,12 +2,13 @@ com.example.flutter_docbook.app-jetified-window-1.0.0-beta04-0 C:\Users\Lenovo\.
 com.example.flutter_docbook.app-jetified-annotation-experimental-1.1.0-1 C:\Users\Lenovo\.gradle\caches\transforms-3\6c0c163cc77ae6c91f9f7dfcd179c29c\transformed\jetified-annotation-experimental-1.1.0\res
 com.example.flutter_docbook.app-core-1.6.0-2 C:\Users\Lenovo\.gradle\caches\transforms-3\7e9df2ac2213a6bd3cef0f2f27870d79\transformed\core-1.6.0\res
 com.example.flutter_docbook.app-jetified-window-java-1.0.0-beta04-3 C:\Users\Lenovo\.gradle\caches\transforms-3\ae81e06d24c799147c26814497a2a305\transformed\jetified-window-java-1.0.0-beta04\res
-com.example.flutter_docbook.app-debug-4 D:\legoom academy\buah\docbook_flutter_laravel\flutter_docbook\android\app\src\debug\res
-com.example.flutter_docbook.app-main-5 D:\legoom academy\buah\docbook_flutter_laravel\flutter_docbook\android\app\src\main\res
-com.example.flutter_docbook.app-pngs-6 D:\legoom academy\buah\docbook_flutter_laravel\flutter_docbook\build\app\generated\res\pngs\debug
-com.example.flutter_docbook.app-resValues-7 D:\legoom academy\buah\docbook_flutter_laravel\flutter_docbook\build\app\generated\res\resValues\debug
-com.example.flutter_docbook.app-rs-8 D:\legoom academy\buah\docbook_flutter_laravel\flutter_docbook\build\app\generated\res\rs\debug
-com.example.flutter_docbook.app-mergeDebugResources-9 D:\legoom academy\buah\docbook_flutter_laravel\flutter_docbook\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
-com.example.flutter_docbook.app-mergeDebugResources-10 D:\legoom academy\buah\docbook_flutter_laravel\flutter_docbook\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
-com.example.flutter_docbook.app-merged_res-11 D:\legoom academy\buah\docbook_flutter_laravel\flutter_docbook\build\app\intermediates\merged_res\debug
-com.example.flutter_docbook.app-packaged_res-12 D:\legoom academy\buah\docbook_flutter_laravel\flutter_docbook\build\shared_preferences_android\intermediates\packaged_res\debug
+com.example.flutter_docbook.app-debug-4 D:\legoom academy\buah\New folder\docbook_flutter_laravel2\flutter_docbook\android\app\src\debug\res
+com.example.flutter_docbook.app-main-5 D:\legoom academy\buah\New folder\docbook_flutter_laravel2\flutter_docbook\android\app\src\main\res
+com.example.flutter_docbook.app-pngs-6 D:\legoom academy\buah\New folder\docbook_flutter_laravel2\flutter_docbook\build\app\generated\res\pngs\debug
+com.example.flutter_docbook.app-resValues-7 D:\legoom academy\buah\New folder\docbook_flutter_laravel2\flutter_docbook\build\app\generated\res\resValues\debug
+com.example.flutter_docbook.app-rs-8 D:\legoom academy\buah\New folder\docbook_flutter_laravel2\flutter_docbook\build\app\generated\res\rs\debug
+com.example.flutter_docbook.app-mergeDebugResources-9 D:\legoom academy\buah\New folder\docbook_flutter_laravel2\flutter_docbook\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
+com.example.flutter_docbook.app-mergeDebugResources-10 D:\legoom academy\buah\New folder\docbook_flutter_laravel2\flutter_docbook\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+com.example.flutter_docbook.app-merged_res-11 D:\legoom academy\buah\New folder\docbook_flutter_laravel2\flutter_docbook\build\app\intermediates\merged_res\debug
+com.example.flutter_docbook.app-packaged_res-12 D:\legoom academy\buah\New folder\docbook_flutter_laravel2\flutter_docbook\build\path_provider_android\intermediates\packaged_res\debug
+com.example.flutter_docbook.app-packaged_res-13 D:\legoom academy\buah\New folder\docbook_flutter_laravel2\flutter_docbook\build\shared_preferences_android\intermediates\packaged_res\debug

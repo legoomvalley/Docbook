@@ -26,7 +26,6 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: <Widget>[
             Stack(
-              clipBehavior: Clip.none,
               children: <Widget>[
                 Container(
                   // color: Config.primaryColor,
