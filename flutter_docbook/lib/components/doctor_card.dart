@@ -65,8 +65,6 @@ class _DoctorCardState extends State<DoctorCard> {
                 Divider(
                   color: Color.fromRGBO(175, 175, 175, 0.3),
                 ),
-                // SizedBox(height: 5),
-                // Text('this is button'),
                 Button(
                   width: double.infinity,
                   title: "Book Now",
@@ -83,7 +81,9 @@ class _DoctorCardState extends State<DoctorCard> {
                   color: Color.fromRGBO(14, 190, 127, 1),
                   backgroundColor: const Color.fromRGBO(232, 245, 233, 1),
                   borderRadius: BorderRadius.circular(40),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed("doctor_details");
+                  },
                 ),
                 SizedBox(height: 20),
               ],

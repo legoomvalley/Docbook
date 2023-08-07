@@ -150,32 +150,13 @@ class _SchedulePageState extends State<SchedulePage> {
     // double itemWidth = 150 / itemsCount;
     // ignore: unused_local_variable
     List<dynamic> filteredSchedules = schedules.where((var schedule) {
-      return schedule['status'] == status;
+      return schedule['status'] == status.value;
     }).toList();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              // Container(
-              //   margin: EdgeInsets.only(top: 40, left: 10, right: 10),
-              //   height: 60,
-              //   child: ListView.separated(
-              //     scrollDirection: Axis.horizontal,
-              //     separatorBuilder: (context, _) => SizedBox(width: 10),
-              //     itemBuilder: (context, index) => Button(
-              //       margin: EdgeInsets.only(bottom: 10),
-              //       width: 150,
-              //       title: scheduleTitle[index].title,
-              //       disable: false,
-              //       color: Config.primaryColor,
-              //       backgroundColor: Color.fromRGBO(239, 247, 255, 1),
-              //       onPressed: () {},
-              //       borderRadius: BorderRadius.circular(40),
-              //     ),
-              //     itemCount: 5,
-              //   ),
-              // ),
               Container(
                 margin: EdgeInsets.only(top: 40),
                 height: 60,
@@ -243,7 +224,7 @@ class _SchedulePageState extends State<SchedulePage> {
                           child: Button(
                             margin: EdgeInsets.only(bottom: 10),
                             width: 150,
-                            title: "",
+                            title: status.name,
                             disable: false,
                             color: Colors.black,
                             backgroundColor: Colors.blue,
@@ -259,13 +240,60 @@ class _SchedulePageState extends State<SchedulePage> {
 
               SizedBox(height: 20),
               Container(
-                margin: EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  children: List.generate(10, (index) {
-                    return ScheduleCard();
+                height: 1000,
+                child: ListView.builder(
+                  itemCount: filteredSchedules.length,
+                  itemBuilder: ((context, index) {
+                    var _schedule = filteredSchedules[index];
+                    bool isLastElement = filteredSchedules.length + 1 == index;
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          color: Colors.grey,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      margin: !isLastElement
+                          ? const EdgeInsets.only(bottom: 20)
+                          : EdgeInsets.zero,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundImage:
+                                    AssetImage(_schedule['doctor_profile']),
+                              ),
+                              Config.spaceSmall,
+                              Text(
+                                _schedule['doctor_name'],
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                    // Container(
+                    //   margin: EdgeInsets.only(left: 20, right: 20),
+                    //   child: Column(
+                    //     children: List.generate(10, (index) {
+                    //       return ScheduleCard();
+                    //     }),
+                    //   ),
+                    // );
                   }),
                 ),
               ),
+
+              // Container(
+              //   margin: EdgeInsets.only(left: 20, right: 20),
+              //   child: Column(
+              //     children: List.generate(10, (index) {
+              //       return ScheduleCard();
+              //     }),
+              //   ),
+              // ),
             ],
           ),
         ),
