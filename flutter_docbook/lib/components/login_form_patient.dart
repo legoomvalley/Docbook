@@ -84,7 +84,9 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
           Row(
             children: <Widget>[
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed('register');
+                },
                 child: Text(
                   textAlign: TextAlign.left,
                   'Don\'t have an account?',

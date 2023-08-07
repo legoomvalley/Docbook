@@ -31,7 +31,7 @@ class _AuthPageState extends State<AuthPage> {
                       width: double.infinity,
                       child: Text(
                         textAlign: TextAlign.left,
-                        'Sign in as patient here',
+                        'Sign in as patient',
                         style: GoogleFonts.openSans(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,

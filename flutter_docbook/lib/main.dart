@@ -4,6 +4,7 @@ import 'package:flutter_docbook/screens/auth_page.dart';
 import 'package:flutter_docbook/screens/doctor_details_page.dart';
 import 'package:flutter_docbook/screens/doctor_specific_appointment_page.dart';
 import 'package:flutter_docbook/screens/home_page.dart';
+import 'package:flutter_docbook/screens/register_page.dart';
 import 'package:flutter_docbook/screens/review_page.dart';
 import 'package:flutter_docbook/screens/success_appointment_page.dart';
 import 'package:flutter_docbook/utils/config.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const AuthPage(),
+        'register': (context) => const RegisterPage(),
         'main': (context) => const MainLayout(),
         'doc_specific_appointment': (context) =>
             const DoctorSpecificAppointment(),
