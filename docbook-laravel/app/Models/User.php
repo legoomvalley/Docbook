@@ -22,6 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'type', //add this "type", to differential user and doctor
         'password',
     ];
 
@@ -43,4 +44,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-}
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class, 'doc_id');
+    }
+
+    public function user_details()
+    {
+        return $this->hasOne(UserDetails::class, 'user_id');
+    }
+};
