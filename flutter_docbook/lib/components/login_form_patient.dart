@@ -1,7 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
+import 'package:flutter_docbook/components/errSnackBar.dart';
+import 'package:flutter_docbook/providers/dio_provider.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../main.dart';
+import '../models/auth_model.dart';
 
 class LoginFormPatient extends StatefulWidget {
   const LoginFormPatient({super.key});
@@ -15,6 +24,8 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool obsecurePass = true;
+  String _emailErr = "";
+  String _passwordErr = "";
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +53,13 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                 ),
               ),
             ),
+            validator: (value) {
+              if (value == '') {
+                return 'email field is required';
+              } else {
+                return null;
+              }
+            },
           ),
           Config.spaceSmall,
           TextFormField(
@@ -80,6 +98,13 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                 ),
               ),
             ),
+            validator: (value) {
+              if (value == '') {
+                return "password field is required";
+              } else {
+                return null;
+              }
+            },
           ),
           Row(
             children: <Widget>[
@@ -113,15 +138,31 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
             ],
           ),
           // Config.spaceSmall,
-          Button(
-            width: double.infinity,
-            title: 'Sign In',
-            disable: false,
-            color: Config.primaryColor,
-            backgroundColor: Color.fromRGBO(239, 247, 255, 1),
-            borderRadius: BorderRadius.circular(0),
-            onPressed: () {
-              Navigator.of(context).pushNamed('main');
+          Consumer<AuthModel>(
+            builder: (context, auth, child) {
+              return Button(
+                width: double.infinity,
+                title: 'Sign In',
+                disable: false,
+                color: Config.primaryColor,
+                backgroundColor: Color.fromRGBO(239, 247, 255, 1),
+                borderRadius: BorderRadius.circular(0),
+                onPressed: () async {
+                  final token = await DioProvider().getToken(
+                      _emailController.text, _passwordController.text);
+                  // _emailErr = token?.data['email'].join('\n');
+                  // _passwordErr = token?.data['password'].join('\n');
+                  if (_formKey.currentState!.validate()) {
+                    print(token);
+                    if (token) {
+                      auth.loginSuccess();
+                      MyApp.navigatorKey.currentState!.pushNamed('main');
+                    } else {
+                      errSnackBar(context, 'Incorrect email or password');
+                    }
+                  }
+                },
+              );
             },
           )
         ],

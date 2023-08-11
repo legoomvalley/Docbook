@@ -3,15 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Models\User;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class LoginController extends Controller
 {
     // use AuthenticatesUsers;
 
+    // web
     public function doctorLogin()
     {
         return view('login.doctor-login', [
@@ -98,6 +103,31 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/admin');
+    }
+
+    // mobile
+    public function patientLogin(Request $request)
+    {
+        //validate incoming inputs 
+        $validatedData = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        if (!$validatedData->passes()) {
+            return response()->json($validatedData->errors(), 400);
+        }
+        // check matching user 
+        $user = User::where('email', $request->email)->first();
+
+        // check password
+        if (!$user || !Hash::check($request->password, $user->password) || $user->type != "patient") {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect'],
+            ]);
+        }
+        // return generated token 
+        return $user->createToken($request->email)->plainTextToken;
     }
 }
 // login 

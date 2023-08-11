@@ -1,0 +1,5 @@
+1 . dio_provider.dart 
+ - provider created in order to connect to dbs,
+ - api token needed for getting data whenever using laravel sanctum, and thus JWT used in this video
+
+ 2 . 

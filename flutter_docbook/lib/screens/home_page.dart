@@ -1,11 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_docbook/utils/config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/doctor_home_list_card.dart';
+import '../providers/dio_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +31,7 @@ class HomePage extends StatefulWidget {
 // }
 
 class _HomePageState extends State<HomePage> {
+  Map<String, dynamic> user = {};
   // List<CardItem> doctorCardLists = [
   //   CardItem(
   //     urlImg: 'assets/doctor.jpg',
@@ -49,6 +54,30 @@ class _HomePageState extends State<HomePage> {
   //     specialist: "specialist",
   //   ),
   // ];
+  Future<void> getData() async {
+    // get token from share preferences
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+
+    if (token.isNotEmpty && token != '') {
+      // get user data
+      final response = await DioProvider().getUser(token);
+      if (response != null) {
+        setState(() {
+          //json
+
+          user = json.decode(response);
+          print(user);
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
 
   // this controller will store the value of the search bar
   final TextEditingController _searchController = TextEditingController();

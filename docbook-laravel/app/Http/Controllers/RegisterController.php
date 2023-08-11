@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\TmpDoctor;
@@ -21,12 +22,10 @@ class RegisterController extends Controller
     }
 
 
+    // website 
 
     public function storeDoctor(Request $request)
     {
-
-        // ddd($request);
-        // return $request->file('image')->store('doctor-img');
 
         $validatedData = $request->validate([
             'first_name' => 'required',
@@ -55,14 +54,17 @@ class RegisterController extends Controller
 
     public function storePatient(Request $request)
     {
-        $validatedData = Validator::make($request->all(), [
-            'full_name' => 'required',
-            'user_name' => 'required|unique:patients|',
-            'email' => 'required|email:dns|unique:patients|',
-            'phone_no' => 'required',
-            'password' => 'required|min:3',
-        ]);
-        // $validatedData['password'] = Hash::make($validatedData['password']);
+        $validatedData = Validator::make(
+            $request->all(),
+            [
+                'full_name' => 'required',
+                'user_name' => 'required|unique:patients|',
+                'email' => 'required|email:dns|unique:patients|',
+                'phone_no' => 'required',
+                'password' => 'required|min:3',
+            ]
+        );
+
         if (!$validatedData->passes()) {
             return response()->json(['status' => 0, 'error' => $validatedData->errors()->toArray()]);
         } else {
@@ -80,6 +82,36 @@ class RegisterController extends Controller
             }
             return redirect('/')->with('success', 'Registration successfull! Please login');
         }
+        // 
+    }
+
+    // mobile
+    public function patientRegister(Request $request)
+    {
+        $validatedData = Validator::make($request->all(), [
+            'full_name' => 'required',
+            'user_name' => 'required|unique:patients|',
+            'email' => 'required|email:dns|unique:users|',
+            'phone_no' => 'required',
+            'password' => 'required|min:3',
+        ]);
+        // $validatedData['password'] = Hash::make($validatedData['password']);
+        if (!$validatedData->passes()) {
+            return response()->json($validatedData->errors(), 400);
+        }
+        // else {
+        $user = User::create([
+            'name' => $request->full_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'type' => 'patient'
+        ]);
+        Patient::create([
+            'user_name' => $request->user_name,
+            'phone_no' => $request->phone_no,
+            'patient_id' => $user->id
+        ]);
+        return $user;
     }
 
 
