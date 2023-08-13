@@ -142,11 +142,10 @@ class _SchedulePageState extends State<SchedulePage> {
       specialist: "specialist",
     ),
   ];
+  int current = 0;
+
   @override
   Widget build(BuildContext context) {
-    double selectedItemIndex = 0;
-
-    double itemsCount = scheduleTitle.length + 0.0;
     // double itemWidth = 150 / itemsCount;
     // ignore: unused_local_variable
     List<dynamic> filteredSchedules = schedules.where((var schedule) {
@@ -158,84 +157,82 @@ class _SchedulePageState extends State<SchedulePage> {
           child: Column(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: EdgeInsets.only(top: 30),
                 height: 60,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  separatorBuilder: (context, _) => SizedBox(width: 10),
-                  itemCount: 1,
-                  itemBuilder: (context, index) => Stack(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: scheduleTitle.length,
+                    itemBuilder: (context, index) {
+                      return Row(
                         children: [
-                          for (FilterStatus filterStatus in FilterStatus.values)
-                            GestureDetector(
-                              onTap: () => setState(() {
-                                //pending('pending'),completed('completed'),notApproved('not approved'), approved('approved
-                                if (filterStatus == FilterStatus.pending) {
-                                  status = FilterStatus.pending;
-                                  selectedItemIndex = 0;
-                                } else if (filterStatus ==
-                                    FilterStatus.completed) {
-                                  status = FilterStatus.completed;
-                                  selectedItemIndex = 1;
-                                } else if (filterStatus ==
-                                    FilterStatus.notApproved) {
-                                  status = FilterStatus.notApproved;
-                                  selectedItemIndex = 2;
-                                } else if (filterStatus ==
-                                    FilterStatus.approved) {
-                                  status = FilterStatus.approved;
-                                  selectedItemIndex = 3;
-                                }
-                              }),
-                              child: Container(
-                                height: 60,
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: Button(
-                                  margin: EdgeInsets.only(bottom: 10),
-                                  width: 150,
-                                  title: filterStatus.value,
-                                  disable: false,
-                                  color: Color.fromRGBO(134, 150, 187, 1),
-                                  backgroundColor:
-                                      Color.fromRGBO(248, 248, 248, 1),
-                                  onPressed: () {
-                                    // if (filterStatus.value == 'approved') {
-                                    //   selectedItemIndex = 3;
-                                    //   print(selectedItemIndex);
-                                    // }
-                                  },
-                                  borderRadius: BorderRadius.circular(40),
+                          // for (FilterStatus filterStatus in FilterStatus.values)
+                          Container(
+                            margin: EdgeInsets.all(5),
+                            child: Material(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              color: current == index
+                                  ? Colors.blue.shade50
+                                  : Colors.grey.shade100,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(40),
+                                onTap: () {
+                                  setState(() {
+                                    current = index;
+                                  });
+                                  print(current);
+                                },
+                                child: Ink(
+                                  child: AnimatedContainer(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                    ),
+                                    duration: const Duration(milliseconds: 100),
+                                    height: 60,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 5),
+                                    width: 150,
+                                    child: Center(
+                                      child: Text(
+                                        scheduleTitle[index].title,
+                                        style: TextStyle(
+                                          color: current == index
+                                              ? Config.primaryColor
+                                              : Color.fromRGBO(
+                                                  134, 150, 187, 1),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                        ],
-                      ),
-                      AnimatedPositioned(
-                        // right: 10,
-                        left: 165 * selectedItemIndex,
-                        duration: const Duration(milliseconds: 200),
-                        //             curve: Curves.easeInOut,
-                        // ignore: sized_box_for_whitespace
-                        child: Container(
-                          height: 60,
-                          child: Button(
-                            margin: EdgeInsets.only(bottom: 10),
-                            width: 150,
-                            title: status.name,
-                            disable: false,
-                            color: Colors.black,
-                            backgroundColor: Colors.blue,
-                            onPressed: () {},
-                            borderRadius: BorderRadius.circular(40),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+
+                          // AnimatedPositioned(
+                          //   // right: 10,
+                          //   left: 165 * selectedItemIndex,
+                          //   duration: const Duration(milliseconds: 200),
+                          //   //             curve: Curves.easeInOut,
+                          //   // ignore: sized_box_for_whitespace
+                          //   child: Container(
+                          //     height: 60,
+                          //     child: Button(
+                          //       margin: EdgeInsets.only(bottom: 10),
+                          //       width: 150,
+                          //       title: status.name,
+                          //       disable: false,
+                          //       color: Colors.black,
+                          //       backgroundColor: Colors.blue,
+                          //       onPressed: () {},
+                          //       borderRadius: BorderRadius.circular(40),
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
+                      );
+                    }),
               ),
 
               SizedBox(height: 20),

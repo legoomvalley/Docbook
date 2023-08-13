@@ -62,41 +62,6 @@ class _ReviewListPageState extends State<ReviewListPage> {
                 ),
               ),
             ),
-            // SliverAppBar(
-            //   automaticallyImplyLeading: false,
-            //   pinned: true,
-            //   backgroundColor: Colors.white,
-            //   centerTitle: true,
-            //   leading: null,
-            //   elevation: 0,
-            //   bottom: PreferredSize(
-            //     preferredSize: const Size.fromHeight(0.0),
-            //     child: Container(
-            //       decoration: BoxDecoration(
-            //         border: Border(
-            //           bottom: BorderSide(
-            //             color: Colors.black,
-            //             width: 1,
-            //           ),
-            //         ),
-            //       ),
-            //       child: Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //         children: [
-            //           SizedBox(
-            //             child: Text("All"),
-            //           ),
-            //           SizedBox(
-            //             child: Text("Newest"),
-            //           ),
-            //           SizedBox(
-            //             child: Text("Oldest"),
-            //           )
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
             SliverPersistentHeader(
               pinned: true,
               delegate: _FixedHeaderDelegate(),
@@ -150,6 +115,13 @@ class _ReviewListPageState extends State<ReviewListPage> {
 //                 color: Colors.blue, // Customize the color of the line
 //                 thickness: 8.0, // Customize the thickness of the line
 class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
+  List<String> tabItems = [
+    "All",
+    "Newest",
+    "Oldest",
+  ];
+
+  int current = 0;
   @override
   double get minExtent => 45.0;
   @override
@@ -158,41 +130,99 @@ class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      // height: 45,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.black12,
-          ),
-        ),
-      ),
-      alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SizedBox(
-            child: Text(
-              'All',
-              style: GoogleFonts.rubik(),
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.black12,
+              ),
             ),
           ),
-          SizedBox(
-            child: Text(
-              'Newest',
-              style: GoogleFonts.rubik(),
-            ),
-          ),
-          SizedBox(
-            child: Text(
-              'Oldest',
-              style: GoogleFonts.rubik(),
+          child: ListView.builder(
+            // separatorBuilder: (BuildContext context, int index) {
+            //   return SizedBox(
+            //       width:
+            //           MediaQuery.of(context).size.width * 1 / tabItems.length);
+            // },
+            scrollDirection: Axis.horizontal,
+            itemCount: tabItems.length,
+            itemBuilder: (context, index) => Row(
+              children: [
+                Material(
+                  child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          current = index;
+                        });
+                      },
+                      child: Ink(
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          width: MediaQuery.of(context).size.width *
+                              1 /
+                              tabItems.length,
+                          // margin: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: current == index
+                                ? Colors.white70
+                                : Colors.white54,
+                            border: current == index
+                                ? Border(
+                                    bottom: BorderSide(
+                                      color: Colors.black,
+                                      width: 2,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          child: Center(
+                            child: Text(
+                              tabItems[index],
+                              style: GoogleFonts.rubik(
+                                fontWeight: current == index
+                                    ? FontWeight.w800
+                                    : FontWeight.normal,
+                                color: current == index
+                                    ? Color.fromRGBO(0, 0, 0, 1)
+                                    : Colors.black87,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )),
+                ),
+              ],
             ),
           )
-        ],
-      ),
-    );
+
+          //  Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //   children: [
+          //     SizedBox(
+          //       child: Text(
+          //         'All',
+          //         style: GoogleFonts.rubik(),
+          //       ),
+          //     ),
+          //     SizedBox(
+          //       child: Text(
+          //         'Newest',
+          //         style: GoogleFonts.rubik(),
+          //       ),
+          //     ),
+          //     SizedBox(
+          //       child: Text(
+          //         'Oldest',
+          //         style: GoogleFonts.rubik(),
+          //       ),
+          //     )
+          //   ],
+          // ),
+          );
+    });
   }
 
   @override
@@ -200,30 +230,3 @@ class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
     return false;
   }
 }
-
-// SliverToBoxAdapter(
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     border: Border(
-//                       bottom: BorderSide(
-//                         color: Colors.black,
-//                         width: 1,
-//                       ),
-//                     ),
-//                   ),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                     children: [
-//                       SizedBox(
-//                         child: Text("All"),
-//                       ),
-//                       SizedBox(
-//                         child: Text("Newest"),
-//                       ),
-//                       SizedBox(
-//                         child: Text("Oldest"),
-//                       )
-//                     ],
-//                   ),
-//                 ),
-//               ),

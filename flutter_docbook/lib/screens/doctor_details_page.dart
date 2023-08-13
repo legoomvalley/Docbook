@@ -252,19 +252,23 @@ class DoctorDetails extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).pushNamed(
-                                          "review_list",
-                                        );
-                                      },
-                                      child: Text(
-                                        'see all',
-                                        style: GoogleFonts.rubik(
-                                          textStyle: TextStyle(
-                                            color: Colors.blue,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.normal,
+                                    Material(
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed(
+                                            "review_list",
+                                          );
+                                        },
+                                        child: Ink(
+                                          child: Text(
+                                            'see all',
+                                            style: GoogleFonts.rubik(
+                                              textStyle: TextStyle(
+                                                color: Colors.blue,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),

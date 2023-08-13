@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/main_layout.dart';
-import 'package:flutter_docbook/screens/auth_page.dart';
+import 'package:flutter_docbook/screens/auth_doctor_page.dart';
+import 'package:flutter_docbook/screens/auth_patient_page.dart';
 import 'package:flutter_docbook/screens/doctor_details_page.dart';
 import 'package:flutter_docbook/screens/doctor_specific_appointment_page.dart';
 import 'package:flutter_docbook/screens/home_page.dart';
-import 'package:flutter_docbook/screens/register_page.dart';
+import 'package:flutter_docbook/screens/register_doctor_page.dart';
+import 'package:flutter_docbook/screens/register_patient_page.dart';
 import 'package:flutter_docbook/screens/review_page.dart';
 import 'package:flutter_docbook/screens/success_appointment_page.dart';
 import 'package:flutter_docbook/utils/config.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'models/auth_model.dart';
 
@@ -31,6 +34,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           // pre-define input decoration
+          fontFamily: GoogleFonts.rubik().fontFamily,
           inputDecorationTheme: const InputDecorationTheme(
             focusColor: Config.primaryColor,
             border: Config.outlinedBorder,
@@ -61,6 +65,8 @@ class MyApp extends StatelessWidget {
           'success_appointment': (context) => const SuccessAppointment(),
           'doctor_details': (context) => const DoctorDetails(),
           'review_list': (context) => ReviewListPage(),
+          'register_doctor': (context) => RegisterDoctorPage(),
+          'auth_doctor': (context) => AuthDoctorPage(),
         },
       ),
     );

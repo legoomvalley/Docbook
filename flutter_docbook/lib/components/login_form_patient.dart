@@ -147,20 +147,23 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                 color: Config.primaryColor,
                 backgroundColor: Color.fromRGBO(239, 247, 255, 1),
                 borderRadius: BorderRadius.circular(0),
-                onPressed: () async {
-                  final token = await DioProvider().getToken(
-                      _emailController.text, _passwordController.text);
-                  // _emailErr = token?.data['email'].join('\n');
-                  // _passwordErr = token?.data['password'].join('\n');
-                  if (_formKey.currentState!.validate()) {
-                    print(token);
-                    if (token) {
-                      auth.loginSuccess();
-                      MyApp.navigatorKey.currentState!.pushNamed('main');
-                    } else {
-                      errSnackBar(context, 'Incorrect email or password');
-                    }
-                  }
+                // onPressed: () async {
+                //   final token = await DioProvider().getToken(
+                //       _emailController.text, _passwordController.text);
+                //   // _emailErr = token?.data['email'].join('\n');
+                //   // _passwordErr = token?.data['password'].join('\n');
+                //   if (_formKey.currentState!.validate()) {
+                //     print(token);
+                //     if (token) {
+                //       auth.loginSuccess();
+                //       MyApp.navigatorKey.currentState!.pushNamed('main');
+                //     } else {
+                //       errSnackBar(context, 'Incorrect email or password');
+                //     }
+                //   }
+                // },
+                onPressed: () {
+                  Navigator.of(context).pushNamed('main');
                 },
               );
             },
