@@ -113,6 +113,34 @@ class RegisterController extends Controller
         ]);
         return $user;
     }
+    public function doctorRegister(Request $request)
+    {
+        $validatedData = Validator::make($request->all(), [
+            'full_name' => 'required',
+            'user_name' => 'required|unique:doctors|unique:tmp_doctors|',
+            'email' => 'required|email:dns|',
+            'mobile_number' => 'required',
+            'specialization' => 'required',
+            'location' => 'required|min:3',
+            'password' => 'required|min:3',
+
+        ]);
+        // $validatedData['password'] = Hash::make($validatedData['password']);
+        if (!$validatedData->passes()) {
+            return response()->json($validatedData->errors(), 400);
+        }
+        // else {
+        $user = TmpDoctor::create([
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'user_name' => $request->user_name,
+            'specialization_id' => $request->specialization,
+            'password' => Hash::make($request->password),
+            'mobile_number' => $request->mobile_number,
+            'status' => $request->status,
+        ]);
+        return $user;
+    }
 
 
     // firstName

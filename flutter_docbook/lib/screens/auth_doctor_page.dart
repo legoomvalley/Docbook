@@ -44,7 +44,7 @@ class _AuthDoctorPageState extends State<AuthDoctorPage> {
                     Container(
                       child: TextButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed('register');
+                          Navigator.of(context).pushNamed('/');
                         },
                         child: Text(
                           'You\'re a patient?',

@@ -3,14 +3,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils/config.dart';
 
-class ProfileCard extends StatefulWidget {
-  const ProfileCard({super.key});
+class ProfileTextField extends StatefulWidget {
+  const ProfileTextField({
+    super.key,
+    required this.labelText,
+  });
+
+  final String labelText;
 
   @override
-  State<ProfileCard> createState() => _ProfileCardState();
+  State<ProfileTextField> createState() => _ProfileTextFieldState();
 }
 
-class _ProfileCardState extends State<ProfileCard> {
+class _ProfileTextFieldState extends State<ProfileTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +26,7 @@ class _ProfileCardState extends State<ProfileCard> {
         ),
         elevation: 30,
         child: Container(
-          padding: EdgeInsets.only(left: 15, top: 15, right: 15, bottom: 15),
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +38,7 @@ class _ProfileCardState extends State<ProfileCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Name',
+                        widget.labelText,
                         style: TextStyle(
                           color: Config.primaryColor,
                           fontSize: 13,
@@ -50,11 +55,14 @@ class _ProfileCardState extends State<ProfileCard> {
                       ),
                     ],
                   ),
-                  FaIcon(
-                    FontAwesomeIcons.pencil,
-                    color: Color.fromRGBO(134, 150, 187, 1),
-                    size: 18,
-                  ),
+                  SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: IconButton(
+                        onPressed: () {},
+                        padding: EdgeInsets.all(0),
+                        icon: const Icon(Icons.mode_edit_sharp)),
+                  )
                 ],
               ),
             ],

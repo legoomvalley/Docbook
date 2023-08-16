@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_docbook/main_layout.dart';
+import 'package:flutter_docbook/main_patient_layout.dart';
+import 'package:flutter_docbook/screens/appointment_page.dart';
 import 'package:flutter_docbook/screens/auth_doctor_page.dart';
 import 'package:flutter_docbook/screens/auth_patient_page.dart';
 import 'package:flutter_docbook/screens/doctor_details_page.dart';
 import 'package:flutter_docbook/screens/doctor_specific_appointment_page.dart';
-import 'package:flutter_docbook/screens/home_page.dart';
 import 'package:flutter_docbook/screens/register_doctor_page.dart';
 import 'package:flutter_docbook/screens/register_patient_page.dart';
 import 'package:flutter_docbook/screens/review_page.dart';
@@ -12,6 +12,7 @@ import 'package:flutter_docbook/screens/success_appointment_page.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'main_doctor_layout.dart';
 import 'models/auth_model.dart';
 
 void main() {
@@ -50,23 +51,28 @@ class MyApp extends StatelessWidget {
             selectedItemColor: Colors.white,
             showSelectedLabels: true,
             showUnselectedLabels: false,
-            unselectedItemColor: Colors.grey.shade500,
+            unselectedItemColor: Colors.white,
             elevation: 10,
             type: BottomNavigationBarType.fixed,
           ),
         ),
         initialRoute: '/',
         routes: {
+          // patient
           '/': (context) => const AuthPage(),
           'register': (context) => const RegisterPage(),
-          'main': (context) => const MainLayout(),
+          'main_patient': (context) => const MainPatientLayout(),
           'doc_specific_appointment': (context) =>
               const DoctorSpecificAppointment(),
           'success_appointment': (context) => const SuccessAppointment(),
           'doctor_details': (context) => const DoctorDetails(),
           'review_list': (context) => ReviewListPage(),
+
+          // doctor
+          'main_doctor': (context) => const MainDoctorLayout(),
           'register_doctor': (context) => RegisterDoctorPage(),
           'auth_doctor': (context) => AuthDoctorPage(),
+          'appointment_list': (context) => AppointmentPage(),
         },
       ),
     );

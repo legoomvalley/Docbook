@@ -43,7 +43,7 @@ class _AuthPageState extends State<AuthPage> {
                     Container(
                       child: TextButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed('register_doctor');
+                          Navigator.of(context).pushNamed('auth_doctor');
                         },
                         child: Text(
                           'You\'re a doctor?',

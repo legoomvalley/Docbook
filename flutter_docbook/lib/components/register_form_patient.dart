@@ -234,35 +234,15 @@ class _RegisterFormPatientState extends State<RegisterFormPatient> {
                     _mobileNumberController.text,
                     _passwordController.text,
                   );
-                  // print(userRegistration.response.statusCode);
-                  // if (_formKey.currentState!.validate()) {
-                  // if register success, proceed to login
-                  // print(userRegistration?.data['email'].toString());
-                  // print(_emailErr);
-
-                  // print(_emailErr);
 
                   print(userRegistration.statusCode);
 
-                  print(_emailErr);
-
-                  //   if (userRegistration.statusCode == 400) {
-                  //   } else if (userRegistration.statusCode == 200) {
-                  //     final token = await DioProvider().getToken(
-                  //         _emailController.text, _passwordController.text);
-                  //     if (token) {
-                  //       auth.loginSuccess(); //update login status
-                  //       // redirect to main page
-                  //       MyApp.navigatorKey.currentState!.pushNamed('main');
-                  //     }
-                  //   }
-                  // }
                   if (userRegistration.statusCode < 300) {
                     _emailErr = null;
                     _userNameErr = null;
                     _passwordErr = null;
                     if (_formKey.currentState!.validate()) {}
-                    final token = await DioProvider().getToken(
+                    final token = await DioProvider().getTokenPatient(
                         _emailController.text, _passwordController.text);
                     if (token) {
                       auth.loginSuccess(); //update login status
@@ -290,7 +270,7 @@ class _RegisterFormPatientState extends State<RegisterFormPatient> {
           Container(
             child: TextButton(
               onPressed: () {
-                Navigator.of(context).pushNamed('register_doctor');
+                Navigator.of(context).pushNamed('auth_doctor');
               },
               child: Text(
                 'You\'re a doctor?',

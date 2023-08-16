@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
+import 'package:flutter_docbook/components/snackBar.dart';
 import 'package:flutter_docbook/main.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,7 +23,7 @@ class RegisterFormDoctor extends StatefulWidget {
 
 class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
   _RegisterFormDoctorState() {
-    _selectedSpecializationItems = _specializationItems[0];
+    _selectedSpecializationItems = _specializationItems[0]['index'];
     _selectedStatusItems = _statusItems[0];
   }
   final _formKey = GlobalKey<FormState>();
@@ -32,24 +33,22 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
   final _mobileNumberController = TextEditingController();
   final _passwordController = TextEditingController();
   final _locationController = TextEditingController();
-  final _specializationController = SingleValueDropDownController();
-  final _statusController = SingleValueDropDownController();
   bool obsecurePass = true;
   String? _userNameErr = '';
   String? _emailErr = '';
   String? _passwordErr = '';
 
-  List<String> _specializationItems = [
-    'Pediatrics',
-    'General Medicine',
-    'Orthopedics',
-    'Eye Specialist'
+  final List<Map<String, dynamic>> _specializationItems = [
+    {'name': 'Pediatrics', 'index': 1},
+    {'name': 'General Medicine', 'index': 2},
+    {'name': 'Orthopedics', 'index': 3},
+    {'name': 'Eye Specialist', 'index': 4}
   ];
   List<String> _statusItems = [
     'Available',
     'Not Available',
   ];
-  String? _selectedSpecializationItems = 'Pediatrics';
+  int? _selectedSpecializationItems = 1;
   String? _selectedStatusItems = 'Available';
 
   @override
@@ -139,13 +138,6 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
                 return null;
               }
             },
-            // validator: (value) {
-            //   if (value != null && value.length < 7) {
-            //     return 'Enter min. 7 characters';
-            //   } else {
-            //     return null;
-            //   }
-            // },
           ),
           Config.spaceSmall,
           TextFormField(
@@ -191,11 +183,12 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
               ),
             ),
             items: _specializationItems
-                .map((e) => DropdownMenuItem(child: Text(e), value: e))
+                .map((e) =>
+                    DropdownMenuItem(child: Text(e['name']), value: e['index']))
                 .toList(),
             onChanged: (val) {
               setState(() {
-                _selectedSpecializationItems = val as String;
+                _selectedSpecializationItems = val as int;
               });
             },
           ),
@@ -220,8 +213,53 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
                 .toList(),
             onChanged: (val) {
               setState(() {
-                _selectedSpecializationItems = val as String;
+                _selectedStatusItems = val as String;
               });
+            },
+          ),
+          Config.spaceSmall,
+          TextFormField(
+            controller: _passwordController,
+            keyboardType: TextInputType.visiblePassword,
+            cursorColor: Config.primaryColor,
+            obscureText: obsecurePass,
+            decoration: InputDecoration(
+              hintText: 'Password',
+              labelText: 'Password',
+              filled: true,
+              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              alignLabelWithHint: true,
+              prefixIcon: const Icon(Icons.lock_outlined),
+              prefixIconColor: Config.primaryColor,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    obsecurePass = !obsecurePass;
+                  });
+                },
+                icon: obsecurePass
+                    ? const Icon(
+                        Icons.visibility_off_outlined,
+                        color: Colors.black38,
+                      )
+                    : const Icon(
+                        Icons.visibility_outlined,
+                        color: Config.primaryColor,
+                      ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                ),
+              ),
+            ),
+            validator: (value) {
+              if (value != null) {
+                return _passwordErr;
+              } else {
+                return null;
+              }
             },
           ),
           Config.spaceSmall,
@@ -244,8 +282,8 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
               ),
             ),
             validator: (value) {
-              if (value != null) {
-                return _passwordErr;
+              if (value == "") {
+                return 'location field is required';
               } else {
                 return null;
               }
@@ -279,71 +317,56 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
                 color: Config.primaryColor,
                 backgroundColor: Color.fromRGBO(239, 247, 255, 1),
                 borderRadius: BorderRadius.circular(0),
-                onPressed: () async {
-                  final userRegistration = await DioProvider().registerPatient(
-                    _fullNameController.text,
-                    _userNameController.text,
-                    _emailController.text,
-                    _mobileNumberController.text,
-                    _passwordController.text,
-                  );
-                  // print(userRegistration.response.statusCode);
-                  // if (_formKey.currentState!.validate()) {
-                  // if register success, proceed to login
-                  // print(userRegistration?.data['email'].toString());
-                  // print(_emailErr);
+                // onPressed: () async {
+                // final userRegistration = await DioProvider().registerDoctor(
+                //   _fullNameController.text,
+                //   _userNameController.text,
+                //   _emailController.text,
+                //   _mobileNumberController.text,
+                //   _selectedSpecializationItems,
+                //   _selectedStatusItems,
+                //   _locationController.text,
+                //   _passwordController.text,
+                // );
+                // print(userRegistration);
 
-                  // print(_emailErr);
+                // if (userRegistration.statusCode < 300) {
+                //   _emailErr = null;
+                //   _userNameErr = null;
+                //   _passwordErr = null;
+                //   snackBar(
+                //     context,
+                //     'your application has been sent, please wait for admin to approve.Kindly check your email for notification.',
+                //     Color.fromRGBO(76, 175, 80, 1),
+                //     Duration(seconds: 4),
+                //   );
+                //   if (_formKey.currentState!.validate()) {}
+                // } else if (userRegistration.statusCode == 400) {
+                //   setState(() {
+                //     _emailErr = userRegistration?.data['email'] != null
+                //         ? userRegistration?.data['email'].join('\n')
+                //         : null;
+                //     _userNameErr = userRegistration?.data['user_name'] != null
+                //         ? userRegistration?.data['user_name'].join('\n')
+                //         : null;
+                //     _passwordErr = userRegistration?.data['password'] != null
+                //         ? userRegistration?.data['password'].join('\n')
+                //         : null;
+                //     if (_formKey.currentState!.validate()) {}
+                //   });
+                // }
 
-                  print(userRegistration.statusCode);
-
-                  print(_emailErr);
-
-                  //   if (userRegistration.statusCode == 400) {
-                  //   } else if (userRegistration.statusCode == 200) {
-                  //     final token = await DioProvider().getToken(
-                  //         _emailController.text, _passwordController.text);
-                  //     if (token) {
-                  //       auth.loginSuccess(); //update login status
-                  //       // redirect to main page
-                  //       MyApp.navigatorKey.currentState!.pushNamed('main');
-                  //     }
-                  //   }
-                  // }
-                  if (userRegistration.statusCode < 300) {
-                    _emailErr = null;
-                    _userNameErr = null;
-                    _passwordErr = null;
-                    if (_formKey.currentState!.validate()) {}
-                    final token = await DioProvider().getToken(
-                        _emailController.text, _passwordController.text);
-                    if (token) {
-                      auth.loginSuccess(); //update login status
-                      // redirect to main page
-                      MyApp.navigatorKey.currentState!.pushNamed('main');
-                    }
-                  } else if (userRegistration.statusCode == 400) {
-                    setState(() {
-                      _emailErr = userRegistration?.data['email'] != null
-                          ? userRegistration?.data['email'].join('\n')
-                          : null;
-                      _userNameErr = userRegistration?.data['user_name'] != null
-                          ? userRegistration?.data['user_name'].join('\n')
-                          : null;
-                      _passwordErr = userRegistration?.data['password'] != null
-                          ? userRegistration?.data['password'].join('\n')
-                          : null;
-                      if (_formKey.currentState!.validate()) {}
-                    });
-                  }
+                onPressed: () {
+                  Navigator.of(context).pushNamed('main_doctor');
                 },
+                // },
               );
             },
           ),
           Container(
             child: TextButton(
               onPressed: () {
-                Navigator.of(context).pushNamed('register');
+                Navigator.of(context).pushNamed('/');
               },
               child: Text(
                 'You\'re a patient?',

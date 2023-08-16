@@ -16,6 +16,13 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   // ignore: unused_field
+  final List<String> doctorLabelText = [
+    'Email',
+    'Username',
+    'Mobile Number',
+    'Location',
+    'Experience'
+  ];
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -89,7 +96,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 5),
                   Column(
                     children: List.generate(4, (index) {
-                      return ProfileCard();
+                      return ProfileTextField(
+                        labelText: 'name',
+                      );
                     }),
                   )
                 ],

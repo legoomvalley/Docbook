@@ -330,48 +330,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// Widget doctorHomeListCard({required CardItem doctorCardList}) => Container(
-//       padding: EdgeInsets.only(left: 19, bottom: 25),
-//       child: SizedBox(
-//         child: Material(
-//           elevation: 10,
-//           borderRadius: BorderRadius.circular(10),
-//           child: Column(
-//             children: [
-//               Expanded(
-//                 child: AspectRatio(
-//                   aspectRatio: 4 / 4,
-//                   child: ClipRRect(
-//                     borderRadius:
-//                         BorderRadius.vertical(top: Radius.circular(10.0)),
-//                     child: Image.asset(
-//                       doctorCardList.urlImg,
-//                       fit: BoxFit.cover,
-//                     ),
-//                   ),
-//                 ),
-//               ),
-
-//               // const SizedBox(height: 4),
-//               SizedBox(height: 8),
-//               Text(doctorCardList.title,
-//                   style: TextStyle(
-//                     fontSize: 18,
-//                     fontWeight: FontWeight.bold,
-//                   )),
-//               SizedBox(height: 5),
-//               Text(
-//                 doctorCardList.specialist,
-//                 style: TextStyle(
-//                   fontSize: 12,
-//                 ),
-//               ),
-//               SizedBox(height: 5),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
 
 // islogin boolean,
 // list view

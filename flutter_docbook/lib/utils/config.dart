@@ -23,8 +23,6 @@ class Config {
 
   // define spacing height
   static const spaceSmall = SizedBox(height: 25);
-  static const spaceMedium = SizedBox(height: 0.05);
-  static const spaceBig = SizedBox(height: 0.1);
 
   // textform field border
   static const outlinedBorder = OutlineInputBorder(
@@ -42,4 +40,5 @@ class Config {
   );
 
   static const primaryColor = Colors.blueAccent;
+  static const doctorTheme = Color.fromRGBO(94, 94, 184, 1);
 }

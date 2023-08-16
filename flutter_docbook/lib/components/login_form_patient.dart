@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
-import 'package:flutter_docbook/components/errSnackBar.dart';
+import 'package:flutter_docbook/components/snackBar.dart';
 import 'package:flutter_docbook/providers/dio_provider.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -156,14 +156,14 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                 //     print(token);
                 //     if (token) {
                 //       auth.loginSuccess();
-                //       MyApp.navigatorKey.currentState!.pushNamed('main');
+                //       MyApp.navigatorKey.currentState!.pushNamed('main_patient');
                 //     } else {
                 //       errSnackBar(context, 'Incorrect email or password');
                 //     }
                 //   }
                 // },
                 onPressed: () {
-                  Navigator.of(context).pushNamed('main');
+                  Navigator.of(context).pushNamed('main_patient');
                 },
               );
             },

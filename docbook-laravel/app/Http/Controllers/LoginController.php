@@ -129,6 +129,29 @@ class LoginController extends Controller
         // return generated token 
         return $user->createToken($request->email)->plainTextToken;
     }
+    public function doctorLoginMobile(Request $request)
+    {
+        //validate incoming inputs 
+        $validatedData = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        if (!$validatedData->passes()) {
+            return response()->json($validatedData->errors(), 400);
+        }
+        // check matching user 
+        $user = User::where('email', $request->email)->first();
+
+        // check password
+        if (!$user || !Hash::check($request->password, $user->password) || $user->type != "doctor") {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect'],
+            ]);
+        }
+        // return generated token 
+        return $user->createToken($request->email)->plainTextToken;
+    }
 }
 // login 
 // attempt = allow our program to check if the inserted information ever registered or not.

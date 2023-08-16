@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
-import 'package:flutter_docbook/components/errSnackBar.dart';
+import 'package:flutter_docbook/components/snackBar.dart';
 import 'package:flutter_docbook/providers/dio_provider.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -148,22 +148,24 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                 backgroundColor: Color.fromRGBO(239, 247, 255, 1),
                 borderRadius: BorderRadius.circular(0),
                 // onPressed: () async {
-                //   final token = await DioProvider().getToken(
+                //   final token = await DioProvider().getTokenDoctor(
                 //       _emailController.text, _passwordController.text);
-                //   // _emailErr = token?.data['email'].join('\n');
-                //   // _passwordErr = token?.data['password'].join('\n');
                 //   if (_formKey.currentState!.validate()) {
                 //     print(token);
                 //     if (token) {
                 //       auth.loginSuccess();
                 //       MyApp.navigatorKey.currentState!.pushNamed('main');
                 //     } else {
-                //       errSnackBar(context, 'Incorrect email or password');
+                //       snackBar(
+                //           context,
+                //           'Incorrect email or password',
+                //           const Color.fromRGBO(244, 67, 54, 1),
+                //           Duration(seconds: 4));
                 //     }
                 //   }
                 // },
                 onPressed: () {
-                  Navigator.of(context).pushNamed('main');
+                  Navigator.of(context).pushNamed('main_doctor');
                 },
               );
             },
