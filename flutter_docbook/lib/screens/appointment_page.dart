@@ -73,23 +73,27 @@ class _AppointmentPageState extends State<AppointmentPage> {
             return [
               PopupMenuItem(
                 value: 'all',
-                child: Text('All Appointment'),
+                child: Text('All'),
               ),
               PopupMenuItem(
                 value: 'approved',
-                child: Text('Approved Appointment'),
+                child: Text('Approved'),
               ),
               PopupMenuItem(
                 value: 'rejected',
-                child: Text('Rejected Appointment'),
+                child: Text('Rejected'),
               ),
               PopupMenuItem(
                 value: 'pending',
-                child: Text('Pending Appointment'),
+                child: Text('Pending'),
               ),
               PopupMenuItem(
                 value: 'today',
-                child: Text('Today Appointment'),
+                child: Text('Today'),
+              ),
+              PopupMenuItem(
+                value: 'completed',
+                child: Text('completed'),
               ),
             ];
           })

@@ -18,11 +18,10 @@ return new class extends Migration
             $table->string("time");
             $table->text("disease");
             $table->foreignId("specialization_id")->nullable();
-            $table->text("additional_message");
-            $table->string("remark");
+            $table->string("remark")->nullable();
             $table->string("status");
             $table->foreignId("patient_id");
-            $table->foreignId('doctor_id')->nullable();
+            $table->foreignId('doctor_id');
             $table->timestamps();
         });
     }

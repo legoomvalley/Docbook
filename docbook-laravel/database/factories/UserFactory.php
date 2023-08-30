@@ -19,6 +19,7 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'type' => 'patient',
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => bcrypt('123'), // password

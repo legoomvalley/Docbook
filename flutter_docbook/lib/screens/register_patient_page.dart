@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_docbook/utils/config.dart';
 
-import '../components/login_form_patient.dart';
-import '../components/register_form_patient.dart';
+import '../components/register/register_form_patient.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

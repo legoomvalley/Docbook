@@ -18,13 +18,10 @@ class DoctorFactory extends Factory
     public function definition(): array
     {
         return [
-            'first_name' => $this->faker->sentence(1),
-            'last_name' => $this->faker->sentence(1),
+            'doc_id' => $this->faker->unique()->numberBetween(1, 10),
             'user_name' => $this->faker->unique()->sentence(1),
             'mobile_number' => $this->faker->phoneNumber(),
-            'email' => $this->faker->freeEmail(),
             'specialization_id' => mt_rand(1, 4),
-            'password' => Hash::make('123'),
             'status' => 'available',
             'experience' => $this->faker->sentence(10, 30),
             'location' => $this->faker->address()
@@ -32,3 +29,5 @@ class DoctorFactory extends Factory
         ];
     }
 }
+
+// 85 to 94

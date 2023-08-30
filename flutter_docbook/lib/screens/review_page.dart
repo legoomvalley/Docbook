@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_docbook/models/booking_datetime_converter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -6,13 +7,17 @@ import '../components/review_list.dart';
 import '../utils/config.dart';
 
 class ReviewListPage extends StatefulWidget {
-  ReviewListPage({super.key});
+  ReviewListPage({Key? key, this.comments}) : super(key: key);
 
+  final List? comments;
   @override
   State<ReviewListPage> createState() => _ReviewListPageState();
 }
 
 class _ReviewListPageState extends State<ReviewListPage> {
+  bool newestToOldest = true;
+  int currentTabIndex = 0;
+
   final ScrollController _scrollController = ScrollController();
   bool showShadow = false;
 
@@ -20,6 +25,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    print(widget.comments?[0]['created_at']);
   }
 
   @override
@@ -27,6 +33,22 @@ class _ReviewListPageState extends State<ReviewListPage> {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void sortComments(bool newestToOldest) {
+    widget.comments?.sort((a, b) {
+      final aTime = DateTime.parse(a['created_at']);
+      final bTime = DateTime.parse(b['created_at']);
+      return newestToOldest ? bTime.compareTo(aTime) : aTime.compareTo(bTime);
+    });
+  }
+
+  void onTabTap(int tabIndex) {
+    setState(() {
+      newestToOldest = tabIndex == 0;
+      currentTabIndex = tabIndex;
+      sortComments(newestToOldest);
+    });
   }
 
   void _scrollListener() {
@@ -38,6 +60,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
   // double appBarHeight = constraints.biggest.height;
   @override
   Widget build(BuildContext context) {
+    // final List? comments = widget.comments;
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -64,7 +87,12 @@ class _ReviewListPageState extends State<ReviewListPage> {
             ),
             SliverPersistentHeader(
               pinned: true,
-              delegate: _FixedHeaderDelegate(),
+              delegate: _FixedHeaderDelegate(
+                comments: widget.comments,
+                newestToOldest: newestToOldest,
+                onTabTap: onTabTap,
+                currentTabIndex: currentTabIndex,
+              ),
             ),
             SliverToBoxAdapter(
               child: Container(
@@ -91,7 +119,11 @@ class _ReviewListPageState extends State<ReviewListPage> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) => ReviewList(
-                  route: 'doc_specific_appointment',
+                  comment: widget.comments?[index]['comment'],
+                  patientName: "${widget.comments?[index]['patientName']}",
+                  date: DateConverter()
+                      .formatDate(widget.comments?[index]['created_at']),
+                  //  DateTime.parse()${widget.comments?[index]['created_at']}
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                   margin: EdgeInsets.only(bottom: 0),
                   border: Border(
@@ -100,7 +132,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
                   dividerWidth: MediaQuery.of(context).size.width,
                   divider: Divider(color: Colors.grey[200], thickness: 8.0),
                 ),
-                childCount: 10,
+                childCount: widget.comments?.length,
               ),
             ),
           ],
@@ -110,18 +142,23 @@ class _ReviewListPageState extends State<ReviewListPage> {
   }
 }
 
-// width: MediaQuery.of(context).size.width,
-//               child: Divider(
-//                 color: Colors.blue, // Customize the color of the line
-//                 thickness: 8.0, // Customize the thickness of the line
 class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final List? comments;
+  final bool newestToOldest;
+
+  final Function(int) onTabTap;
+  int currentTabIndex; // Receive the current tab index
+
+  _FixedHeaderDelegate(
+      {required this.comments,
+      required this.newestToOldest,
+      required this.onTabTap,
+      required this.currentTabIndex});
   List<String> tabItems = [
-    "All",
     "Newest",
     "Oldest",
   ];
 
-  int current = 0;
   @override
   double get minExtent => 45.0;
   @override
@@ -142,11 +179,6 @@ class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
             ),
           ),
           child: ListView.builder(
-            // separatorBuilder: (BuildContext context, int index) {
-            //   return SizedBox(
-            //       width:
-            //           MediaQuery.of(context).size.width * 1 / tabItems.length);
-            // },
             scrollDirection: Axis.horizontal,
             itemCount: tabItems.length,
             itemBuilder: (context, index) => Row(
@@ -155,8 +187,9 @@ class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
                   child: InkWell(
                       onTap: () {
                         setState(() {
-                          current = index;
+                          currentTabIndex = index;
                         });
+                        onTabTap(index);
                       },
                       child: Ink(
                         child: AnimatedContainer(
@@ -164,12 +197,11 @@ class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
                           width: MediaQuery.of(context).size.width *
                               1 /
                               tabItems.length,
-                          // margin: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: current == index
+                            color: index == currentTabIndex
                                 ? Colors.white70
                                 : Colors.white54,
-                            border: current == index
+                            border: currentTabIndex == index
                                 ? Border(
                                     bottom: BorderSide(
                                       color: Colors.black,
@@ -182,10 +214,10 @@ class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
                             child: Text(
                               tabItems[index],
                               style: GoogleFonts.rubik(
-                                fontWeight: current == index
+                                fontWeight: index == currentTabIndex
                                     ? FontWeight.w800
                                     : FontWeight.normal,
-                                color: current == index
+                                color: currentTabIndex == index
                                     ? Color.fromRGBO(0, 0, 0, 1)
                                     : Colors.black87,
                               ),
@@ -196,32 +228,7 @@ class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
                 ),
               ],
             ),
-          )
-
-          //  Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //   children: [
-          //     SizedBox(
-          //       child: Text(
-          //         'All',
-          //         style: GoogleFonts.rubik(),
-          //       ),
-          //     ),
-          //     SizedBox(
-          //       child: Text(
-          //         'Newest',
-          //         style: GoogleFonts.rubik(),
-          //       ),
-          //     ),
-          //     SizedBox(
-          //       child: Text(
-          //         'Oldest',
-          //         style: GoogleFonts.rubik(),
-          //       ),
-          //     )
-          //   ],
-          // ),
-          );
+          ));
     });
   }
 

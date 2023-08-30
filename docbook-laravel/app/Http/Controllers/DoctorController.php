@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Doctor;
 use App\Models\TmpComment;
 use App\Models\Appointment;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\Specialization;
+use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -195,6 +197,28 @@ class DoctorController extends Controller
         }
     }
 
+    // mobile
+
+    public function showData()
+    {
+        // required data : appointment, user(doctor), related id patient, 
+        $doctor = array();
+        $user = Auth::user();
+    }
+
+    public function showComment($doctorId)
+    {
+        $comments = Comment::where('doctor_id', $doctorId)->get();
+        $patientsName = User::Select('name', 'id')->get();
+        foreach ($comments as $comment) {
+            foreach ($patientsName as $patientName) {
+                if ($comment['patient_id'] == $patientName['id']) {
+                    $comment['patientName'] = $patientName['name'];
+                }
+            }
+        }
+        return $comments;
+    }
     /**
      * Store a newly created resource in storage.
      */

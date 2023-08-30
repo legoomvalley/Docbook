@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_docbook/utils/config.dart';
 
-import '../components/login_form_doctor.dart';
-import '../components/login_form_patient.dart';
+import '../components/login/login_form_doctor.dart';
 
 class AuthDoctorPage extends StatefulWidget {
   const AuthDoctorPage({super.key});

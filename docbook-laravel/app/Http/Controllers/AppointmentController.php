@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
 use App\Models\Specialization;
+use App\Models\User;
 
 class AppointmentController extends Controller
 {
@@ -23,7 +24,26 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        $appointment = Appointment::where('patient_id', Auth::user()->id)->get();
+        $doctor = User::where('type', 'doctor')->get();
+        $specializations = Specialization::all();
+
+
+        // sorting appointment and doctor details 
+        foreach ($appointment as $data) {
+            foreach ($specializations as $specialization) {
+                foreach ($doctor as $info) {
+                    $details = $info->doctor;
+                    if ($data['doctor_id'] == $info['id'] && $details['specialization_id'] == $specialization['id']) {
+                        $data['doctor_name'] = $info['name'];
+                        $data['doctor_profile'] = $info['profile_photo_url'];
+                        $data['specialization_name'] = $specialization['name'];
+                    }
+                }
+            }
+        }
+
+        return $appointment;
     }
 
 
@@ -39,27 +59,23 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'date' => 'required',
-            'time' => 'required',
-            'disease' => 'required',
-            'specialization_id' => 'required',
-            'additional_message' => 'required'
+        $appointment = new Appointment();
+        $appointment->patient_id = Auth::user()->id;
+        $appointment->full_name = Auth::user()->name;
+        $appointment->doctor_id = $request->get('doctor_id');
+        $appointment->date = $request->get('date');
+        $appointment->time = $request->get('time');
+        $appointment->disease = $request->get('disease');
+        $appointment->status = 'upcoming';
+        $appointment->save();
 
-        ]);
-        //
-        $validatedData['patient_id'] = Auth::guard('patient')->user()->id;
-        $validatedData['full_name'] = Auth::guard('patient')->user()->full_name;
-        $doctorId = Doctor::where('specialization_id', $validatedData['specialization_id'])->where('status', 'available')->pluck('id')[0];
-        $validatedData['doctor_id'] = $doctorId;
-        $validatedData['status'] = "Pending";
-        $validatedData['remark'] = "not updated yet";
-        $validatedData['date'] = Carbon::parse($validatedData['date'])->format('Y-m-d');
-        DB::table('appointments')->insert($validatedData);
+        // $jsonPatientId = 
 
-        return redirect('/')->with('success', 'New Appointment has been added! just wait and check your appointment at
-        ');
+        return response()->json([
+            'success' => 'New Appointment has been made successfully!',
+        ], 200);
     }
+
     public function storeBookDoctor(Request $request)
     {
         $validatedData = $request->validate([
@@ -209,6 +225,12 @@ class AppointmentController extends Controller
 
         return redirect('/dashboard/appointment-cancel/')->with('success', 'your message successfully sent');
     }
+
+
+
+    // mobile 
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -220,16 +242,53 @@ class AppointmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAppointmentRequest $request, Appointment $appointment)
+    public function updatePatientAppointment(Request $request, $id)
     {
-        //
+        $appointment = Appointment::find($id);
+
+        if (!$appointment) {
+            return response()->json([
+                'error' => 'Appointment not found',
+            ], 404);
+        }
+
+        $appointment->update([
+            'disease' => $request->input('disease'),
+            'date' => Carbon::parse($request->input('date'))->format('Y-m-d'),
+            'time' => $request->input('time'),
+        ]);
+
+        return response()->json([
+            'success' => 'Appointment updated successfully!',
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Appointment $appointment)
+    public function destroyPatientAppointment(Appointment $appointment)
     {
-        //
+        // Check if the authenticated user is the owner of the appointment
+        if (Auth::user()->id !== $appointment->patient_id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        try {
+            $appointment->delete();
+            return response()->json(['success' => 'Appointment deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete appointment'], 500);
+        }
+    }
+    public function updatePatientAppointmentStatus(Request $request, $id)
+    {
+
+        $appointment = Appointment::find($id);
+        $appointment->update([
+            'status' => 'completed',
+        ]);
+        return response()->json([
+            'success' => 'Appointment updated successfully!',
+        ], 200);
     }
 }

@@ -2,15 +2,24 @@
 
 import 'package:flutter/material.dart';
 
+import '../screens/doctor_details_page.dart';
+
 class DoctorHomeListCard extends StatelessWidget {
-  const DoctorHomeListCard({super.key, required this.route});
+  const DoctorHomeListCard(
+      {super.key, required this.route, this.isLastCard, required this.doctor});
 
   final String route;
+  final bool? isLastCard;
+  final Map<String, dynamic> doctor;
 
   @override
   Widget build(BuildContext context) {
+    final double paddingRight = isLastCard == true ? 19 : 0;
+    final doctorName = doctor['doctor_name'];
+    final nameWords = doctorName.split(' ');
+    final firstTwoWords = nameWords.take(2).join(' ');
     return Container(
-      padding: EdgeInsets.only(left: 19, bottom: 25),
+      padding: EdgeInsets.only(left: 19, bottom: 25, right: paddingRight),
       child: SizedBox(
         child: GestureDetector(
             child: Material(
@@ -34,14 +43,14 @@ class DoctorHomeListCard extends StatelessWidget {
 
                   // const SizedBox(height: 4),
                   SizedBox(height: 8),
-                  Text("doctor name",
+                  Text(firstTwoWords,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       )),
                   SizedBox(height: 5),
                   Text(
-                    "doctor specialist",
+                    doctor['specialization_name'],
                     style: TextStyle(
                       fontSize: 12,
                     ),
@@ -51,7 +60,12 @@ class DoctorHomeListCard extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.of(context).pushNamed(route);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DoctorDetails(doctor: doctor),
+                ),
+              );
             }),
       ),
     );

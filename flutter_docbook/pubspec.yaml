@@ -48,6 +48,9 @@ dependencies:
   sliver_tools: ^0.2.12
   http: ^1.1.0
   dropdown_textfield: ^1.0.8
+  syncfusion_flutter_calendar: ^22.2.9
+  image_picker: ^1.0.2
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:

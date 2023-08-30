@@ -11,39 +11,44 @@ use App\Models\Patient;
 use App\Models\TmpDoctor;
 use App\Models\Appointment;
 use App\Models\Specialization;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     /**
+     * 
+    php artisan migrate:refresh --path='database/migrations/2023_06_06_035148_create_appointments_table.php'
      * Seed the application's database.
      */
     public function run(): void
     {
-        //     Specialization::create([
-        //         'name' => 'Pediatrics'
-        //     ]);
-        //     Specialization::create([
-        //         'name' => 'General Medicine'
-        //     ]);
-        //     Specialization::create([
-        //         'name' => 'Eye Specialist'
-        //     ]);
-        //     Specialization::create([
-        //         'name' => 'Orthopedics'
-        //     ]);
+        // Specialization::create([
+        //     'name' => 'Pediatrics'
+        // ]);
+        // Specialization::create([
+        //     'name' => 'General Medicine'
+        // ]);
+        // Specialization::create([
+        //     'name' => 'Eye Specialist'
+        // ]);
+        // Specialization::create([
+        //     'name' => 'Orthopedics'
+        // ]);
 
-        Admin::create([
-            'user_name' => "muaz",
-            'password' => Hash::make('123')
-        ]);
+        // Admin::create([
+        //     'user_name' => "muaz",
+        //     'password' => Hash::make('123')
+        // ]);
 
-        // Doctor::factory(9)->create();
+        // User::factory(10)->create();
 
-        // Patient::factory(10)->create();
+        // Doctor::factory(10)->create();
 
-        // Appointment::factory(50)->create();
+        Patient::factory(10)->create();
+
+        // Comment::factory(1)->create();
         // // TmpDoctor::factory(20)->create();
 
 

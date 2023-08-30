@@ -32,7 +32,7 @@ class _ExpandedWidgetState extends State<ExpandedWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: secondHalf.length == ""
+      child: secondHalf.length <= 150
           ? Text(widget.text)
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,

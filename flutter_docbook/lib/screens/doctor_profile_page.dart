@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_docbook/components/profile_card.dart';
+import 'package:flutter_docbook/components/profile_text_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -93,13 +93,14 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                     ),
                   ),
                   SizedBox(height: 5),
-                  Column(
-                    children: List.generate(doctorLabelText.length, (index) {
-                      return ProfileTextField(
-                        labelText: doctorLabelText[index],
-                      );
-                    }),
-                  )
+                  // Column(
+                  //   children: List.generate(doctorLabelText.length, (index) {
+                  //     // return ProfileTextField(
+                  //     //   data: 'f',
+                  //     //   labelText: doctorLabelText[index],
+                  //     // );
+                  //   }),
+                  // )
                 ],
               ),
             ),

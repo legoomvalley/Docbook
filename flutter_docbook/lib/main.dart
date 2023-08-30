@@ -4,11 +4,13 @@ import 'package:flutter_docbook/screens/appointment_page.dart';
 import 'package:flutter_docbook/screens/auth_doctor_page.dart';
 import 'package:flutter_docbook/screens/auth_patient_page.dart';
 import 'package:flutter_docbook/screens/doctor_details_page.dart';
-import 'package:flutter_docbook/screens/doctor_specific_appointment_page.dart';
+import 'package:flutter_docbook/screens/doctor_list_page.dart';
+import 'package:flutter_docbook/screens/patient_make_appointment_page.dart';
+import 'package:flutter_docbook/screens/patient_update_appointment_page.dart';
 import 'package:flutter_docbook/screens/register_doctor_page.dart';
 import 'package:flutter_docbook/screens/register_patient_page.dart';
 import 'package:flutter_docbook/screens/review_page.dart';
-import 'package:flutter_docbook/screens/success_appointment_page.dart';
+import 'package:flutter_docbook/screens/appointment_msg_page.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -62,17 +64,20 @@ class MyApp extends StatelessWidget {
           '/': (context) => const AuthPage(),
           'register': (context) => const RegisterPage(),
           'main_patient': (context) => const MainPatientLayout(),
-          'doc_specific_appointment': (context) =>
-              const DoctorSpecificAppointment(),
-          'success_appointment': (context) => const SuccessAppointment(),
-          'doctor_details': (context) => const DoctorDetails(),
+          'patient_update_appointment_page': (context) =>
+              const PatientUpdateAppointment(),
+          'patient_make_appointment_page': (context) =>
+              PatientMakeAppointment(),
+          'appointment_msg': (context) => const AppointmentMsg(),
+          'doctor_details': (context) => DoctorDetails(),
           'review_list': (context) => ReviewListPage(),
 
           // doctor
           'main_doctor': (context) => const MainDoctorLayout(),
+          'doctor_list': (context) => DoctorListPage(),
           'register_doctor': (context) => RegisterDoctorPage(),
           'auth_doctor': (context) => AuthDoctorPage(),
-          'appointment_list': (context) => AppointmentPage(),
+          'appointment_lisjt': (context) => AppointmentPage(),
         },
       ),
     );

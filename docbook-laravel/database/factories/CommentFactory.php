@@ -18,8 +18,8 @@ class CommentFactory extends Factory
     {
         return [
             "comment" => $this->faker->sentence(45),
-            "patient_id" => mt_rand(1, 10),
-            "doctor_id" => mt_rand(1, 10)
+            "patient_id" => 15,
+            "doctor_id" => 10,
         ];
     }
 }

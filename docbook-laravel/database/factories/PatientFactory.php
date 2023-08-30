@@ -18,11 +18,9 @@ class PatientFactory extends Factory
     public function definition(): array
     {
         return [
-            'full_name' => $this->faker->sentence(5),
             'user_name' => $this->faker->unique()->sentence(1),
             'phone_no' => $this->faker->phoneNumber(),
-            'email' => $this->faker->freeEmail(),
-            'password' => Hash::make('123'),
+            'patient_id' => $this->faker->unique()->numberBetween(11, 21),
         ];
     }
 }

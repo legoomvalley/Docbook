@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_docbook/utils/config.dart';
 
-import '../components/login_form_patient.dart';
-import '../components/register_form_doctor.dart';
-import '../components/register_form_patient.dart';
+import '../components/register/register_form_doctor.dart';
 
 class RegisterDoctorPage extends StatefulWidget {
   const RegisterDoctorPage({super.key});

@@ -6,14 +6,20 @@ import 'package:flutter_docbook/components/expanded_widget.dart';
 class ReviewList extends StatefulWidget {
   const ReviewList(
       {super.key,
-      required this.route,
+      this.route,
       required this.padding,
+      required this.patientName,
+      required this.date,
+      required this.comment,
       required this.margin,
       required this.border,
       this.dividerWidth,
       this.divider});
 
-  final String route;
+  final String? route;
+  final String patientName;
+  final String comment;
+  final String date;
   final EdgeInsets? padding;
   final EdgeInsets? margin;
   final Border? border;
@@ -25,12 +31,12 @@ class ReviewList extends StatefulWidget {
 }
 
 class _ReviewListState extends State<ReviewList> {
-  bool isReadMore = false;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
+          width: double.infinity,
           margin: widget.margin,
           padding: widget.padding,
           decoration: BoxDecoration(border: widget.border),
@@ -39,17 +45,31 @@ class _ReviewListState extends State<ReviewList> {
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(height: 8),
-              Text(
-                "Patient Name",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.patientName,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    widget.date,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  SizedBox(height: 5)
+                ],
               ),
               SizedBox(height: 5),
               ExpandedWidget(
-                text:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+                text: widget.comment,
                 style: TextStyle(
                   fontSize: 12,
                 ),

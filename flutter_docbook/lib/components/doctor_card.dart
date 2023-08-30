@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
 import 'package:flutter_docbook/utils/config.dart';
 
-class DoctorCard extends StatefulWidget {
-  const DoctorCard({super.key});
+import '../screens/doctor_details_page.dart';
+import '../screens/patient_make_appointment_page.dart';
 
-  @override
-  State<DoctorCard> createState() => _DoctorCardState();
-}
-
-class _DoctorCardState extends State<DoctorCard> {
+class DoctorCard extends StatelessWidget {
+  const DoctorCard({super.key, required this.doctor, required this.route});
+  final Map<String, dynamic> doctor;
+  final String route;
   @override
   Widget build(BuildContext context) {
     Config().init(context);
@@ -37,9 +36,9 @@ class _DoctorCardState extends State<DoctorCard> {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const <Widget>[
+                          children: <Widget>[
                             Text(
-                              'Dr Username',
+                              "Dr ${doctor['doctor_name']}",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900,
@@ -47,7 +46,7 @@ class _DoctorCardState extends State<DoctorCard> {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              'Dr Specialization',
+                              "${doctor['specialization_name']}",
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -70,19 +69,33 @@ class _DoctorCardState extends State<DoctorCard> {
                   title: "Book Now",
                   disable: false,
                   color: Config.primaryColor,
-                  backgroundColor: Color.fromRGBO(239, 247, 255, 1),
+                  backgroundColor: Colors.blue.shade50,
                   borderRadius: BorderRadius.circular(40),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            PatientMakeAppointment(doctor: doctor),
+                      ),
+                    );
+                  },
                 ),
                 Button(
                   width: double.infinity,
                   title: "Details",
                   disable: false,
-                  color: Color.fromRGBO(14, 190, 127, 1),
-                  backgroundColor: const Color.fromRGBO(232, 245, 233, 1),
+                  color: Colors.green,
+                  backgroundColor: Colors.green.shade50,
                   borderRadius: BorderRadius.circular(40),
+                  // onPressed: () {},
                   onPressed: () {
-                    Navigator.of(context).pushNamed("doctor_details");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DoctorDetails(doctor: doctor),
+                      ),
+                    );
                   },
                 ),
                 SizedBox(height: 20),

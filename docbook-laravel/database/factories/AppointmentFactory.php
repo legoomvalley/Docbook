@@ -18,15 +18,15 @@ class AppointmentFactory extends Factory
     {
         return [
             'date' => $this->faker->date('Y-m-d'),
-            'full_name' => $this->faker->sentence(5),
+            'full_name' => 'Hadley Stroman',
             'time' => $this->faker->time(),
             'disease' => $this->faker->sentence(1),
-            'additional_message' => $this->faker->sentence(10),
+            // 'additional_message' => $this->faker->sentence(10),
             'specialization_id' => mt_rand(1, 4),
             'remark' => $this->faker->sentence(10),
-            'status' => $this->faker->randomElement(['Approved', 'Not Approved', 'Pending']),
-            'patient_id' => mt_rand(1, 10),
-            'doctor_id' => mt_rand(1, 9),
+            'status' => $this->faker->randomElement(['approved', 'not approved', 'pending', 'completed']),
+            'patient_id' => 15,
+            'doctor_id' => mt_rand(1, 10),
         ];
     }
 }
