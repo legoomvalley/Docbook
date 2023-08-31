@@ -26,34 +26,6 @@ class BorderCard extends StatelessWidget {
       child: Column(
         children: [
           cardHeader,
-          // Container(
-          //   alignment: Alignment.centerRight,
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-          //     color: const Color.fromRGBO(94, 94, 184, 0.3),
-          //   ),
-          //   width: double.infinity,
-          //   padding: EdgeInsets.all(10),
-          //   child: Container(
-          //     width: 30,
-          //     height: 30,
-          //     child: ElevatedButton(
-          //       style: ElevatedButton.styleFrom(
-          //           padding: EdgeInsets.all(0),
-          //           backgroundColor: Colors.yellow[50],
-          //           side: BorderSide(color: Colors.yellow.shade600, width: 2),
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(7),
-          //           )),
-          //       child: Icon(
-          //         Icons.edit_calendar_sharp,
-          //         size: 17,
-          //         color: Colors.yellow[600],
-          //       ),
-          //       onPressed: () {},
-          //     ),
-          //   ),
-          // ),
           Container(
             margin: EdgeInsets.all(10),
             child: Column(

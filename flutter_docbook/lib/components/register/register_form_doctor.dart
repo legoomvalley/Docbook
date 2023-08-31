@@ -31,6 +31,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
   final _mobileNumberController = TextEditingController();
   final _passwordController = TextEditingController();
   final _locationController = TextEditingController();
+  final _bioDataController = TextEditingController();
   bool obsecurePass = true;
   String? _userNameErr = '';
   String? _emailErr = '';
@@ -282,6 +283,40 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
             validator: (value) {
               if (value == "") {
                 return 'location field is required';
+              } else {
+                return null;
+              }
+            },
+          ),
+          Config.spaceSmall,
+          TextFormField(
+            controller: _bioDataController,
+            maxLines: 5,
+            cursorColor: Config.primaryColor,
+            decoration: InputDecoration(
+              hintText: 'Bio Data',
+              labelText: 'Bio Data',
+              filled: true,
+              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              alignLabelWithHint: true,
+              prefixIcon: Padding(
+                  padding:
+                      EdgeInsets.only(bottom: 80), // Adjust padding as needed
+                  child: Icon(
+                    Icons.medical_information,
+                    color: Config.primaryColor,
+                  )),
+              prefixIconColor: Config.primaryColor,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                ),
+              ),
+            ),
+            validator: (value) {
+              if (value != null) {
+                return _emailErr;
               } else {
                 return null;
               }

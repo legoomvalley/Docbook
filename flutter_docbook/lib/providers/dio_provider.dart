@@ -92,8 +92,8 @@ class DioProvider {
       } else {
         return response;
       }
-    } catch (error) {
-      return false;
+    } on DioException catch (error) {
+      return error.response;
     }
   }
 

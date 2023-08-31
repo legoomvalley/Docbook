@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
 import 'package:flutter_docbook/components/review_list.dart';
-import 'package:flutter_docbook/models/booking_datetime_converter.dart';
+import 'package:flutter_docbook/models/datetime_converter.dart';
 import 'package:flutter_docbook/providers/dio_provider.dart';
 import 'package:flutter_docbook/screens/patient_make_appointment_page.dart';
 import 'package:flutter_docbook/screens/review_page.dart';

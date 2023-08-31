@@ -6,7 +6,10 @@ import 'package:flutter_docbook/components/border_card.dart';
 import 'package:flutter_docbook/components/button.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import '../models/auth_model.dart';
+import '../models/datetime_converter.dart';
 import 'appointment_page.dart';
 
 class HomeDoctorPage extends StatefulWidget {
@@ -17,8 +20,28 @@ class HomeDoctorPage extends StatefulWidget {
 }
 
 class _HomeDoctorPageState extends State<HomeDoctorPage> {
+  Map<String, dynamic> user = {};
+  List<dynamic> appointments = [];
+  List<dynamic> todayAppointments = [];
   @override
   Widget build(BuildContext context) {
+    Config().init(context);
+    user = Provider.of<AuthModel>(context, listen: false).getUser;
+    appointments = user['patient'];
+    todayAppointments = appointments[0]['today_app'];
+
+    print(appointments);
+
+    List<dynamic> filterAppointmentsByStatus(String status) {
+      return appointments
+          .where((appointment) => appointment['status'] == status)
+          .toList();
+    }
+
+    List<dynamic> pendingAppointments = filterAppointmentsByStatus('pending');
+    List<dynamic> rejectedAppointments =
+        filterAppointmentsByStatus('not approved');
+
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -31,7 +54,7 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                   children: [
                     Config.spaceSmall,
                     Text(
-                      'Hello, doctor',
+                      'Hello, ${user['name']}',
                       style: GoogleFonts.rubik(
                         fontSize: 25,
                         fontWeight: FontWeight.w500,
@@ -41,7 +64,7 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                     SizedBox(height: 5),
                     Text(
                       textAlign: TextAlign.center,
-                      'Welcome back!',
+                      'Welcome!',
                       style: GoogleFonts.rubik(
                         fontSize: 17,
                         fontWeight: FontWeight.w400,
@@ -56,7 +79,7 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                             cardHeader: Container(),
                             topWidget: [
                               Text(
-                                '100',
+                                '${appointments.length}',
                                 style: TextStyle(
                                   color: Config.doctorTheme,
                                   fontWeight: FontWeight.w600,
@@ -93,7 +116,7 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                             cardHeader: Container(),
                             topWidget: [
                               Text(
-                                '100',
+                                '${todayAppointments.length}',
                                 style: TextStyle(
                                   color: Config.doctorTheme,
                                   fontWeight: FontWeight.w600,
@@ -134,7 +157,7 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                             cardHeader: Container(),
                             topWidget: [
                               Text(
-                                '100',
+                                '${pendingAppointments.length}',
                                 style: TextStyle(
                                   color: Config.doctorTheme,
                                   fontWeight: FontWeight.w600,
@@ -171,7 +194,7 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                             cardHeader: Container(),
                             topWidget: [
                               Text(
-                                '100',
+                                '${rejectedAppointments.length}',
                                 style: TextStyle(
                                   color: Config.doctorTheme,
                                   fontWeight: FontWeight.w600,
@@ -221,140 +244,160 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                 ),
               ),
             ),
-            SliverList.separated(
-              itemCount: 5,
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(height: 20);
-              },
-              itemBuilder: (context, index) => SizedBox(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: BorderCard(
-                    cardHeader: Container(),
-                    topWidget: [
-                      Expanded(
-                        // width: double.infinity,
-                        // color: Colors.red,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Patient Name',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.green[100],
-                                    borderRadius: BorderRadius.circular(7),
-                                  ),
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(
-                                    'Approved',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green[600],
-                                      fontSize: 12,
+            todayAppointments.length == 0
+                ? SliverToBoxAdapter(
+                    child: Container(
+                      height: 140,
+                      width: double.infinity,
+                      child: Stack(alignment: Alignment.center, children: [
+                        Container(
+                          height: 130,
+                          width: 150,
+                          child: Image.asset(
+                            'assets/no_appointment.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          child: Text(
+                            'No Appointments Available',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        )
+                      ]),
+                    ),
+                  )
+                : SliverList.separated(
+                    itemCount: todayAppointments.length,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return SizedBox(height: 20);
+                    },
+                    itemBuilder: (context, index) {
+                      var today_appointment = todayAppointments[index];
+                      return SizedBox(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: BorderCard(
+                            cardHeader: Container(),
+                            topWidget: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Patient Name',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black54,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.green[100],
+                                            borderRadius:
+                                                BorderRadius.circular(7),
+                                          ),
+                                          padding: EdgeInsets.all(5),
+                                          child: Text(
+                                            'Approved',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.green[600],
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          // child: Text(
+                                          //   'Pending',
+                                          //   style: TextStyle(
+                                          //     fontWeight: FontWeight.bold,
+                                          //     color: Colors.yellow[600],
+                                          //     fontSize: 12,
+                                          //   ),
+                                          // ),
+                                        )
+                                      ],
                                     ),
-                                  ),
-                                  // child: Text(
-                                  //   'Pending',
-                                  //   style: TextStyle(
-                                  //     fontWeight: FontWeight.bold,
-                                  //     color: Colors.yellow[600],
-                                  //     fontSize: 12,
-                                  //   ),
-                                  // ),
-                                )
-                              ],
-                            ),
-                            Text(
-                              'Ahmad Muaz Aiman Bin Ahmad Badri',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                    Text(
+                                      today_appointment['full_name'],
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                            btmWidget: [
+                              SizedBox(height: 10),
+                              Container(
+                                padding: EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Date & time',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black54,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${DateConverter().formatDate2(today_appointment['date'])} at ${today_appointment['time']}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 15),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Disease',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black54,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(
+                                          today_appointment['disease'],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                    btmWidget: [
-                      SizedBox(height: 10),
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Date & Time',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Text(
-                                  '20 Sep, 2022 At 03:11 PM',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 15),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Disease',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Text(
-                                  'Kencing maneh',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      // Button(
-                      //   width: double.infinity,
-                      //   title: 'Take action',
-                      //   disable: false,
-                      //   color: Colors.white,
-                      //   backgroundColor: const Color.fromRGBO(253, 216, 53, 1),
-                      //   onPressed: () {},
-                      //   borderRadius: BorderRadius.circular(5),
-                      // )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                      );
+                    }),
             SliverToBoxAdapter(
               child: SizedBox(height: 30),
             ),

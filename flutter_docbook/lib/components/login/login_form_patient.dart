@@ -136,7 +136,7 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                 onPressed: () async {
                   final token = await DioProvider()
                       .getTokenPatient('lindgren.ashley@example.org', '123');
-                  print(token);
+                  print("muax");
                   if (token) {
                     final SharedPreferences prefs =
                         await SharedPreferences.getInstance();
@@ -145,6 +145,7 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                       //get user data
                       final response =
                           await DioProvider().getUserPatient(tokenValue);
+                      print(response);
                       if (response != null) {
                         setState(() {
                           final user = json.decode(response);

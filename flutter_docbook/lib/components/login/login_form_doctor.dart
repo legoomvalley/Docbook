@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
 import 'package:flutter_docbook/components/snackBar.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_docbook/providers/dio_provider.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import '../../models/auth_model.dart';
@@ -135,11 +138,28 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                 onPressed: () async {
                   final token = await DioProvider()
                       .getTokenDoctor('london32@example.com', '123');
-                  // if (_formKey.currentState!.validate()) {
                   print(token);
+                  // if (_formKey.currentState!.validate()) {
                   if (token) {
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    final tokenValue = prefs.getString('token') ?? '';
                     // auth.loginSuccess();
-                    MyApp.navigatorKey.currentState!.pushNamed('main_doctor');
+                    if (tokenValue.isNotEmpty && tokenValue != '') {
+                      //get user data
+                      final response =
+                          await DioProvider().getUserDoctor(tokenValue);
+                      if (response != null) {
+                        setState(() {
+                          final user = json.decode(response);
+
+                          auth.loginSuccess(user, tokenValue);
+                          print(user['patient'].length);
+                        });
+                        MyApp.navigatorKey.currentState!
+                            .pushNamed('main_doctor');
+                      }
+                    }
                   } else {
                     snackBar(context, 'Incorrect email or password',
                         Color.fromRGBO(244, 67, 54, 1), Duration(seconds: 4));

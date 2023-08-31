@@ -202,8 +202,22 @@ class DoctorController extends Controller
     public function showData()
     {
         // required data : appointment, user(doctor), related id patient, 
-        $doctor = array();
+        $user = array();
         $user = Auth::user();
+        $patients = User::where('type', 'patient')->get();
+        $appointments = Appointment::where('doctor_id', Auth::user()->id)->get();
+
+        foreach ($patients as $patient) {
+            foreach ($appointments as $appointment) {
+                if ($patient['id'] == $appointment['patient_id']) {
+                    $appointment['patient_name'] = $patient['name'];
+                    $appointment['today_app'] = Appointment::where('doctor_id', Auth::user()->id)->whereDate('date', now()->toDateString())->get();
+                }
+            }
+        }
+
+        $user['patient'] = $appointments;
+        return $user;
     }
 
     public function showComment($doctorId)

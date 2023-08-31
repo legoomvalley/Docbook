@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
 import 'package:flutter_docbook/components/confirmation_dialog.dart';
 import 'package:flutter_docbook/components/schedule_card.dart';
-import 'package:flutter_docbook/models/booking_datetime_converter.dart';
+import 'package:flutter_docbook/models/datetime_converter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer';
 
