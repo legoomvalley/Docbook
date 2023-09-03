@@ -138,7 +138,6 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                 onPressed: () async {
                   final token = await DioProvider()
                       .getTokenDoctor('london32@example.com', '123');
-                  print(token);
                   // if (_formKey.currentState!.validate()) {
                   if (token) {
                     final SharedPreferences prefs =
@@ -153,8 +152,9 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                         setState(() {
                           final user = json.decode(response);
 
-                          auth.loginSuccess(user, tokenValue);
-                          print(user['patient'].length);
+                          auth.loginSuccessDoctor(
+                              user, tokenValue, user['doctor'][0]);
+                          print(user['doctor'][0]);
                         });
                         MyApp.navigatorKey.currentState!
                             .pushNamed('main_doctor');

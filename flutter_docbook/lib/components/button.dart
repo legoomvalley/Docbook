@@ -5,7 +5,7 @@ import '../utils/config.dart';
 class Button extends StatelessWidget {
   const Button(
       {Key? key,
-      required this.width,
+      this.width,
       required this.title,
       required this.disable,
       required this.color,
@@ -15,10 +15,11 @@ class Button extends StatelessWidget {
       this.borderSideColor,
       this.padding,
       this.margin,
+      this.elevation,
       this.fontWeight})
       : super(key: key);
 
-  final double width;
+  final double? width;
   final String title;
   final bool disable;
   final Color color;
@@ -29,6 +30,7 @@ class Button extends StatelessWidget {
   final Function() onPressed;
   final Color? borderSideColor;
   final FontWeight? fontWeight;
+  final double? elevation;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class Button extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             padding: padding,
             backgroundColor: backgroundColor,
-            elevation: 0,
+            elevation: elevation,
             shape: RoundedRectangleBorder(
               borderRadius: borderRadius,
               side: BorderSide(color: borderSideColor ?? Colors.transparent),

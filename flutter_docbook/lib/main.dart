@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
               const PatientUpdateAppointment(),
           'patient_make_appointment_page': (context) =>
               PatientMakeAppointment(),
-          'appointment_msg': (context) => const AppointmentMsg(),
+          'appointment_msg': (context) => AppointmentMsg(),
           'doctor_details': (context) => DoctorDetails(),
           'review_list': (context) => ReviewListPage(),
 

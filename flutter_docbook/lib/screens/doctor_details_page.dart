@@ -361,7 +361,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                                                     ReviewList(
                                                       patientName:
                                                           "${comments[index]['patientName']}",
-                                                      date: DateConverter()
+                                                      date: DateConverter
                                                           .formatDate(comments[
                                                                   index]
                                                               ['created_at']),

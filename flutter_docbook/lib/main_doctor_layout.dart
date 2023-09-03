@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/screens/appointment_page.dart';
-import 'package:flutter_docbook/screens/doctor_list_page.dart';
 import 'package:flutter_docbook/screens/doctor_profile_page.dart';
 import 'package:flutter_docbook/screens/home_doctor_page.dart';
-import 'package:flutter_docbook/screens/home_page.dart';
-import 'package:flutter_docbook/screens/profile_page.dart';
-import 'package:flutter_docbook/screens/schedule_page.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -32,40 +28,32 @@ class _MainDoctorLayoutState extends State<MainDoctorLayout> {
         }),
         children: const <Widget>[
           HomeDoctorPage(),
-          // DoctorListPage(),
           AppointmentPage(),
-          DoctorProfilePage(),
         ],
       ),
-      bottomNavigationBar: Container(
-        child: BottomNavigationBar(
-          backgroundColor: Config.doctorTheme,
-          currentIndex: currentPage,
-          onTap: (page) {
-            setState(() {
-              currentPage = page;
-              _page.animateToPage(
-                page,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-            });
-          },
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.houseChimneyMedical),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.meeting_room),
-              label: 'Appointment',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_3_outlined),
-              label: 'Profile',
-            ),
-          ],
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Config.doctorTheme,
+        currentIndex: currentPage,
+        onTap: (page) {
+          setState(() {
+            currentPage = page;
+            _page.animateToPage(
+              page,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+            );
+          });
+        },
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.houseChimneyMedical),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.meeting_room),
+            label: 'Appointment',
+          ),
+        ],
       ),
     );
   }

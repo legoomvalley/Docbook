@@ -88,7 +88,6 @@ class DoctorCard extends StatelessWidget {
                   color: Colors.green,
                   backgroundColor: Colors.green.shade50,
                   borderRadius: BorderRadius.circular(40),
-                  // onPressed: () {},
                   onPressed: () {
                     Navigator.push(
                       context,

@@ -32,8 +32,8 @@ class DioProvider {
       if (user.statusCode == 200 && user.data != '') {
         return jsonEncode(user.data);
       }
-    } catch (error) {
-      return error;
+    } on DioException catch (error) {
+      return error.response;
     }
   }
 
@@ -45,8 +45,9 @@ class DioProvider {
     String mobileNumber,
     dynamic specialization,
     dynamic status,
-    String location,
     String password,
+    String bioData,
+    String experience_year,
   ) async {
     try {
       var response = await Dio().post(
@@ -58,23 +59,70 @@ class DioProvider {
           'mobile_number': mobileNumber,
           'specialization': specialization,
           'status': status,
-          'location': location,
-          'password': password
+          'password': password,
+          'bio_data': bioData,
+          'experience_year': experience_year,
         },
       );
 
-      //if request successfully, then return token
       if (response.statusCode == 201 && response.data != '') {
         return response;
       }
     } on DioException catch (error) {
-      // return error.response?.data['email'];
       return error.response;
-      // return false;
     }
   }
 
-  // patientpage
+  Future<dynamic> updateAppointment(
+    String token,
+    int appointmentId,
+    String status,
+    DateTime date,
+    String time,
+    String additionalMessage,
+  ) async {
+    try {
+      var response = await Dio().put(
+        'http://10.0.2.2:8000/api/appointment/$appointmentId',
+        data: {
+          'status': status,
+          'date': date.toIso8601String(),
+          'time': time,
+          'additional_message': additionalMessage,
+        },
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200 && response.data != '') {
+        return response.data;
+      } else {
+        print('API request failed with status code: ${response.statusCode}');
+        print('Response data: ${response.data}');
+      }
+    } catch (error) {
+      return error;
+    }
+  }
+
+  Future<dynamic> deleteDoctorAppointment(
+    int appointmentId,
+    String token,
+  ) async {
+    try {
+      var response = await Dio().delete(
+        'http://10.0.2.2:8000/api/appointment/$appointmentId',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200 && response.data != '') {
+        return true;
+      } else {
+        return 'Error';
+      }
+    } on DioException catch (error) {
+      return error.response;
+    }
+  }
+
+  // PATIENT PAGE
   // get token
   Future<dynamic> getTokenPatient(String email, String password) async {
     try {
@@ -234,6 +282,41 @@ class DioProvider {
       }
     } catch (error) {
       return error;
+    }
+  }
+
+  Future<dynamic> updateDoctor(
+    String token,
+    int doctorId,
+    String fullName,
+    String userName,
+    String phoneNo,
+    int? specialization,
+    String bioData,
+    String experience,
+    String? status,
+  ) async {
+    try {
+      var response = await Dio().put(
+        'http://10.0.2.2:8000/api/doctor/$doctorId',
+        data: {
+          'name': fullName,
+          'user_name': userName,
+          'phone_no': phoneNo,
+          'specialization': specialization,
+          'bio_data': bioData,
+          'experience': experience,
+          'status': status,
+        },
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200 && response.data != '') {
+        return response;
+      } else {
+        return 'Error';
+      }
+    } on DioException catch (error) {
+      return error.response;
     }
   }
 

@@ -11,6 +11,7 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/auth_model.dart';
+import '../../providers/dio_provider.dart';
 
 class RegisterFormDoctor extends StatefulWidget {
   const RegisterFormDoctor({super.key});
@@ -32,6 +33,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
   final _passwordController = TextEditingController();
   final _locationController = TextEditingController();
   final _bioDataController = TextEditingController();
+  final _experienceController = TextEditingController();
   bool obsecurePass = true;
   String? _userNameErr = '';
   String? _emailErr = '';
@@ -263,33 +265,6 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           ),
           Config.spaceSmall,
           TextFormField(
-            controller: _locationController,
-            cursorColor: Config.primaryColor,
-            decoration: InputDecoration(
-              hintText: 'Location',
-              labelText: 'Location',
-              filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
-              alignLabelWithHint: true,
-              prefixIcon: const Icon(Icons.location_on),
-              prefixIconColor: Config.primaryColor,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(
-                  color: Colors.transparent,
-                ),
-              ),
-            ),
-            validator: (value) {
-              if (value == "") {
-                return 'location field is required';
-              } else {
-                return null;
-              }
-            },
-          ),
-          Config.spaceSmall,
-          TextFormField(
             controller: _bioDataController,
             maxLines: 5,
             cursorColor: Config.primaryColor,
@@ -317,6 +292,40 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
             validator: (value) {
               if (value != null) {
                 return _emailErr;
+              } else {
+                return null;
+              }
+            },
+          ),
+          Config.spaceSmall,
+          TextFormField(
+            controller: _experienceController,
+            cursorColor: Config.primaryColor,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: 'Total Experience',
+              labelText: 'Total Experience',
+              filled: true,
+              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              alignLabelWithHint: true,
+              prefixIcon: Icon(
+                Icons.medical_services,
+                color: Config.primaryColor,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Config.primaryColor),
+              ),
+            ),
+            validator: (value) {
+              if (value == "") {
+                return "Total Experience field is required";
               } else {
                 return null;
               }
@@ -350,48 +359,48 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
                 color: Config.primaryColor,
                 backgroundColor: Color.fromRGBO(239, 247, 255, 1),
                 borderRadius: BorderRadius.circular(0),
-                // onPressed: () async {
-                // final userRegistration = await DioProvider().registerDoctor(
-                //   _fullNameController.text,
-                //   _userNameController.text,
-                //   _emailController.text,
-                //   _mobileNumberController.text,
-                //   _selectedSpecializationItems,
-                //   _selectedStatusItems,
-                //   _locationController.text,
-                //   _passwordController.text,
-                // );
-                // print(userRegistration);
+                onPressed: () async {
+                  final userRegistration = await DioProvider().registerDoctor(
+                    _fullNameController.text,
+                    _userNameController.text,
+                    _emailController.text,
+                    _mobileNumberController.text,
+                    _selectedSpecializationItems,
+                    _selectedStatusItems,
+                    _passwordController.text,
+                    _bioDataController.text,
+                    _experienceController.text,
+                  );
+                  print(userRegistration);
 
-                // if (userRegistration.statusCode < 300) {
-                //   _emailErr = null;
-                //   _userNameErr = null;
-                //   _passwordErr = null;
-                //   snackBar(
-                //     context,
-                //     'your application has been sent, please wait for admin to approve.Kindly check your email for notification.',
-                //     Color.fromRGBO(76, 175, 80, 1),
-                //     Duration(seconds: 4),
-                //   );
-                //   if (_formKey.currentState!.validate()) {}
-                // } else if (userRegistration.statusCode == 400) {
-                //   setState(() {
-                //     _emailErr = userRegistration?.data['email'] != null
-                //         ? userRegistration?.data['email'].join('\n')
-                //         : null;
-                //     _userNameErr = userRegistration?.data['user_name'] != null
-                //         ? userRegistration?.data['user_name'].join('\n')
-                //         : null;
-                //     _passwordErr = userRegistration?.data['password'] != null
-                //         ? userRegistration?.data['password'].join('\n')
-                //         : null;
-                //     if (_formKey.currentState!.validate()) {}
-                //   });
-                // }
-
-                onPressed: () {
-                  Navigator.of(context).pushNamed('main_doctor');
+                  if (userRegistration.statusCode < 300) {
+                    _emailErr = null;
+                    _userNameErr = null;
+                    _passwordErr = null;
+                    snackBar(
+                      context,
+                      'your registration has been sent, please wait for admin to approve, kindly check your email.',
+                      Color.fromRGBO(76, 175, 80, 1),
+                      Duration(seconds: 5),
+                    );
+                    if (_formKey.currentState!.validate()) {}
+                  } else if (userRegistration.statusCode == 400) {
+                    setState(() {
+                      _emailErr = userRegistration?.data['email'] != null
+                          ? userRegistration?.data['email'].join('\n')
+                          : null;
+                      _userNameErr = userRegistration?.data['user_name'] != null
+                          ? userRegistration?.data['user_name'].join('\n')
+                          : null;
+                      _passwordErr = userRegistration?.data['password'] != null
+                          ? userRegistration?.data['password'].join('\n')
+                          : null;
+                      if (_formKey.currentState!.validate()) {}
+                    });
+                  }
                 },
+                // onPressed: () {
+                //   Navigator.of(context).pushNamed('main_doctor');
                 // },
               );
             },

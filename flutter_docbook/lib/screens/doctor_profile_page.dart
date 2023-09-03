@@ -1,43 +1,57 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_const_constructors
 
+import 'dart:io';
+import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_docbook/components/profile_text_field.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_docbook/providers/dio_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/button.dart';
+import '../components/confirmation_dialog.dart';
+import '../components/snackBar.dart';
+import '../main.dart';
 import '../models/auth_model.dart';
 import '../utils/config.dart';
 
 class DoctorProfilePage extends StatefulWidget {
-  const DoctorProfilePage({super.key});
+  const DoctorProfilePage({this.userData});
+  final Map<String, dynamic>? userData;
 
   @override
   State<DoctorProfilePage> createState() => _DoctorProfilePageState();
 }
 
 class _DoctorProfilePageState extends State<DoctorProfilePage> {
+  // user_id 1
   // ignore: unused_field
   // fullName, username, mobile_number, specialization, status, location, bio_data, experience_year
 
-  _RegisterFormDoctorState() {
-    _selectedSpecializationItems = _specializationItems[0]['index'];
-    _selectedStatusItems = _statusItems[0];
-  }
-
+  Map<String, dynamic> user = {};
+  List<dynamic> doctorBefore = [];
+  dynamic doctor;
+  String globalToken = "";
   final _formKey = GlobalKey<FormState>();
-  final _fullNameController = TextEditingController();
-  final _userNameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _mobileNumberController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _locationController = TextEditingController();
-  final _bioDataController = TextEditingController();
-
+  TextEditingController _fullNameController = TextEditingController();
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _mobileNumberController = TextEditingController();
+  TextEditingController _bioDataController = TextEditingController();
+  TextEditingController _experienceController = TextEditingController();
+  int? _selectedSpecializationItems;
+  String? _selectedStatusItems = 'Available';
   String? _userNameErr = '';
-  String? _emailErr = '';
-  String? _passwordErr = '';
+  File? _pickedImage;
+  bool isLoading = false;
+
+  bool _fullNamechanged = false;
+  bool _userNamechanged = false;
+  bool _mobileNumberChanged = false;
+  bool _bioDataChanged = false;
+  bool _experienceChanged = false;
 
   final List<Map<String, dynamic>> _specializationItems = [
     {'name': 'Pediatrics', 'index': 1},
@@ -46,371 +60,582 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     {'name': 'Eye Specialist', 'index': 4}
   ];
   List<String> _statusItems = [
-    'Available',
-    'Not Available',
+    'available',
+    'not available',
   ];
-  int? _selectedSpecializationItems = 1;
-  String? _selectedStatusItems = 'Available';
+
+  Future<void> getData() async {
+    print('ll');
+
+    setState(() {
+      user = Provider.of<AuthModel>(context, listen: false).getUser;
+      globalToken = Provider.of<AuthModel>(context, listen: false).getToken;
+      doctorBefore = user['doctor'];
+      doctor = doctorBefore[0];
+
+      _fullNameController.text = user['name'];
+      _userNameController.text = doctor['user_name'];
+      _mobileNumberController.text = doctor['mobile_number'];
+      _selectedSpecializationItems = doctor['specialization_id'];
+      _selectedStatusItems = doctor['status'];
+      _bioDataController.text = doctor['bio_data'];
+      _experienceController.text = doctor['experience_year'].toString();
+    });
+    print(user);
+  }
+
+  Future<void> pickImage() async {
+    final pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _pickedImage = File(pickedImage.path);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(
-                  // color: Config.primaryColor,
-                  height: 200.0,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Config.doctorTheme,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(10),
-                      bottom: Radius.circular(30),
-                    ),
-                  ),
-                  child: SafeArea(
-                    child: Column(
-                      // ignore: prefer_const_literals_to_create_immutables
-                      children: <Widget>[
-                        Padding(padding: EdgeInsets.only(top: 20)),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              textAlign: TextAlign.center,
-                              'Your profile',
-                              style: GoogleFonts.openSans(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: CircleAvatar(
-                            radius: 30,
-                            backgroundImage: AssetImage('assets/user.jpg'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 20, top: 40, right: 20),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Config.doctorTheme,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context); // Navigate back to the previous screen
+            },
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Stack(
                 children: <Widget>[
-                  Text(
-                    'Personal information',
-                    style: GoogleFonts.openSans(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                  Container(
+                    // color: Config.primaryColor,
+                    height: 200.0,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Config.doctorTheme,
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.circular(30),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 5),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        TextFormField(
-                          controller: _fullNameController,
-                          cursorColor: Config.primaryColor,
-                          decoration: const InputDecoration(
-                            hintText: 'Full Name',
-                            labelText: 'Full Name',
-                            filled: true,
-                            fillColor: Color.fromRGBO(206, 222, 239, 1),
-                            alignLabelWithHint: true,
-                            prefixIcon: Icon(Icons.people_alt_outlined),
-                            prefixIconColor: Config.primaryColor,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == "") {
-                              return "full name field is required";
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        Config.spaceSmall,
-                        TextFormField(
-                          controller: _userNameController,
-                          cursorColor: Config.primaryColor,
-                          decoration: InputDecoration(
-                            hintText: 'Username',
-                            labelText: 'Username',
-                            filled: true,
-                            fillColor: Color.fromRGBO(206, 222, 239, 1),
-                            alignLabelWithHint: true,
-                            prefixIcon: const Icon(Icons.person_2_outlined),
-                            prefixIconColor: Config.primaryColor,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value != null) {
-                              return _userNameErr;
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        Config.spaceSmall,
-                        TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          cursorColor: Config.primaryColor,
-                          decoration: InputDecoration(
-                            hintText: 'Email Address',
-                            labelText: 'Email',
-                            filled: true,
-                            fillColor: Color.fromRGBO(206, 222, 239, 1),
-                            alignLabelWithHint: true,
-                            prefixIcon: const Icon(Icons.email_outlined),
-                            prefixIconColor: Config.primaryColor,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value != null) {
-                              return _emailErr;
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        Config.spaceSmall,
-                        TextFormField(
-                          controller: _mobileNumberController,
-                          cursorColor: Config.primaryColor,
-                          decoration: InputDecoration(
-                            hintText: 'Mobile Number',
-                            labelText: 'Mobile Number',
-                            filled: true,
-                            fillColor: Color.fromRGBO(206, 222, 239, 1),
-                            alignLabelWithHint: true,
-                            prefixIcon: const Icon(Icons.phone_android_sharp),
-                            prefixIconColor: Config.primaryColor,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == "") {
-                              return "mobile number field is required";
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        Config.spaceSmall,
-                        DropdownButtonFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Specialization',
-                            labelText: 'Specialization',
-                            filled: true,
-                            fillColor: Color.fromRGBO(206, 222, 239, 1),
-                            alignLabelWithHint: true,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          items: _specializationItems
-                              .map((e) => DropdownMenuItem(
-                                  child: Text(e['name']), value: e['index']))
-                              .toList(),
-                          onChanged: (val) {
-                            setState(() {
-                              _selectedSpecializationItems = val as int;
-                            });
-                          },
-                        ),
-                        Config.spaceSmall,
-                        DropdownButtonFormField(
-                          value: _selectedStatusItems,
-                          decoration: InputDecoration(
-                            hintText: 'Status',
-                            labelText: 'Status',
-                            filled: true,
-                            fillColor: Color.fromRGBO(206, 222, 239, 1),
-                            alignLabelWithHint: true,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          items: _statusItems
-                              .map((e) =>
-                                  DropdownMenuItem(child: Text(e), value: e))
-                              .toList(),
-                          onChanged: (val) {
-                            setState(() {
-                              _selectedStatusItems = val as String;
-                            });
-                          },
-                        ),
-                        Config.spaceSmall,
-                        TextFormField(
-                          controller: _locationController,
-                          cursorColor: Config.primaryColor,
-                          decoration: InputDecoration(
-                            hintText: 'Location',
-                            labelText: 'Location',
-                            filled: true,
-                            fillColor: Color.fromRGBO(206, 222, 239, 1),
-                            alignLabelWithHint: true,
-                            prefixIcon: const Icon(Icons.location_on),
-                            prefixIconColor: Config.primaryColor,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == "") {
-                              return 'location field is required';
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        Config.spaceSmall,
-                        TextFormField(
-                          controller: _bioDataController,
-                          maxLines: 5,
-                          cursorColor: Config.primaryColor,
-                          decoration: InputDecoration(
-                            hintText: 'Bio Data',
-                            labelText: 'Bio Data',
-                            filled: true,
-                            fillColor: Color.fromRGBO(206, 222, 239, 1),
-                            alignLabelWithHint: true,
-                            prefixIcon: Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: 80), // Adjust padding as needed
-                                child: Icon(
-                                  Icons.medical_information,
-                                  color: Config.primaryColor,
-                                )),
-                            prefixIconColor: Config.primaryColor,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value != null) {
-                              return _emailErr;
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        Row(
-                          children: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pushNamed('auth_doctor');
-                              },
-                              child: Text(
-                                textAlign: TextAlign.left,
-                                'ALready have an account?',
+                    child: SafeArea(
+                      child: Column(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: <Widget>[
+                          Padding(padding: EdgeInsets.only(top: 20)),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                textAlign: TextAlign.center,
+                                'Your profile',
                                 style: GoogleFonts.openSans(
-                                  color: Colors.black,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        // Config.spaceSmall,
-                        Consumer<AuthModel>(
-                          builder: (context, auth, child) {
-                            return Button(
-                              width: double.infinity,
-                              title: 'Register',
-                              disable: false,
-                              color: Config.primaryColor,
-                              backgroundColor: Color.fromRGBO(239, 247, 255, 1),
-                              borderRadius: BorderRadius.circular(0),
-
-                              onPressed: () {
-                                Navigator.of(context).pushNamed('main_doctor');
-                              },
-                              // },
-                            );
-                          },
-                        ),
-                        Container(
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed('/');
-                            },
-                            child: Text(
-                              'You\'re a patient?',
-                              style: GoogleFonts.openSans(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                              SizedBox(height: 10),
+                            ],
                           ),
-                        ),
-                      ],
+                          Stack(
+                            children: [
+                              SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: Container(
+                                      child: _pickedImage != null
+                                          ? CircleAvatar(
+                                              radius: 50,
+                                              backgroundImage:
+                                                  FileImage(_pickedImage!),
+                                            )
+                                          : user['profile_photo_path'] != null
+                                              ? CircleAvatar(
+                                                  radius: 50,
+                                                  backgroundImage: NetworkImage(
+                                                    'http://10.0.2.2:8000/storage/${user['profile_photo_path']}',
+                                                  ),
+                                                )
+                                              : CircleAvatar(
+                                                  radius: 50,
+                                                  backgroundImage: AssetImage(
+                                                      'assets/user.jpg'),
+                                                ))),
+                              Container(
+                                margin: EdgeInsets.only(top: 40, left: 70),
+                                color: Colors.white30,
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    child: IconButton(
+                                      icon: Icon(Icons.camera_alt),
+                                      onPressed: () => pickImage(),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
-            ),
-          ],
+              Container(
+                margin: EdgeInsets.only(left: 20, top: 40, right: 20),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Update Information',
+                      style: GoogleFonts.openSans(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Theme(
+                      data: ThemeData(primaryColor: Colors.grey),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            TextFormField(
+                              cursorColor: Colors.grey,
+                              controller: _fullNameController,
+                              decoration: InputDecoration(
+                                labelText: 'Full Name',
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                hintText: '',
+                                filled: true,
+                                fillColor: Colors.grey.shade100,
+                                alignLabelWithHint: true,
+                                suffixIcon: Icon(Icons.people_alt_outlined),
+                                suffixIconColor: Colors.grey,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                              ),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  newValue != doctor['name']
+                                      ? _fullNamechanged = true
+                                      : _fullNamechanged = false;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == "") {
+                                  return "full name field is required";
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            Config.spaceSmall,
+                            TextFormField(
+                              controller: _userNameController,
+                              decoration: InputDecoration(
+                                labelText: 'Username',
+                                filled: true,
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                fillColor: Colors.grey.shade100,
+                                alignLabelWithHint: true,
+                                suffixIcon: const Icon(Icons.person_2_outlined),
+                                suffixIconColor: Colors.grey,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                              ),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  newValue != doctor['user_name']
+                                      ? _userNamechanged = true
+                                      : _userNamechanged = false;
+                                });
+                              },
+                              validator: (value) {
+                                if (value != null) {
+                                  return _userNameErr;
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            Config.spaceSmall,
+                            TextFormField(
+                              controller: _mobileNumberController,
+                              cursorColor: Colors.grey,
+                              decoration: InputDecoration(
+                                hintText: '',
+                                labelText: 'Mobile Number',
+                                filled: true,
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                fillColor: Colors.grey.shade100,
+                                alignLabelWithHint: true,
+                                suffixIcon:
+                                    const Icon(Icons.phone_android_sharp),
+                                suffixIconColor: Colors.grey,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                              ),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  newValue != doctor['mobile_number']
+                                      ? _mobileNumberChanged = true
+                                      : _mobileNumberChanged = false;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == "") {
+                                  return "mobile number field is required";
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            Config.spaceSmall,
+                            DropdownButtonFormField(
+                              value: _selectedSpecializationItems,
+                              decoration: InputDecoration(
+                                hintText: '',
+                                labelText: 'Specialization',
+                                filled: true,
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                fillColor: Colors.grey.shade100,
+                                alignLabelWithHint: true,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                              ),
+                              items: _specializationItems
+                                  .map((e) => DropdownMenuItem(
+                                      child: Text(e['name']),
+                                      value: e['index']))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedSpecializationItems = val as int;
+                                });
+                              },
+                            ),
+                            Config.spaceSmall,
+                            DropdownButtonFormField(
+                              value: _selectedStatusItems,
+                              decoration: InputDecoration(
+                                hintText: '',
+                                labelText: 'Status',
+                                filled: true,
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                fillColor: Colors.grey.shade100,
+                                alignLabelWithHint: true,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                              ),
+                              items: _statusItems
+                                  .map((e) => DropdownMenuItem(
+                                      child: Text(e), value: e))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedStatusItems = val as String;
+                                });
+                              },
+                            ),
+                            Config.spaceSmall,
+                            TextFormField(
+                              controller: _bioDataController,
+                              maxLines: 5,
+                              cursorColor: Colors.grey,
+                              decoration: InputDecoration(
+                                hintText: '',
+                                labelText: 'Bio Data',
+                                filled: true,
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                fillColor: Colors.grey.shade100,
+                                alignLabelWithHint: true,
+                                suffixIcon: Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: 80), // Adjust padding as needed
+                                    child: Icon(
+                                      Icons.medical_information,
+                                      color: Colors.grey,
+                                    )),
+                                suffixIconColor: Colors.grey,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                              ),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  newValue != doctor['bio_data']
+                                      ? _bioDataChanged = true
+                                      : _bioDataChanged = false;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == '') {
+                                  return 'bio data field is required';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            Config.spaceSmall,
+                            TextFormField(
+                              controller: _experienceController,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(2)
+                              ],
+                              cursorColor: Colors.grey,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: '',
+                                labelText: 'Total Experience',
+                                filled: true,
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                fillColor: Colors.grey.shade100,
+                                alignLabelWithHint: true,
+                                suffixIcon: Icon(
+                                  Icons.medical_services,
+                                  color: Colors.grey,
+                                ),
+                                suffixIconColor: Colors.grey,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                              ),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  newValue !=
+                                          doctor['experience_year'].toString()
+                                      ? _experienceChanged = true
+                                      : _experienceChanged = false;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == '') {
+                                  return 'experience field is required';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            Config.spaceSmall,
+                            Button(
+                                width: double.infinity,
+                                title: isLoading ? 'Saving...' : 'Save',
+                                disable: _fullNamechanged ||
+                                        _userNamechanged == true ||
+                                        _mobileNumberChanged ||
+                                        (_selectedSpecializationItems !=
+                                            doctor['specialization_id']) ||
+                                        (_selectedStatusItems !=
+                                            doctor['status']) ||
+                                        _bioDataChanged ||
+                                        _experienceChanged ||
+                                        _pickedImage != null
+                                    ? false
+                                    : true,
+                                color: Colors.white,
+                                backgroundColor: Config.doctorTheme,
+                                onPressed: () async {
+                                  final authModel = Provider.of<AuthModel>(
+                                      context,
+                                      listen: false);
+                                  if (_pickedImage != null) {
+                                    FormData formData = FormData.fromMap({
+                                      'profile_photo':
+                                          await MultipartFile.fromFile(
+                                              _pickedImage!.path),
+                                    });
+
+                                    final image = await DioProvider()
+                                        .uploadProfileImage(
+                                            globalToken, formData);
+
+                                    final updatedUser = {
+                                      ...authModel.getUser,
+                                      'profile_photo_path': image
+                                    };
+                                    authModel.updateUser(updatedUser);
+                                  }
+                                  authModel.updateUser({
+                                    ...authModel.getUser,
+                                    'name': _fullNameController.text,
+                                    'doctor': [
+                                      {
+                                        ...authModel.getUser['doctor'][0],
+                                        'user_name': _userNameController.text,
+                                        'mobile_number':
+                                            _mobileNumberController.text,
+                                        'specialization_id':
+                                            _selectedSpecializationItems,
+                                        'status': _selectedStatusItems,
+                                        'bio_data': _bioDataController.text,
+                                        'experience_year':
+                                            _experienceController.text
+                                      },
+                                    ],
+                                  });
+                                  final doctorUpdate =
+                                      await DioProvider().updateDoctor(
+                                    globalToken,
+                                    user['id'],
+                                    _fullNameController.text,
+                                    _userNameController.text,
+                                    _mobileNumberController.text,
+                                    _selectedSpecializationItems,
+                                    _bioDataController.text,
+                                    _experienceController.text,
+                                    _selectedStatusItems,
+                                  );
+                                  final updatedData = {
+                                    'name': _fullNameController.text
+                                  };
+                                  snackBar(context, 'data successfully updated',
+                                      Colors.green, Duration(seconds: 4));
+                                  await getData();
+                                  Navigator.pop(context, updatedData);
+
+                                  // if (_formKey.currentState!.validate()) {}
+                                },
+                                borderRadius: BorderRadius.circular(5),
+                                elevation: 5),
+                            Button(
+                                width: double.infinity,
+                                title: 'Logout',
+                                disable: false,
+                                color: Colors.white,
+                                backgroundColor: Colors.red.shade500,
+                                onPressed: () async {
+                                  await showConfirmationDialog(
+                                      context, 'Logout', () async {
+                                    final SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    final token =
+                                        prefs.getString('token') ?? '';
+                                    if (token.isNotEmpty && token != '') {
+                                      final response =
+                                          await DioProvider().logout(token);
+                                      if (response == 200) {
+                                        await prefs.remove('token');
+                                        setState(() {
+                                          MyApp.navigatorKey.currentState!
+                                              .pushReplacementNamed('/');
+                                        });
+                                      }
+                                    }
+                                  });
+                                },
+                                borderRadius: BorderRadius.circular(5),
+                                elevation: 5),
+                            Config.spaceSmall
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

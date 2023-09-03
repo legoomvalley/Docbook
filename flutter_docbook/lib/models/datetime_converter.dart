@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 // these all basically to convert date & time from calendar to string
@@ -10,23 +11,53 @@ class DateConverter {
     return DateFormat('EEEE').format(date);
   }
 
-  String formatDate(String dateString) {
+  static DateTime stringToDate(String date) {
+    return DateTime.parse(date);
+  }
+
+  static String formatDate(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
     String formattedDate = '${dateTime.day}/${dateTime.month}/${dateTime.year}';
     return formattedDate;
   }
 
-  String formatDate2(String dateString) {
+  static String formatDate2(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
     DateFormat formattedDate = DateFormat('dd MMM, yyyy');
     return formattedDate.format(dateTime);
   }
 
-  DateTime intToDate(int dateInt) {
+  static DateTime intToDate(int dateInt) {
     String intToStringDate = dateInt.toString();
     DateTime date = DateTime.parse(intToStringDate);
     // bool compareDate = dateTime.isAtSameMomentAs(DateTime.now());
     return date;
+  }
+
+  static TimeOfDay? parseTimeOfDay(String timeString) {
+    final parts = timeString.split(':');
+    if (parts.length != 2) {
+      return null; // Invalid format
+    }
+
+    final hour = int.tryParse(parts[0]);
+    final minuteAndAmPm = parts[1].split(' ');
+
+    if (hour == null || minuteAndAmPm.length != 2) {
+      return null; // Invalid format
+    }
+
+    final minute = int.tryParse(minuteAndAmPm[0]);
+    final amPm = minuteAndAmPm[1];
+
+    if (minute == null || (amPm != 'AM' && amPm != 'PM')) {
+      return null; // Invalid format
+    }
+
+    return TimeOfDay(
+      hour: amPm == 'AM' ? hour : hour + 12,
+      minute: minute,
+    );
   }
 
   static String getTime(int time) {

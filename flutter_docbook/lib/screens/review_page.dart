@@ -121,8 +121,8 @@ class _ReviewListPageState extends State<ReviewListPage> {
                 (context, index) => ReviewList(
                   comment: widget.comments?[index]['comment'],
                   patientName: "${widget.comments?[index]['patientName']}",
-                  date: DateConverter()
-                      .formatDate(widget.comments?[index]['created_at']),
+                  date: DateConverter.formatDate(
+                      widget.comments?[index]['created_at']),
                   //  DateTime.parse()${widget.comments?[index]['created_at']}
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                   margin: EdgeInsets.only(bottom: 0),

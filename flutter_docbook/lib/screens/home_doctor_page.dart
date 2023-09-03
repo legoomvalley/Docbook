@@ -3,14 +3,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/border_card.dart';
-import 'package:flutter_docbook/components/button.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../components/confirmation_dialog.dart';
 import '../models/auth_model.dart';
 import '../models/datetime_converter.dart';
-import 'appointment_page.dart';
+import '../providers/dio_provider.dart';
+import 'appointment_details.dart';
+import 'doctor_profile_page.dart';
 
 class HomeDoctorPage extends StatefulWidget {
   const HomeDoctorPage({super.key});
@@ -20,29 +22,76 @@ class HomeDoctorPage extends StatefulWidget {
 }
 
 class _HomeDoctorPageState extends State<HomeDoctorPage> {
-  Map<String, dynamic> user = {};
+  dynamic user;
   List<dynamic> appointments = [];
   List<dynamic> todayAppointments = [];
+
+  late List<dynamic> pendingAppointments;
+  late List<dynamic> rejectedAppointments;
+  String token = '';
+
+  Future<void> getData() async {
+    setState(() {
+      user = Provider.of<AuthModel>(context, listen: false).getUser;
+      token = Provider.of<AuthModel>(context, listen: false).getToken;
+
+      appointments = user['patient'];
+      todayAppointments = user['today_app'];
+
+      List<dynamic> filterAppointmentsByStatus(String status) {
+        return appointments
+            .where((appointment) => appointment['status'] == status)
+            .toList();
+      }
+
+      pendingAppointments = filterAppointmentsByStatus('pending');
+      rejectedAppointments = filterAppointmentsByStatus('not approved');
+    });
+    print(todayAppointments);
+  }
+
+  void updateHomePageData(Map<String, dynamic> updatedData) {
+    setState(() {
+      user = updatedData;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     Config().init(context);
-    user = Provider.of<AuthModel>(context, listen: false).getUser;
-    appointments = user['patient'];
-    todayAppointments = appointments[0]['today_app'];
-
-    print(appointments);
-
-    List<dynamic> filterAppointmentsByStatus(String status) {
-      return appointments
-          .where((appointment) => appointment['status'] == status)
-          .toList();
-    }
-
-    List<dynamic> pendingAppointments = filterAppointmentsByStatus('pending');
-    List<dynamic> rejectedAppointments =
-        filterAppointmentsByStatus('not approved');
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Config.doctorTheme,
+        automaticallyImplyLeading: false,
+        actions: [
+          PopupMenuButton(itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem(
+                value: 'all',
+                child: Text('Profile'),
+              ),
+            ];
+          }, onSelected: (value) async {
+            final updatedUserData = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DoctorProfilePage(userData: user)),
+            );
+
+            // Update your homepage data with the received updated data
+            if (updatedUserData != null) {
+              updateHomePageData(updatedUserData);
+            }
+          })
+        ],
+      ),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -279,7 +328,101 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           child: BorderCard(
-                            cardHeader: Container(),
+                            cardHeader: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(10)),
+                                color: const Color.fromRGBO(94, 94, 184, 0.3),
+                              ),
+                              width: double.infinity,
+                              padding: EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    width: 30,
+                                    height: 30,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.all(0),
+                                          backgroundColor: Colors.yellow[50],
+                                          side: BorderSide(
+                                              color: Colors.red.shade600,
+                                              width: 2),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(7),
+                                          )),
+                                      child: Icon(
+                                        Icons.delete_forever_outlined,
+                                        size: 17,
+                                        color: Colors.red[600],
+                                      ),
+                                      onPressed: () async {
+                                        await showConfirmationDialog(context,
+                                            'are you sure to remove this appointment',
+                                            () async {
+                                          final response = await DioProvider()
+                                              .deleteDoctorAppointment(
+                                                  today_appointment['id'],
+                                                  token);
+                                          print(response);
+                                          if (response) {
+                                            setState(() {
+                                              todayAppointments
+                                                  .remove(today_appointment);
+                                            });
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width: today_appointment['status'] ==
+                                              "completed"
+                                          ? 0
+                                          : 10),
+                                  today_appointment['status'] == "completed"
+                                      ? SizedBox()
+                                      : Container(
+                                          width: 30,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                padding: EdgeInsets.all(0),
+                                                backgroundColor:
+                                                    Colors.yellow[50],
+                                                side: BorderSide(
+                                                    color:
+                                                        Colors.yellow.shade600,
+                                                    width: 2),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                )),
+                                            child: Icon(
+                                              Icons.edit_calendar_sharp,
+                                              size: 17,
+                                              color: Colors.yellow[600],
+                                            ),
+                                            onPressed: () async {
+                                              await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AppointmentDetails(
+                                                          appointment:
+                                                              today_appointment,
+                                                          token: token,
+                                                          index: index),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ),
                             topWidget: [
                               Expanded(
                                 child: Column(
@@ -314,14 +457,6 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                                               fontSize: 12,
                                             ),
                                           ),
-                                          // child: Text(
-                                          //   'Pending',
-                                          //   style: TextStyle(
-                                          //     fontWeight: FontWeight.bold,
-                                          //     color: Colors.yellow[600],
-                                          //     fontSize: 12,
-                                          //   ),
-                                          // ),
                                         )
                                       ],
                                     ),
@@ -359,7 +494,7 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                                           ),
                                         ),
                                         Text(
-                                          '${DateConverter().formatDate2(today_appointment['date'])} at ${today_appointment['time']}',
+                                          '${DateConverter.formatDate2(today_appointment['date'])} At ${today_appointment['time']}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 15,
