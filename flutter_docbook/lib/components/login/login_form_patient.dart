@@ -24,6 +24,7 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
   bool obsecurePass = true;
   String _emailErr = "";
   String _passwordErr = "";
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -128,12 +129,15 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
             builder: (context, auth, child) {
               return Button(
                 width: double.infinity,
-                title: 'Sign In',
-                disable: false,
+                title: isLoading ? 'Please wait' : 'Sign In',
+                disable: isLoading ? true : false,
                 color: Config.primaryColor,
                 backgroundColor: Color.fromRGBO(239, 247, 255, 1),
                 borderRadius: BorderRadius.circular(0),
                 onPressed: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
                   final token = await DioProvider()
                       .getTokenPatient('lindgren.ashley@example.org', '123');
                   print("muax");
@@ -155,6 +159,9 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                         });
                         MyApp.navigatorKey.currentState!
                             .pushNamed('main_patient');
+                        setState(() {
+                          isLoading = false;
+                        });
                       }
                     }
                   }

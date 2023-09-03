@@ -61,20 +61,24 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
         children: <Widget>[
           TextFormField(
             controller: _fullNameController,
-            cursorColor: Config.primaryColor,
+            cursorColor: Config.doctorTheme,
             decoration: const InputDecoration(
               hintText: 'Full Name',
               labelText: 'Full Name',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: Icon(Icons.people_alt_outlined),
-              prefixIconColor: Config.primaryColor,
+              prefixIconColor: Config.doctorTheme,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.transparent,
                 ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Config.doctorTheme),
               ),
             ),
             validator: (value) {
@@ -88,20 +92,24 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           Config.spaceSmall,
           TextFormField(
             controller: _userNameController,
-            cursorColor: Config.primaryColor,
+            cursorColor: Config.doctorTheme,
             decoration: InputDecoration(
               hintText: 'Username',
               labelText: 'Username',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.person_2_outlined),
-              prefixIconColor: Config.primaryColor,
+              prefixIconColor: Config.doctorTheme,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.transparent,
                 ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Config.doctorTheme),
               ),
             ),
             validator: (value) {
@@ -116,20 +124,24 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           TextFormField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            cursorColor: Config.primaryColor,
+            cursorColor: Config.doctorTheme,
             decoration: InputDecoration(
               hintText: 'Email Address',
               labelText: 'Email',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.email_outlined),
-              prefixIconColor: Config.primaryColor,
+              prefixIconColor: Config.doctorTheme,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.transparent,
                 ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Config.doctorTheme),
               ),
             ),
             validator: (value) {
@@ -143,20 +155,24 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           Config.spaceSmall,
           TextFormField(
             controller: _mobileNumberController,
-            cursorColor: Config.primaryColor,
+            cursorColor: Config.doctorTheme,
             decoration: InputDecoration(
               hintText: 'Mobile Number',
               labelText: 'Mobile Number',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.phone_android_sharp),
-              prefixIconColor: Config.primaryColor,
+              prefixIconColor: Config.doctorTheme,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.transparent,
                 ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Config.doctorTheme),
               ),
             ),
             validator: (value) {
@@ -174,13 +190,18 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
               hintText: 'Specialization',
               labelText: 'Specialization',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              labelStyle: TextStyle(color: Color.fromRGBO(94, 94, 184, 0.3)),
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.transparent,
                 ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Config.doctorTheme),
               ),
             ),
             items: _specializationItems
@@ -200,14 +221,20 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
               hintText: 'Status',
               labelText: 'Status',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
-              alignLabelWithHint: true,
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.transparent,
                 ),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Config.doctorTheme),
+              ),
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              labelStyle: TextStyle(color: Colors.red),
+              hintStyle: TextStyle(color: Colors.grey),
             ),
             items: _statusItems
                 .map((e) => DropdownMenuItem(child: Text(e), value: e))
@@ -222,16 +249,16 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           TextFormField(
             controller: _passwordController,
             keyboardType: TextInputType.visiblePassword,
-            cursorColor: Config.primaryColor,
+            cursorColor: Config.doctorTheme,
             obscureText: obsecurePass,
             decoration: InputDecoration(
               hintText: 'Password',
               labelText: 'Password',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.lock_outlined),
-              prefixIconColor: Config.primaryColor,
+              prefixIconColor: Config.doctorTheme,
               suffixIcon: IconButton(
                 onPressed: () {
                   setState(() {
@@ -245,7 +272,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
                       )
                     : const Icon(
                         Icons.visibility_outlined,
-                        color: Config.primaryColor,
+                        color: Config.doctorTheme,
                       ),
               ),
               enabledBorder: OutlineInputBorder(
@@ -253,6 +280,10 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
                 borderSide: BorderSide(
                   color: Colors.transparent,
                 ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Config.doctorTheme),
               ),
             ),
             validator: (value) {
@@ -267,26 +298,30 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           TextFormField(
             controller: _bioDataController,
             maxLines: 5,
-            cursorColor: Config.primaryColor,
+            cursorColor: Config.doctorTheme,
             decoration: InputDecoration(
               hintText: 'Bio Data',
               labelText: 'Bio Data',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: Padding(
                   padding:
                       EdgeInsets.only(bottom: 80), // Adjust padding as needed
                   child: Icon(
                     Icons.medical_information,
-                    color: Config.primaryColor,
+                    color: Config.doctorTheme,
                   )),
-              prefixIconColor: Config.primaryColor,
+              prefixIconColor: Config.doctorTheme,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.transparent,
                 ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Config.doctorTheme),
               ),
             ),
             validator: (value) {
@@ -300,17 +335,17 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           Config.spaceSmall,
           TextFormField(
             controller: _experienceController,
-            cursorColor: Config.primaryColor,
+            cursorColor: Config.doctorTheme,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               hintText: 'Total Experience',
               labelText: 'Total Experience',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: Icon(
                 Icons.medical_services,
-                color: Config.primaryColor,
+                color: Config.doctorTheme,
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -320,7 +355,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(color: Config.primaryColor),
+                borderSide: BorderSide(color: Config.doctorTheme),
               ),
             ),
             validator: (value) {
@@ -355,9 +390,10 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
               return Button(
                 width: double.infinity,
                 title: 'Register',
+                elevation: 5,
                 disable: false,
-                color: Config.primaryColor,
-                backgroundColor: Color.fromRGBO(239, 247, 255, 1),
+                color: Config.doctorTheme,
+                backgroundColor: Colors.indigo.shade100,
                 borderRadius: BorderRadius.circular(0),
                 onPressed: () async {
                   final userRegistration = await DioProvider().registerDoctor(

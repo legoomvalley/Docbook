@@ -26,6 +26,7 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
   bool obsecurePass = true;
   String _emailErr = "";
   String _passwordErr = "";
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +38,15 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
           TextFormField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            cursorColor: Config.primaryColor,
+            cursorColor: Config.doctorTheme,
             decoration: const InputDecoration(
               hintText: 'Email Address',
               labelText: 'Email',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: Icon(Icons.email_outlined),
-              prefixIconColor: Config.primaryColor,
+              prefixIconColor: Config.doctorTheme,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
@@ -65,16 +66,16 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
           TextFormField(
             controller: _passwordController,
             keyboardType: TextInputType.visiblePassword,
-            cursorColor: Config.primaryColor,
+            cursorColor: Config.doctorTheme,
             obscureText: obsecurePass,
             decoration: InputDecoration(
               hintText: 'Password',
               labelText: 'Password',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.lock_outlined),
-              prefixIconColor: Config.primaryColor,
+              prefixIconColor: Config.doctorTheme,
               suffixIcon: IconButton(
                 onPressed: () {
                   setState(() {
@@ -88,7 +89,7 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                       )
                     : const Icon(
                         Icons.visibility_outlined,
-                        color: Config.primaryColor,
+                        color: Config.doctorTheme,
                       ),
               ),
               enabledBorder: OutlineInputBorder(
@@ -130,12 +131,16 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
             builder: (context, auth, child) {
               return Button(
                 width: double.infinity,
-                title: 'Sign In',
-                disable: false,
-                color: Config.primaryColor,
-                backgroundColor: Color.fromRGBO(239, 247, 255, 1),
+                title: isLoading ? 'Please wait' : 'Sign In',
+                disable: isLoading ? true : false,
+                color: Config.doctorTheme,
+                elevation: 5,
+                backgroundColor: Colors.indigo.shade100,
                 borderRadius: BorderRadius.circular(0),
                 onPressed: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
                   final token = await DioProvider()
                       .getTokenDoctor('london32@example.com', '123');
                   // if (_formKey.currentState!.validate()) {
@@ -158,6 +163,9 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                         });
                         MyApp.navigatorKey.currentState!
                             .pushNamed('main_doctor');
+                        setState(() {
+                          isLoading = false;
+                        });
                       }
                     }
                   } else {
