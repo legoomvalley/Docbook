@@ -163,12 +163,12 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
           ),
           SliverToBoxAdapter(child: Config.spaceSmall),
-          schedules.isEmpty
+          filteredSchedules.isEmpty
               ? SliverToBoxAdapter(
                   child: Container(
                     margin: EdgeInsets.only(top: 200),
                     child: Text(
-                      'To see the record, please maka an appointment first',
+                      'no record',
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -204,9 +204,9 @@ class _SchedulePageState extends State<SchedulePage> {
                                   Row(
                                     children: [
                                       CircleAvatar(
-                                          // backgroundImage: NetworkImage(
-                                          //     "http://10.0.2.2:8000${schedule['doctor_profile']}"),
-                                          ),
+                                        backgroundImage:
+                                            AssetImage('assets/user.jpg'),
+                                      ),
                                       const SizedBox(
                                         width: 10,
                                       ),

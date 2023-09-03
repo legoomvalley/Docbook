@@ -121,7 +121,6 @@ class RegisterController extends Controller
             'email' => 'required|email:dns|',
             'mobile_number' => 'required',
             'specialization' => 'required',
-            'location' => 'required|min:3',
             'password' => 'required|min:3',
 
         ]);
@@ -132,12 +131,14 @@ class RegisterController extends Controller
         // else {
         $user = TmpDoctor::create([
             'full_name' => $request->full_name,
-            'email' => $request->email,
             'user_name' => $request->user_name,
-            'specialization_id' => $request->specialization,
-            'password' => Hash::make($request->password),
+            'email' => $request->email,
             'mobile_number' => $request->mobile_number,
+            'specialization_id' => $request->specialization,
             'status' => $request->status,
+            'password' => Hash::make($request->password),
+            'bio_data' => $request->bio_data,
+            'experience_year' => $request->experience_year,
         ]);
         return $user;
     }

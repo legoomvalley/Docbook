@@ -230,7 +230,7 @@ class AppointmentController extends Controller
 
     // mobile 
 
-
+    // patient
     /**
      * Show the form for editing the specified resource.
      */
@@ -280,7 +280,7 @@ class AppointmentController extends Controller
             return response()->json(['error' => 'Failed to delete appointment'], 500);
         }
     }
-    public function updatePatientAppointmentStatus(Request $request, $id)
+    public function updatePatientAppointmentStatus($id)
     {
 
         $appointment = Appointment::find($id);
@@ -290,5 +290,31 @@ class AppointmentController extends Controller
         return response()->json([
             'success' => 'Appointment updated successfully!',
         ], 200);
+    }
+
+    // Doctor
+    public function updateAppointment(Request $request, $id)
+    {
+        // status, time, date, additionalMessage or remark
+        $appointment = Appointment::find($id);
+
+        $appointment->update([
+            'status' => $request->status,
+            'date' => \Carbon\Carbon::parse($request->date),
+            'time' => $request->time,
+            'remark' => $request->additional_message,
+        ]);
+
+        return $appointment;
+    }
+    public function destroyAppointment(Request $request, Appointment $appointment)
+    {
+        // status, time, date, additionalMessage or remark
+        try {
+            $appointment->delete();
+            return response()->json(['success' => 'Appointment deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete appointment'], 500);
+        }
     }
 }

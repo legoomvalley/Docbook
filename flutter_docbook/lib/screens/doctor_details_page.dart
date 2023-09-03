@@ -47,7 +47,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
   Widget build(BuildContext context) {
     // get argument passed from doctor card
     // final doctor = ModalRoute.of(context)!.settings.arguments;
-
+    print(widget.doctor);
     return Scaffold(
       backgroundColor: Config.primaryColor,
       body: SafeArea(
@@ -124,7 +124,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                      'Dr ${widget.doctor?['specialization_name']}',
+                                      '${widget.doctor?['specialization_name']}',
                                       style: GoogleFonts.rubik(
                                         textStyle: TextStyle(
                                           fontSize: 15,
@@ -136,7 +136,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                                     ),
                                     SizedBox(height: 15),
                                     Text(
-                                      'Dr Reviews',
+                                      'Experience year : ${widget.doctor?['experience_year']}',
                                       style: GoogleFonts.rubik(
                                         textStyle: TextStyle(
                                           fontSize: 15,
@@ -273,7 +273,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                                 ),
                                 SizedBox(height: 15),
                                 Text(
-                                  widget.doctor?['experience'],
+                                  widget.doctor?['bio_data'],
                                   style: GoogleFonts.rubik(
                                     textStyle: TextStyle(
                                       fontSize: 15,

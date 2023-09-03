@@ -34,6 +34,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // doctor page
     Route::get('/doctor', [DoctorController::class, 'showData']);
+    Route::put('/doctor/{id}', [DoctorController::class, 'updateDoctor']);
+    Route::put('/appointment/{id}', [AppointmentController::class, 'updateAppointment']);
+    Route::delete('/appointment/{appointment}', [AppointmentController::class, 'destroyAppointment']);
+
 
     // patient page 
     Route::get('/patient', [PatientController::class, 'showData']);

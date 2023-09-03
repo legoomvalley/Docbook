@@ -199,24 +199,60 @@ class DoctorController extends Controller
 
     // mobile
 
+    public function updateDoctor(Request $request, $id)
+    {
+        $user = User::where('id', $id)->first();
+        $doctor = Doctor::where('doc_id', $id)->first();
+        $validatedData = Validator::make($request->all(), [
+            'unique:doctors,user_name,' . $id,
+            'unique:tmp_doctors,user_name,' . $id,
+        ]);
+        if (!$validatedData->passes()) {
+            return response()->json($validatedData->errors(), 400);
+        }
+        $user->update([
+            'name' => $request->name
+        ]);
+        $doctor->update([
+            'user_name' => $request->user_name,
+            'phone_no' => $request->phone_no,
+            'specialization_id' => $request->specialization,
+            'bio_data' => $request->bio_data,
+            'experience_year' => $request->experience,
+            'status' => $request->status,
+        ]);
+
+        // fullname, username, mobilenumber, specialization, status, biodata, experience
+
+        return response()->json(['message' => 'Data updated successfully']);
+    }
+
     public function showData()
     {
         // required data : appointment, user(doctor), related id patient, 
         $user = array();
         $user = Auth::user();
         $patients = User::where('type', 'patient')->get();
+        $doctor = Doctor::where('doc_id', Auth::user()->id)->get();
         $appointments = Appointment::where('doctor_id', Auth::user()->id)->get();
+        $todayAppointments = [];
 
-        foreach ($patients as $patient) {
-            foreach ($appointments as $appointment) {
+
+        foreach ($appointments as $appointment) {
+            if (now()->toDateString() == $appointment->date && 'approved' == $appointment->status) {
+                // Add it to the todayAppointments array
+                $todayAppointments[] = $appointment;
+            }
+            foreach ($patients as $patient) {
                 if ($patient['id'] == $appointment['patient_id']) {
                     $appointment['patient_name'] = $patient['name'];
-                    $appointment['today_app'] = Appointment::where('doctor_id', Auth::user()->id)->whereDate('date', now()->toDateString())->get();
+                    $appointment['photo_path'] = $patient['profile_photo_path'];
                 }
             }
         }
-
+        $user['doctor'] = $doctor;
         $user['patient'] = $appointments;
+        $user['today_app'] = $todayAppointments;
         return $user;
     }
 
