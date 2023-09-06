@@ -121,6 +121,8 @@ return [
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
+            'field' => 'password',
+
         ],
         'doctors' => [
             'provider' => 'doctors',

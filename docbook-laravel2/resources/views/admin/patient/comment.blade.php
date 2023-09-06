@@ -39,8 +39,8 @@
                 @foreach ($tmpComment as $item)
                 <tr class="shadow-sm rounded">
                     <th scope="row" class="align-middle">{{ $loop->iteration }}</th>
-                    <td class="align-middle text-center">{{ $item->patient->full_name }}</td>
-                    <td class="align-middle text-center">{{ $item->doctor->first_name }} {{ $item->doctor->last_name }}
+                    <td class="align-middle text-center">{{ $item->patient->name }}</td>
+                    <td class="align-middle text-center">{{ $item->doctor->name }}
                     </td>
                     <td class="align-middle text-center">
                         <form action="" method="post">
@@ -52,7 +52,7 @@
                         </form>
                     </td>
                     <td class="align-middle text-center">
-                        <form action="/admin/dashboard/approve-comment/{{$item->id}}/{{ $item->patient->full_name }}"
+                        <form action="/admin/dashboard/approve-comment/{{$item->id}}/{{ $item->patient->name }}"
                             method="post">
                             @csrf
                             <button class="bg-transparent border-0"
@@ -60,7 +60,7 @@
                                     class="fa-solid fa-circle-check" id="approve-doctor"
                                     style="color: #37ff00;"></i></button>
                         </form>
-                        <form action="/admin/dashboard/reject-comment/{{$item->id}}/{{ $item->patient->full_name }}"
+                        <form action="/admin/dashboard/reject-comment/{{$item->id}}/{{ $item->patient->name }}"
                             method="post">
                             @csrf
                             <button class="bg-transparent border border-0"
@@ -73,7 +73,7 @@
             </tbody>
         </table>
         @else
-        <h5 class="text-uppercase mt-3 ms-3 text-primary mb-3">don't have Pending Patient Comment for now</h5>
+        <h5 class="text-uppercase mt-3 ms-3 text-primary mb-3">no comment</h5>
         @endif
     </div>
     {{-- endof indexDashboard --}}

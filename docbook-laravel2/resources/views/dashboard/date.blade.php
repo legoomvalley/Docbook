@@ -49,7 +49,7 @@
                     </td>
                     <td class="align-middle ">
                         {{-- {{$p->patient->full_name }} --}}
-                        {{$p->patient->full_name }}
+                        {{$p->full_name }}
                     </td>
                     <td class="align-middle text-center">
                         <form action="/dashboard" method="post">

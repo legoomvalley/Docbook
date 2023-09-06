@@ -428,9 +428,7 @@ a {
     transition: 0.3s ease-in-out all
 }
 
-.imageSpeciality figure:hover .imgTitle {
-    backdrop-filter: blur(0px);
-}
+
 
 .imageSpeciality figure:hover img {
     transform: scale(1.5);
@@ -1330,7 +1328,7 @@ p.text-danger {
     /* margin-bottom: 0px; */
 }
 
-.registerForm input[name=experience] {
+.registerForm input[name=bio_data] {
     height: 92px;
     padding-bottom: 60px;
 }
@@ -2795,7 +2793,8 @@ q {
 }
 
 .dashboardProfileContainer input,
-.dashboardProfileContainer select {
+.dashboardProfileContainer select,
+.dashboardProfileContainer textarea {
     display: block;
     border-radius: 25px;
     /* margin-top: 15px; */

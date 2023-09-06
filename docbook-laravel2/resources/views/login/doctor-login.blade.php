@@ -4,10 +4,12 @@
 <div class="signInContainer">
 
     @if(session()->has('success'))
-    <div class="alert-container">
-        <div class="alert alert-success">
-            <p>{{ session('success') }}</p>
-            <span style="display:flex;" class="close"><i class="fa-solid fa-xmark"></i></span>
+    <div class="d-flex justify-content-center mx-2">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="text-center"><i class="fa-regular fa-circle-check"></i></i>
+                <p>{{ session('success') }}</p>
+            </div>
+            <button type="button" class="btn-close mt-1" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </div>
 

@@ -10,14 +10,14 @@ class Appointment extends Model
 {
     use HasFactory;
 
-    // public $timestamps = false;
+    public $timestamps = true;
     protected $guarded = ['id'];
 
 
     // one appointment can has one patient and one doctor
     public function doctor()
     {
-        return $this->belongsTo(Doctor::class, 'doctor_id');
+        return $this->belongsTo(Doctor::class, 'doc_id');
     }
 
 

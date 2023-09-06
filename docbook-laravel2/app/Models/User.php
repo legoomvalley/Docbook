@@ -27,6 +27,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type',
+        'profile_photo_path'
     ];
 
     /**
@@ -58,4 +60,13 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function patient()
+    {
+        return $this->hasOne(Patient::class);
+    }
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class, 'doc_id');
+    }
 }

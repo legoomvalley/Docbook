@@ -23,9 +23,8 @@
                 @if(session()->has('success'))
                 <div class="d-flex justify-content-center">
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <div class="text-center"><i class="fa-sharp fa-solid fa-square-check me-1"></i> {{
-                            session('success') }} <a
-                                href="/check-appointment/{{ \Auth::guard('patient')->user()->user_name }}">here</a>
+                        <div class="text-center"><i class="fa-sharp fa-solid fa-square-check me-1"></i> {!!
+                            session('success') !!}
 
                         </div>
 
@@ -90,19 +89,6 @@
                             <label for="floatingInput">Select Specialization</label>
                         </div>
                     </div>
-                    <div class="form-floating">
-
-
-                        {{-- additional Message --}}
-                        <input value="{{ old('additional_message') }}" name="additional_message" type="text"
-                            class="form-control rounded-end @error('additional_message') is-invalid  @enderror"
-                            id="floatingInput">
-                        <label for="floatingInput">Additional Message</label>
-                        @error('additional_message')
-                        <div class="invalid-feedback">
-                            {{ $message }}</div>
-                        @enderror
-                    </div>
                     <div class="d-grid col-4 mx-auto mt-3">
                         <button class="btn btn-lg btn-primary" type="submit">Submit</button>
                     </div>
@@ -111,12 +97,9 @@
 
 
             <form action="/make-appointment" method="POST">
-
-
-
+                @csrf
                 {{-- form 2 --}}
                 <div class="form2">
-
                     <div class="mb-1 dateTime">
                         {{-- date --}}
                         <div class="mb-1 input">
@@ -168,22 +151,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="mb-1">
-
-
-                        {{-- additional Message --}}
-                        <label for="floatingInput">Additional Message</label>
-                        <textarea value="{{ old('additional_message') }}" name="additional_message" type="text"
-                            class="form-control rounded-end @error('additional_message') is-invalid  @enderror"
-                            id="floatingInput" rows='3'></textarea>
-                        @error('additional_message')
-                        <div class="invalid-feedback">
-                            {{ $message }}</div>
-                        @enderror
-                    </div>
-
-
-
                     <div class="d-grid col-4 mx-auto mt-3">
                         <button class="btn btn-lg btn-primary" type="submit">Submit</button>
                     </div>
@@ -193,6 +160,8 @@
         </main>
     </div>
 </div>
+{{-- not auth patient --}}
+{{-- ================================================= --}}
 @else
 <!-- login section -->
 <div class="appointmentFormContainer pt-3 pb-5 d-flex justify-content-center mx-auto"
@@ -289,7 +258,7 @@
                                                     id="form3Example1" placeholder="Full Name"
                                                     class="form-control full_name_error" />
 
-                                                <p class="text-danger full_name_error"></p>
+                                                <p class="text-danger full_name_error full_name"></p>
                                             </div>
                                         </div>
                                         {{-- Username Input --}}
@@ -349,7 +318,7 @@
     <div class="specialityGallery">
         <div class="imageSpeciality">
             <figure style="position: relative; overflow:hidden" class="rounded-4">
-                <a href="all-doctors/specialization/{{ 'Pediatrics'}}" class="text-white">
+                <a href="{{ route('specialization', ['specialization' => '1']) }}" class="text-white">
                     <img src="{{ asset('img/specialityImg1.png') }}" alt="">
                     <div class="imgTitle">
                         <h3>Pediatrics</h3>
@@ -359,7 +328,7 @@
         </div>
         <div class="imageSpeciality rounded">
             <figure style="position: relative; overflow:hidden" class="rounded-4">
-                <a class="text-white" href="all-doctors/specialization/{{ 'General Medicine'}}">
+                <a class="text-white" href="{{ route('specialization', ['specialization' => '2']) }}">
                     <img src="{{ asset('img/specialityImg2.png') }}" alt="">
                     <div class="imgTitle">
                         <h3>General Medicine</h3>
@@ -370,7 +339,7 @@
         </div>
         <div class="imageSpeciality">
             <figure style="position: relative; overflow:hidden" class="rounded-4">
-                <a class="text-white" href="all-doctors/specialization/{{ 'Orthopedics'}}">
+                <a class="text-white" href="all-doctors/specialization/{{ '3'}}">
                     <img src="{{ asset('img/specialityImg3.png') }}" alt="">
                     <div class="imgTitle">
                         <h3>Orthopedics</h3>
@@ -381,7 +350,7 @@
         </div>
         <div class="imageSpeciality">
             <figure style="position: relative; overflow:hidden" class="rounded-4">
-                <a class="text-white" href="all-doctors/specialization/{{ 'Eye Specialist'}}">
+                <a class="text-white" href="all-doctors/specialization/{{ '4'}}">
                     <img src="{{ asset('img/specialityImg4.png') }}" alt="">
                     <div class="imgTitle">
                         <h3>Eye Specialist</h3>

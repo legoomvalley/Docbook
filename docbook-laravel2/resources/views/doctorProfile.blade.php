@@ -13,8 +13,7 @@
         <div class="d-flex flex-column justify-content-start col-sm-12 col-xs-12 col-md-11 col-lg-9">
             <div class="profileHeader">
                 <h2>Dr .
-                    <?= $doctor['first_name']; ?>
-                    <?= $doctor['last_name']; ?>
+                    <?= $doctor->user->name; ?>
                 </h2>
                 <p>
                     <?= $doctor['location']; ?>
@@ -33,14 +32,13 @@
             <div class="profileInformation">
                 <h3>Name:</h3>
                 <p>
-                    <?= $doctor['first_name']; ?>
-                    <?= $doctor['last_name']; ?>
+                    <?= $doctor->user->name; ?>
                 </p>
             </div>
             <div class="profileInformation">
                 <h3>Email:</h3>
                 <p>
-                    <?= $doctor['email']; ?>
+                    <?= $doctor->user->email ?>
                 </p>
             </div>
             <div class="profileInformation profileInformation3">
@@ -50,9 +48,9 @@
                 </p>
             </div>
             <div class="profileInformation profileInformation4">
-                <h3>Location:</h3>
+                <h3>Total experience:</h3>
                 <p>
-                    <?= $doctor['location']; ?>
+                    <?= $doctor['experience_year']; ?> year
                 </p>
             </div>
             <div class="profileInformation profileInformation5">
@@ -94,7 +92,7 @@
                             <button type="button" data-bs-dismiss="modal"><i
                                     class="fa-solid fa-xmark text-end"></i></button>
                         </div>
-                        <p>Make Appointment with Dr.{{ $doctor['first_name']}}Here</p>
+                        <p>Make Appointment with Dr.{{ $doctor->user->name}}</p>
                     </div>
                     <!-- Background image -->
 
@@ -149,16 +147,6 @@
                                                 @endforeach
                                             </select>
                                             <p class="text-danger"></p>
-                                        </div>
-                                        {{-- additional message input --}}
-                                        <div class="mb-1 d-flex flex-column">
-                                            <label for="form3Example4"
-                                                class="form-label text-start fw-bold text-body-tertiary">Additional
-                                                Message</label>
-                                            <textarea value="{{ old('additional_message') }}" name="additional_message"
-                                                type="text" id="form3Example4" placeholder="Addtional Message"
-                                                class="form-control" style="height: 100px"></textarea>
-                                            <p class="text-danger additional_message_error"></p>
                                         </div>
                                         <!-- Submit button -->
                                         <button type="submit" class="btn btn-outline-primary btn-block"

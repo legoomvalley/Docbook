@@ -1,9 +1,9 @@
 // registration form with ajax
 $(function () {
-    console.log('parah')
     $("#patient-register-form").on('submit', function (e) {
         e.preventDefault();
-
+        $('#patient-registration-btn').attr('disabled', 'disabled')
+        $('#patient-registration-btn').text('please wait......')
 
         $.ajax({
             url: $(this).attr('action'),
@@ -13,13 +13,15 @@ $(function () {
             contentType: false,
             processData: false,
             beforeSend: function () {
-                $(document).find('h5.registerAlert').text("");
+                $(document).find('p.text-danger').text("");
             },
             success: function (data) {
                 console.log(data)
                 if (data.status == 0) {
                     $.each(data.error, function (prefix, val) {
                         $('p.' + prefix + '_error').text(val[0]);
+                        $('#patient-registration-btn').text('submit')
+                        $('#patient-registration-btn').removeAttr('disabled')
                     })
                 } else {
                     $('#patient-registration-btn').attr('data-bs-dismiss', 'modal');
@@ -29,7 +31,8 @@ $(function () {
                     <button type="button" class="btn-close mt-1" data-bs-dismiss="alert"
                         aria-label="Close"></button>
                 </div>`)
-                    // $('p#errMsg').text(data.msg);
+                    $('#patient-registration-btn').attr('data-bs-dismiss', 'modal');
+                    $('#patient-registration-btn').text('your account has been registered, please login')
                 }
             }
         })
@@ -54,8 +57,9 @@ $(function () {
             },
             success: function (data) {
                 if (data.status == 0) {
+                    console.log(data.status)
                     $.each(data.error, function (prefix, val) {
-                        $('#patient-appointment-btn').text('submit')
+                        $('#doctor-comment-btn').text('submit')
                         $('#doctor-comment-btn').removeAttr('disabled')
                         $('p.' + prefix + '_error').text(val[0]);
                     })
@@ -164,6 +168,7 @@ $(function () {
     })
     $('.displayDetailsModal').on('click', function () {
         const id = $(this).data('id')
+        console.log(id)
         $.ajax({
             url: 'http://docbook-laravel2.test/check-appointment',
             data: { id: id },
@@ -173,6 +178,7 @@ $(function () {
             },
             dataType: 'json',
             success: function (data) {
+                console.log(data)
                 $('.patient-modal-body #remark').text(data.remark);
                 $('.patient-modal-body #status').text(data.status);
                 let date = new Date(Date.parse(data.date));
@@ -180,7 +186,7 @@ $(function () {
                 let m = date.getMonth() + 1;
                 let y = date.getFullYear();
                 $('.patient-modal-body #date').text(d + "/" + m + "/" + y + " | " + data.time);
-                $('.patient-modal-body #doctorName').text(data.first_name + " " + data.last_name);
+                // $('.patient-modal-body #doctorName').text(data.first_name + " " + data.last_name);
             }
         })
     })
@@ -317,6 +323,7 @@ $(function () {
     })
     $('.displayDetailsTmpComment').on('click', function () {
         const id = $(this).data('id')
+
         $.ajax({
             url: 'http://docbook-laravel2.test/admin/dashboard/comment',
             data: { id: id },
@@ -332,6 +339,8 @@ $(function () {
     })
     $('.displayDetailsDoctor').on('click', function () {
         const id = $(this).data('id')
+        console.log(id)
+
         $.ajax({
             url: 'http://docbook-laravel2.test/admin/dashboard/allDoctor',
             data: { id: id },
@@ -341,13 +350,9 @@ $(function () {
             },
             dataType: 'json',
             success: function (data) {
-                let date = new Date(Date.parse(data.date));
-                let d = date.getDate();
-                let m = date.getMonth() + 1;
-                let y = date.getFullYear();
+                console.log(data)
                 $('.patient-modal-body #email').text(data.email);
                 $('.patient-modal-body #mobile_no').text(data.mobile_number);
-                $('.patient-modal-body #location').text(data.location);
             }
         })
     })

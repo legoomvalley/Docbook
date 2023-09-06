@@ -43,7 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/patient', [PatientController::class, 'showData']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('/doctors/{doctorId}/comments', [DoctorController::class, 'showComment']);
-    Route::post('/book', [AppointmentController::class, 'store']);
+    Route::post('/book', [AppointmentController::class, 'storeDoctorMobile']);
     Route::post('/comments', [PatientController::class, 'storeComment']);
     Route::put('/profile/update/patient', [PatientController::class, 'update']);
     Route::put('/appointment/update/{id}', [AppointmentController::class, 'updatePatientAppointment']);

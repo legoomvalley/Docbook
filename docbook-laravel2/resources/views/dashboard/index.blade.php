@@ -7,6 +7,15 @@
             <h1 class="my-5 text-center font-monospace fw-bolder">Welcome Doctor {{ $doctor['user_name']}}
             </h1>
             <div class="d-flex allTable align-content-center justify-content-center">
+                @if(session()->has('success'))
+                <div class="alert alert-success alert-dismissible fade show col-10 col-md-6 col-lg-4 mx-auto"
+                    role="alert">
+                    <i class="fa-sharp fa-solid fa-square-check me-1"></i>
+                    {{ session('success') }}
+                    <button type="button" class="btn-close align-middle" data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+                </div>
+                @endif
                 <div class="d-flex flex-column requestCancelContainer">
                     <div class="shadow indexDashboard rounded-4 col-11 col-sm-11 col-md-11 col-lg-11 px-4 mb-5">
                         @if (count($requestedAppointmentAll) > 2)
@@ -25,7 +34,7 @@
                             @foreach ($requestedAppointment as $appointment)
                             <tr class=" shadow-sm rounded-5">
                                 <th scope="row" class="align-middle">{{ $loop->iteration }}</th>
-                                <td class="align-middle">{{$appointment->patient->full_name }}</td>
+                                <td class="align-middle text-center">{{$appointment->full_name }}</td>
                                 <td class="align-middle text-center">
                                     <form action="/dashboard" method="post">
                                         @csrf
@@ -42,12 +51,7 @@
                                 <td class="align-middle text-center">
                                     <a class="myBtn"
                                         href="/dashboard/appointment-request/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
-                                        class="fas fa-times-circle requestIcon" style="color: red;"><i
-                                            class="fa-solid fa-circle-xmark"></i></a>
-                                    <a class="myBtn2"
-                                        href="/dashboard/appointment-request/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
-                                        class="fas fa-check-circle requestIcon" style=" color:green;"><i
-                                            class="fa-solid fa-circle-check"></i></a>
+                                        class=""><i class=" fa-sharp fa-regular fa-pen-to-square"></i></a>
                                 </td>
                             </tr>
                             @endforeach
@@ -76,7 +80,7 @@
                                     {{ $loop->iteration }}
                                 </td>
                                 <td class="align-middle">
-                                    {{$appointment->patient->full_name }}
+                                    {{$appointment->full_name }}
                                 </td>
                                 <td class="align-middle text-center">
                                     <form action="/dashboard" method="post">
@@ -97,22 +101,20 @@
                                 <td class="align-middle text-center">
                                     <a class="myBtn"
                                         href="/dashboard/appointment-request/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
-                                        class="fas fa-times-circle requestIcon" style="color: red;"><i
-                                            class="fa-solid fa-circle-xmark"></i></a>
-                                    <a class="myBtn2"
-                                        href="/dashboard/appointment-request/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
-                                        class="fas fa-check-circle requestIcon" style=" color:green;"><i
-                                            class="fa-solid fa-circle-check"></i></a>
+                                        class=""><i class=" fa-sharp fa-regular fa-pen-to-square"></i></a>
                                 </td>
                             </tr>
                             {{-- endfor --}}
                             @endforeach
                         </table>
 
-                        @elseif(count($requestedAppointmentAll) < 1) <h5 class="ms-3 my-2">You Don't Have
-                            Appointment Request For Now</h5>
+                        @elseif(count($requestedAppointmentAll) < 1) <h5 class="ms-3 my-2">Don't Have
+                            Appointment Request </h5>
                             @endif
                     </div>
+
+
+                    {{-- cancelled table --}}
                     <div class="shadow indexDashboard rounded-4 col-11 col-sm-11 col-md-11 col-lg-11 px-4 pb-1 mb-4">
                         {{-- if (sizeof($data['patientCancel']) > 1) { ?> --}}
                         @if (count($cancelledAppointmentAll) > 2)
@@ -125,8 +127,8 @@
                                     <th scope="col" class="text-center">details</th>
                                     <th scope="col" class="text-center">Mobile No</th>
                                     <th scope="col" class="text-center">Date</th>
-                                    <th scope="col" class="text-center">Action</th>
-                                    <th scope="col" class="text-center">edit</th>
+                                    <th scope="col" class="text-center">status</th>
+                                    <th scope="col" class="text-center">action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -135,8 +137,8 @@
                                     <td class="align-middle">
                                         {{ $loop->iteration }}
                                     </td>
-                                    <td class="align-middle">
-                                        {{$appointment->patient->full_name }}
+                                    <td class="align-middle text-center">
+                                        {{$appointment->full_name }}
                                     </td>
                                     <td class="align-middle text-center">
                                         <form action="/dashboard" method="post">
@@ -158,7 +160,10 @@
                                         {{ $appointment->status }}
                                     </td>
                                     <td class="align-middle text-center">
-                                        <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+                                        <a href=" /dashboard/appointment-cancel/{{ $appointment->patient->user_name
+                                        }}/{{$appointment->id}}/edit">
+                                            <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -187,7 +192,7 @@
                                         {{ $loop->iteration }}
                                     </td>
                                     <td class="align-middle">
-                                        {{$appointment->patient->full_name }}
+                                        {{$appointment->full_name }}
                                     </td>
                                     <td class="align-middle text-center">
                                         <form action="/dashboard" method="post">
@@ -209,17 +214,21 @@
                                         {{ $appointment->status }}
                                     </td>
                                     <td class="align-middle text-center">
-                                        <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+                                    <td class="align-middle text-center">
+                                        <a href=" /dashboard/appointment-cancel/{{ $appointment->patient->user_name
+                                            }}/{{$appointment->id}}/edit">
+                                            <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+                                        </a>
+                                    </td>
                                     </td>
                                 </tr>
                                 {{-- endfor --}}
                                 @endforeach
                             </tbody>
                         </table>
-                        @elseif(count($cancelledAppointmentAll) < 1) <h5 class="ms-3 my-2">You Don't Have
+                        @elseif(count($cancelledAppointmentAll) < 1) <h5 class="ms-3 my-2">Don't Have
                             Cancelled
-                            Appointment For
-                            Now
+                            Appointment
                             </h5>
                             @endif
 
@@ -228,30 +237,7 @@
                     {{--
                 </div> --}}
             </div>
-            {{-- <div class="d-flex align-items-center">
-                <div class="shadow indexDashboard rounded-4 col-sm-10 col-md-11 col-lg-11 px-4 mt-4 pb-3"
-                    style="max-height:min-content">
-                    <h5 class="ms-3 my-2">Today Appointment</h5>
-                    <table class="table table-borderless">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="text-center"></th>
-                                <th scope="col" class="text-center">Name</th>
-                                <th scope="col" class="text-center">Mobile No.</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($requestedAppointment as $appointment)
-                            <tr class=" shadow-sm rounded-5">
-                                <th scope="row" class="align-middle">{{ $loop->iteration }}</th>
-                                <td class="align-middle">{{$appointment->patient->full_name }}</td>
-                                <td>{{ $appointment->patient->phone_no }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div> --}}
+
 
 
 
@@ -281,7 +267,7 @@
                                         {{ $loop->iteration }}
                                     </td>
                                     <td class="align-middle">
-                                        {{$appointment->patient->full_name }}
+                                        {{$appointment->full_name }}
                                     </td>
                                     <td class="align-middle text-center">
                                         <form action="/dashboard" method="post">
@@ -303,7 +289,10 @@
                                         {{ $appointment->disease }}
                                     </td>
                                     <td class="align-middle text-center">
-                                        <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+                                        <a
+                                            href="/dashboard/appointment-approve/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit">
+                                            <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                 {{-- endfor --}}
@@ -332,7 +321,7 @@
                                         {{ $loop->iteration }}
                                     </td>
                                     <td class="align-middle">
-                                        {{$appointment->patient->full_name }}
+                                        {{$appointment->full_name }}
                                     </td>
                                     <td class="align-middle text-center">
                                         <form action="/dashboard" method="post">
@@ -354,14 +343,17 @@
                                         {{ $appointment->disease }}
                                     </td>
                                     <td class="align-middle text-center">
-                                        <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+                                        <a
+                                            href="/dashboard/appointment-approve/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit">
+                                            <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                 {{-- endfor --}}
                                 @endforeach
                             </tbody>
                         </table>
-                        @elseif(count($todayAppointmentAll) < 1) <h5 class="ms-3 my-2">You Don't Have Appointment
+                        @elseif(count($todayAppointmentAll) < 1) <h5 class="ms-3 my-2">Don't Have Appointment
                             Today</h5>
                             @endif
                             {{-- } ?> --}}

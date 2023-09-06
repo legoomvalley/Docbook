@@ -14,22 +14,12 @@
             @csrf
 
             <div class="input-group-sm mt-2">
-                <div class="form-text" id="basic-addon4">first name</div>
-                <input name="first_name" type="text"
-                    class="form-control shadow-sm @error('first_name') is-invalid @enderror"
+                <div class="form-text" id="basic-addon4">full name</div>
+                <input name="full_name" type="text"
+                    class="form-control shadow-sm @error('full_name') is-invalid @enderror"
                     aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                    value="{{ old('first_name') }}">
-                @error('first_name')
-                <p class=" text-danger">{{ $message }}</p>
-                @enderror
-            </div>
-            <div class=" input-group-sm mt-2">
-                <div class="form-text" id="basic-addon4">last name</div>
-                <input name="last_name" type="text"
-                    class="form-control shadow-sm @error('last_name') is-invalid @enderror"
-                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                    value="{{ old('last_name') }}">
-                @error('last_name')
+                    value="{{ old('full_name') }}">
+                @error('full_name')
                 <p class=" text-danger">{{ $message }}</p>
                 @enderror
             </div>
@@ -81,34 +71,24 @@
                     <option value="4">Orthopedics</option>
                     <option value="3">Eye Specialist</option>
                 </select>
-                @error('specialization_id')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
             </div>
+            @error('specialization_id')
+            <div class="text-danger">{{ $message }}</div>
+            @enderror
             <div class=" input-group-sm mt-3 shadow-sm">
                 <select name="status" class="form-select form-select-sm  @error('status') is-invalid @enderror"
                     aria-label=".form-select-sm example" value="{{ old('status') }}">
                     <option value="" disabled selected>Select status</option>
-                    <option value="Available">Available</option>
-                    <option value="Not Available">Not Available</option>
+                    <option value="available">Available</option>
+                    <option value="not available">Not Available</option>
                 </select>
-                @error('status')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
             </div>
-            <div class=" input-group-sm mt-2">
-                <div class="form-text" id="basic-addon4">location</div>
-                <input name="location" type="text"
-                    class="form-control shadow-sm @error('location') is-invalid @enderror"
-                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                    value="{{ old('location') }}">
-                @error('location')
-                <p class=" text-danger">{{ $message }}</p>
-                @enderror
-            </div>
+            @error('status')
+            <div class="text-danger">{{ $message }}</div>
+            @enderror
             <div class=" input-group-sm mt-2">
                 <div class="form-text" id="basic-addon4">experience</div>
-                <input name="experience" type="text"
+                <input name="experience" type="number"
                     class="form-control shadow-sm @error('experience') is-invalid @enderror"
                     aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
                     value="{{ old('experience') }}">
@@ -116,11 +96,21 @@
                 <p class=" text-danger">{{ $message }}</p>
                 @enderror
             </div>
+            <div class=" input-group-sm mt-2">
+                <div class="form-text" id="basic-addon4">bio_data</div>
+                <input name="bio_data" type="text"
+                    class="form-control shadow-sm @error('bio_data') is-invalid @enderror"
+                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                    value="{{ old('bio_data') }}">
+                @error('bio_data')
+                <p class=" text-danger">{{ $message }}</p>
+                @enderror
+            </div>
             <div class="mt-2">
                 <div class="form-text" id="basic-addon4">image</div>
-                <input type="file" class="form-control shadow-sm @error('img') is-invalid @enderror"
-                    id="inputGroupFile03" name="img" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
-                @error('img')
+                <input type="file" class="form-control shadow-sm @error('image') is-invalid @enderror"
+                    id="inputGroupFile03" name="image" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                @error('image')
                 <p class="text-danger">{{ $message }}</p>
                 @enderror
             </div>

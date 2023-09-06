@@ -44,12 +44,12 @@ class DatabaseSeeder extends Seeder
 
         // User::factory(10)->create();
 
-        TmpDoctor::factory(10)->create();
-
-        // Patient::factory(10)->create();
+        // TmpDoctor::factory(10)->create();
+        // 
+        // Doctor::factory(10)->create();
 
         // Comment::factory(1)->create();
-        // // TmpDoctor::factory(20)->create();
+        Appointment::factory(20)->create();
 
 
         // Comment::factory(100)->create();

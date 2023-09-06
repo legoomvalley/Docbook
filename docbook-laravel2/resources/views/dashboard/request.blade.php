@@ -10,9 +10,9 @@
     </div>
     @endif
     <div class="dashboardHistoryTableContainer justify-content-center">
-        <div class="shadow indexDashboard rounded-4 col-11 px-4 mb-2 mx-auto requestTablePageContainer mb-5">
-            @if (count($doctorAppointments) < 1) <h5 class="my-3 me-5" style="width: 100%">You Don't
-                Have Request Today</h5>
+        <div class="shadow indexDashboard rounded-4 col-12 px-4 mb-2 mx-auto requestTablePageContainer mb-5">
+            @if (count($doctorAppointments) < 1) <h5 class="my-3 me-5" style="width: 100%">Don't
+                Have Request Appointment</h5>
 
                 @else
                 <h5>Appointment Request</h5>
@@ -36,7 +36,7 @@
                             1}}
                         </td>
                         <td class="align-middle">
-                            {{$appointment->patient->full_name }}
+                            {{$appointment->full_name }}
                         </td>
                         <td class="align-middle text-center">
                             <form action="/dashboard" method="post">
@@ -62,19 +62,9 @@
                         <td class="align-middle text-center">
                             <a class="myBtn"
                                 href="/dashboard/appointment-request/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
-                                class="fas fa-times-circle requestIcon" style="color: red;"><i
-                                    class="fa-solid fa-circle-xmark"></i></a>
-                            <a class="myBtn2"
-                                href="/dashboard/appointment-request/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
-                                class="fas fa-check-circle requestIcon" style=" color:green;"><i
-                                    class="fa-solid fa-circle-check"></i></a>
+                                class=""><i class=" fa-sharp fa-regular fa-pen-to-square"></i></a>
                         </td>
                     </tr>
-
-
-
-
-
                     @endforeach
                 </table>
                 @endif
@@ -107,7 +97,7 @@ justify-content-between" style="height: 30px;">
                         Mobile No</h1>
                     <p id="mobile_no" class="justify-content-center d-flex fw-bolder text-body"></p>
                     <h1 class="fs-6 justify-content-center d-flex text-body-tertiary" id="exampleModalLabel">
-                        Time
+                        date & Time
                     </h1>
                     <p id="date" class="justify-content-center d-flex fw-bolder text-body">
                     </p>

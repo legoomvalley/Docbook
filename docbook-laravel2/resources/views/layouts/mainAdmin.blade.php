@@ -112,10 +112,6 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <div class="dropdown sidebarDropdown">
-                            <a class="collapse-item d-block" href="{{ route('admin.createPatient') }}">Add Patient
-                            </a>
-                        </div>
-                        <div class="dropdown sidebarDropdown">
                             <a class="collapse-item d-block" href="{{ route('admin.commentPage') }}">Pending Comment
                             </a>
                         </div>

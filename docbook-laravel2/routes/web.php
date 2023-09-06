@@ -33,13 +33,10 @@ Route::middleware('guest:doctor')->group(function () {
     Route::post('/patient-logout', [LoginController::class, 'logoutPatient']);
     Route::get('/all-doctors/specialization/{specialization:name}', [DoctorController::class, 'getBySpecializationName']);
 });
-// Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/all-doctors', [DoctorController::class, 'index']);
-Route::get('/book-doctor/{doctor:user_name}', [DoctorController::class, 'bookDoctor']);
-Route::post('/book-doctor/{doctor:user_name}', [AppointmentController::class, 'storeBookDoctor']);
 Route::post('/all-doctors/specialization', [DoctorController::class, 'getBySpecialization']);
-Route::get('/all-doctors/specialization', [DoctorController::class, 'getBySpecialization']);
+Route::get('/all-doctors/specialization/{specialization}', [DoctorController::class, 'getBySpecialization'])->name('specialization');
 Route::get('/doctor-login', [LoginController::class, 'doctorLogin'])->middleware('guest:doctor')->name('login');
 Route::post('/doctor-login', [LoginController::class, 'authenticateDoctor']);
 Route::get('/doctor-register', [RegisterController::class, 'createDoctor'])->middleware('guest:doctor');
@@ -62,20 +59,20 @@ Route::middleware('doctor-access:doctor')->group(function () {
     Route::get('/dashboard/appointment-search-by-date', [DashboardController::class, 'showAppointmentDate']);
 
     Route::get('/dashboard/appointment-request/{patient:user_name}/{appointment}/edit', [AppointmentController::class, 'editActionAppointmentRequest']);
-    Route::post('/dashboard/appointment-request/{patient:user_name}/{appointment}/', [AppointmentController::class, 'updateActionAppointmentRequest']);
 
     Route::get('/dashboard/appointment-approve/{patient:user_name}/{appointment}/edit', [AppointmentController::class, 'editActionAppointmentApprove']);
     Route::post('/dashboard/appointment-approve/{patient:user_name}/{appointment}/', [AppointmentController::class, 'updateActionAppointmentApprove']);
 
     Route::get('/dashboard/appointment-cancel/{patient:user_name}/{appointment}/edit', [AppointmentController::class, 'editActionAppointmentCancel']);
-    Route::post('/dashboard/appointment-cancel/{patient:user_name}/{appointment}/', [AppointmentController::class, 'updateActionAppointmentCancel']);
-    // Route::post('/dashboard/appointment-approve/{patient:user_name}/{appointment}/', [AppointmentController::class, 'updateActionAppointmentApprove']);
+    Route::delete('/appointment-cancel/{appointment}', [AppointmentController::class, 'deleteAppointmentApprove']);
 });
 
 Route::middleware('patient-access:patient')->group(function () {
 
     Route::get('/check-appointment/{patient:user_name}', [PatientController::class, 'index']);
     Route::post('/check-appointment', [PatientController::class, 'showDetails']);
+    Route::delete('/appointment/{appointment:id}', [PatientController::class, 'deleteAppointment']);
+    Route::put('/appointment/{appointment:id}', [PatientController::class, 'updateAppointmentToComplete']);
     Route::post('/make-appointment', [AppointmentController::class, 'store']);
 });
 
@@ -86,13 +83,13 @@ Route::post('/admin-logout', [LoginController::class, 'logoutAdmin']);
 Route::middleware('admin-access:admin')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'showDashboard']);
     Route::post('/admin/dashboard', [AdminController::class, 'showDetailTmpDoctor']);
-    Route::post('/admin/dashboard/approve-doctor/{tmpDoctor:user_name}', [AdminController::class, 'storeApproveDoctor']);
-    Route::post('/admin/dashboard/reject-doctor/{tmpDoctor:user_name}', [AdminController::class, 'destroyRejectDoctor']);
+    Route::post('/admin/dashboard/approve-doctor/{tmpDoctor}', [AdminController::class, 'storeApproveDoctor']);
+    Route::post('/admin/dashboard/reject-doctor/{tmpDoctor}', [AdminController::class, 'destroyRejectDoctor']);
     Route::get('/admin/dashboard/allDoctor/', [AdminController::class, 'showDoctor'])->name('admin.allDoctor');
     Route::post('/admin/dashboard/allDoctor/', [AdminController::class, 'showDetailDoctor'])->name('admin.allDoctorPost');
 
     Route::get('/admin/dashboard/addDoctor/', [AdminController::class, 'createDoctor'])->name('admin.createDoctor');
-    Route::post('/admin/dashboard/addDoctor/', [AdminController::class, 'storeDoctor'])->name('admin.storeDoctor');
+    Route::post('/admin/dashboard/addDoctor', [AdminController::class, 'storeDoctor'])->name('admin.storeDoctor');
     Route::get('/admin/dashboard/showAllDoctorCategory/', [AdminController::class, 'showAllDoctorCategory'])->name('admin.showDoctorByCategory');
     Route::get('/admin/dashboard/fetchAllDoctorCategory/', [AdminController::class, 'fetchAllDoctorCategory']);
     Route::post('/admin/dashboard/showDoctorByCategory/', [AdminController::class, 'getDoctorByCategory'])->name('admin.getDoctorByCategory');
@@ -102,18 +99,9 @@ Route::middleware('admin-access:admin')->group(function () {
     Route::get('/admin/dashboard/addPatient/', [AdminController::class, 'createPatient'])->name('admin.createPatient');
     Route::post('/admin/dashboard/addPatient/', [AdminController::class, 'storePatient'])->name('admin.storePatient');
     Route::get('/admin/dashboard/showPatientBySearch/', [AdminController::class, 'showPatientBySearch'])->name('admin.showPatientBySearch');
-    Route::post('/admin/dashboard/reject-patient/{patient:full_name}', [AdminController::class, 'destroyRejectPatient']);
+    Route::post('/admin/dashboard/reject-patient/{patient}', [AdminController::class, 'destroyRejectPatient']);
     Route::get('/admin/dashboard/comment', [AdminController::class, 'showComment'])->name("admin.commentPage");
     Route::post('/admin/dashboard/comment', [AdminController::class, 'showDetailTmpComment']);
     Route::post('/admin/dashboard/approve-comment/{tmpComment:id}/{patient:full_name}', [AdminController::class, 'storeApproveComment']);
     Route::post('/admin/dashboard/reject-comment/{tmpComment:id}/{patient:full_name}', [AdminController::class, 'destroyRejectComment']);
 });
-
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
-
-// require __DIR__ . '/auth.php';

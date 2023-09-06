@@ -20,11 +20,11 @@ class DoctorController extends Controller
 
     public function index()
     {
-        $doctors = Doctor::latest();
+        $doctors = User::latest()->where('type', 'doctor');
         $specializationName = Specialization::get();
 
         if (request('searchDoctor')) {
-            $doctors->where('first_name', 'like', '%' . request('searchDoctor') . '%')->orWhere('last_name', 'like', '%' . request('searchDoctor') . '%')->get();
+            $doctors->where('name', 'like', '%' . request('searchDoctor') . '%')->get();
         }
         // dd($doctors);
 
@@ -37,47 +37,44 @@ class DoctorController extends Controller
             "option" => isset($option) ? $option : ""
         ]);
     }
-    public function bookDoctor(Doctor $doctor)
+
+
+    public function getBySpecialization(Specialization $specialization)
     {
+        $doctorsSpecialization = User::latest()->where('type', 'doctor');
+        $doctor =  User::latest()->where('type', 'doctor');
         $specializationName = Specialization::get();
-        // dd($doctors);
-
-        return view('bookDoctor', [
-            "title" => "Book Doctor",
-            "container" => "generalContainer",
-            "doctor" => $doctor,
-            "specializations" => $specializationName,
-            "option" => isset($option) ? $option : ""
-        ]);
-    }
-
-
-    public function getBySpecialization()
-    {
-        $doctorsSpecialization = Doctor::latest();
-        $specializationName = Specialization::get();
-        $doctors = Doctor::latest();
 
         if (request()->specialization) {
             $resultCategory = request()->specialization;
-            $doctorsSpecialization = Doctor::where('specialization_id', $resultCategory);
+            if ($resultCategory == 'all') {
+                $doctorsSpecialization = User::latest()->where('type', 'doctor');
+            } else {
+                $doctorsSpecialization = User::whereHas('doctor', function ($query) use ($resultCategory, $specialization) {
+                    $query->where('specialization_id', $resultCategory)->orWhere('specialization_id', $specialization->id);
+                })->where('type', 'doctor');
+            }
 
-            if (request()->specialization == "1") {
+            if (request()->specialization == "1" || $specialization->id == '1') {
                 $option = "All doctors in Pediatrics";
-            } elseif (request()->specialization == "2") {
+            } elseif (request()->specialization == "2" || $specialization->id == '2') {
                 $option = "All doctors in General Medicine";
-            } elseif (request()->specialization == "3") {
+            } elseif (request()->specialization == "3" || $specialization->id == '3') {
                 $option = "All doctors in Eye Specialist";
-            } elseif (request()->specialization == "4") {
+            } elseif (request()->specialization == "4" || $specialization->id == '4') {
                 $option = "All doctors in Orthopedics";
+            } elseif (request()->specialization == "all") {
+                $option = "All doctors";
             }
         }
+
+
         return view('doctors', [
             "title" => "doctor list",
             "container" => "generalContainer",
             "specializationName" => $specializationName,
-            "doctors" => $doctors->get(),
             "doctorsSpecialization" => $doctorsSpecialization->get(),
+            'doctors' => $doctor->get(),
             "option" => isset($option) ? $option : ""
         ]);
     }

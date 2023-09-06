@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Appointment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -23,30 +24,31 @@ class DashboardController extends Controller
         return view('dashboard.index', [
             "title" => "Dashboard Page",
             "container" => "generalContainer",
-            "doctor" => $doctor,
+            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
 
-            "requestedAppointment" => Appointment::where('doctor_id', $doctor['id'])->where('status', "Pending")->paginate(2),
-            "requestedAppointmentAll" => Appointment::where('doctor_id', $doctor['id'])->where('status', "Pending")->get(),
+            "requestedAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "pending")->paginate(2),
+            "requestedAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "pending")->get(),
 
-            "cancelledAppointment" => Appointment::where('doctor_id', $doctor['id'])->where('status', '=', 'Not Approved')->paginate(2),
-            "cancelledAppointmentAll" => Appointment::where('doctor_id', $doctor['id'])->where('status', '=', 'Not Approved')->get(),
+            "cancelledAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'not approved')->paginate(2),
+            "cancelledAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'not approved')->get(),
 
 
-            "todayAppointment" => Appointment::where('doctor_id', $doctor['id'])->where('date', '=', $today)->where('status', '=', 'Approved')->paginate(2),
-            "todayAppointmentAll" => Appointment::where('doctor_id', $doctor['id'])->where('date', '=', $today)->where('status', '=', 'Approved')->get(),
+            "todayAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('date', '=', $today)->where('status', '=', 'approved')->paginate(2),
+            "todayAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('date', '=', $today)->where('status', '=', 'approved')->get(),
         ]);
     }
     public function showDetails()
     {
-        echo json_encode(Appointment::join('patients', 'patients.id', '=', 'appointments.patient_id')->where('appointments.id', $_POST['id'])->get()[0]);
+        echo json_encode(Appointment::join('patients', 'patients.patient_id', '=', 'appointments.patient_id')->join('users', 'users.id', '=', 'appointments.patient_id')->where('appointments.id', $_POST['id'])->get()[0]);
         // echo json_encode(Appointment::where('id', $_POST['id'])->get()[0]);
     }
     public function editDoctor(Doctor $doctor)
     {
+        $doctorData = Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first();
         return view('dashboard.editDoctor', [
             "title" => "edit Page",
             "container" => "",
-            "doctor" => $doctor,
+            "doctor" => $doctorData,
 
         ]);
     }
@@ -54,28 +56,41 @@ class DashboardController extends Controller
     {
         $rules = [
             'mobile_number' => 'required',
-            'location' => 'required',
+            'full_name' => 'required',
             'experience' => 'required',
-            'specialization_id' => 'required',
-            'status' => 'required',
-            'img' => 'image|file|max:5000'
+            'bio_data' => 'required',
+            'specialization' => 'required',
+            'image' => 'image|file|max:5000',
+            'email' => 'required|email:dns|unique:users,email,' . $doctor->doc_id,
+            'user_name' => 'required|unique:doctors,user_name,' . $doctor->id,
         ];
-        if ($request->email != $doctor->email) {
-            $rules['email'] = 'required|email:dns|unique:doctors|';
-        }
-        if ($request->user_name != $doctor->user_name) {
-            $rules['user_name'] = 'required|unique:doctors|';
-        }
         $validatedData = $request->validate($rules);
+
+        // Update the user record in the users table
+        $user = User::find($doctor->doc_id);
+        $user->name = $validatedData['full_name'];
+        $user->email = $validatedData['email'];
+
         if ($request->oldImg) {
             Storage::delete($request->oldImg);
         }
-        if ($request->file('img')) {
-            $validatedData['img'] = $request->file('img')->store('doctor-img');
+        if ($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('profile_photos');
+
+            $user->profile_photo_path = $validatedData['image'];
         }
+        $user->save();
 
-        Doctor::where('id', $doctor->id)->update($validatedData);
 
+
+        Doctor::where('id', $doctor->id)->update([
+            'user_name' => $validatedData['user_name'],
+            'mobile_number' => $validatedData['mobile_number'],
+            'specialization_id' => $validatedData['specialization'],
+            'bio_data' => $validatedData['bio_data'],
+            'experience_year' => $validatedData['experience'],
+            'status' => $request->input('status')
+        ]);
         return redirect('/dashboard/' . $request->user_name . '/edit')->with('success', 'Data succesfully Updated');
     }
     public function showAppointmentRequest()
@@ -85,8 +100,8 @@ class DashboardController extends Controller
         return view('dashboard.request', [
             "title" => "Request Appointment Page",
             "container" => "generalContainer",
-            "doctor" => $doctor,
-            "doctorAppointments" => Appointment::where('doctor_id', $doctor['id'])->where('status', "Pending")->paginate(7),
+            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
+            "doctorAppointments" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "Pending")->paginate(7),
         ]);
     }
     public function showAppointmentCancel()
@@ -96,8 +111,8 @@ class DashboardController extends Controller
         return view('dashboard.cancel', [
             "title" => "Cancel Appointment Page",
             "container" => "generalContainer",
-            "doctor" => $doctor,
-            "doctorAppointments" => Appointment::where('doctor_id', $doctor['id'])->where('status', '=', 'Not Approved')->paginate(7),
+            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
+            "doctorAppointments" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'Not Approved')->paginate(7),
         ]);
     }
     public function showAppointmentApprove()
@@ -107,8 +122,8 @@ class DashboardController extends Controller
         return view('dashboard.approve', [
             "title" => "Approve Appointment Page",
             "container" => "generalContainer",
-            "doctor" => $doctor,
-            "doctorAppointments" => Appointment::where('doctor_id', $doctor['id'])->where('status', '=', 'Approved')->paginate(7),
+            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
+            "doctorAppointments" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'Approved')->paginate(7),
         ]);
     }
     public function showAppointmentToday()
@@ -120,7 +135,7 @@ class DashboardController extends Controller
         return view('dashboard.today', [
             "title" => "today Appointment Page",
             "container" => "generalContainer",
-            "doctor" => $doctor,
+            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
             "doctorAppointments" => Appointment::where('doctor_id', $doctor['id'])->where('date', '=', $today)->paginate(7),
         ]);
     }
@@ -140,9 +155,8 @@ class DashboardController extends Controller
         return view('dashboard.name', [
             "title" => "Search Page",
             "container" => "generalContainer",
-            "patient" => $patient->where('doctor_id', $doctor->id)->get(),
-            "doctor" => $doctor
-            // "doctorAppointments" => Appointment::where('doctor_id', $patient['id'])->where('date', '=', $today)->paginate(7),
+            "patient" => $patient->where('doctor_id', $doctor->doc_id)->get(),
+            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
         ]);
     }
 
@@ -164,8 +178,8 @@ class DashboardController extends Controller
         return view('dashboard.date', [
             "title" => "Search Page",
             "container" => "generalContainer",
-            "patient" => $patient->where('doctor_id', $doctor->id)->get(),
-            "doctor" => $doctor
+            "patient" => $patient->where('doctor_id', $doctor->doc_id)->get(),
+            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
             // "doctorAppointments" => Appointment::where('doctor_id', $patient['id'])->where('date', '=', $today)->paginate(7),
         ]);
     }

@@ -15,28 +15,18 @@
                     aria-label="Close"></button>
             </div>
             @endif
-            <form action="{{ route('admin.storeDoctor') }}" method="post" enctype="multipart/form-data">
+
+            <form action="{{ route('admin.storeDoctor') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="d-sm-flex justify-content-between">
-                    <div class="input-group-sm mt-2 col-sm-6  pe-sm-2" style="padding:0">
-                        <div class="form-text" id="basic-addon4">first name</div>
-                        <input name="first_name" type="text"
-                            class="form-control shadow-sm @error('first_name') is-invalid @enderror"
-                            value="{{ old('first_name') }}">
-                        @error('first_name')
-                        <p class=" text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class=" input-group-sm mt-2 col-sm-6" style="padding:0">
-                        <div class="form-text" id="basic-addon4">last name</div>
-                        <input name="last_name" type="text"
-                            class="form-control shadow-sm @error('last_name') is-invalid @enderror"
-                            aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                            value="{{ old('last_name') }}">
-                        @error('last_name')
-                        <p class=" text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <div class=" input-group-sm mt-2" style="padding:0">
+                    <div class="form-text" id="basic-addon4">full name</div>
+                    <input name="full_name" type="text"
+                        class="form-control shadow-sm @error('full_name') is-invalid @enderror"
+                        aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                        value="{{ old('full_name') }}">
+                    @error('full_name')
+                    <p class=" text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div class=" input-group-sm mt-2">
                     <div class="form-text" id="basic-addon4">user name</div>
@@ -59,7 +49,7 @@
                 </div>
                 <div class=" input-group-sm mt-2">
                     <div class="form-text" id="basic-addon4">password</div>
-                    <input name="password" type="text"
+                    <input name="password" type="password"
                         class="form-control shadow-sm @error('password') is-invalid @enderror"
                         aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                     @error('password')
@@ -95,8 +85,8 @@
                         <select name="status" class="form-select form-select-sm  @error('status') is-invalid @enderror"
                             aria-label=".form-select-sm example" value="{{ old('status') }}">
                             <option value="" disabled selected>Select status</option>
-                            <option value="Available">Available</option>
-                            <option value="Not Available">Not Available</option>
+                            <option value="available">Available</option>
+                            <option value="not available">Not Available</option>
                         </select>
                         @error('status')
                         <div class="text-danger">{{ $message }}</div>
@@ -104,34 +94,34 @@
                     </div>
                 </div>
                 <div class=" input-group-sm mt-2">
-                    <div class="form-text" id="basic-addon4">location</div>
-                    <input name="location" type="text"
-                        class="form-control shadow-sm @error('location') is-invalid @enderror"
+                    <div class="form-text" id="basic-addon4">year of experience</div>
+                    <input name="experience" type="number" min="0"
+                        class="form-control shadow-sm @error('experience') is-invalid @enderror"
                         aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                        value="{{ old('location') }}">
-                    @error('location')
+                        value="{{ old('experience') }}">
+                    @error('experience')
                     <p class=" text-danger">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class=" input-group-sm mt-2">
-                    <div class="form-text" id="basic-addon4">experience</div>
-                    <input name="experience" type="text"
-                        class="form-control shadow-sm @error('experience') is-invalid @enderror"
+                    <div class="form-text" id="basic-addon4">bio data</div>
+                    <input name="bio_data" type="text"
+                        class="form-control shadow-sm @error('bio_data') is-invalid @enderror"
                         aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                        value="{{ old('experience') }}" style="height: 100px;padding-bottom:70px">
-                    @error('experience')
+                        value="{{ old('bio_data') }}" style="height: 100px;padding-bottom:70px">
+                    @error('bio_data')
                     <p class=" text-danger">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="input-group-sm mt-2">
                     <div class="form-text" id="basic-addon4">image</div>
-                    <input type="file" class="form-control shadow-sm @error('img') is-invalid @enderror"
-                        id="inputGroupFile03" name="img" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
-                    @error('img')
+                    <input type="file" class="form-control shadow-sm @error('image') is-invalid @enderror"
+                        id="inputGroupFile03" name="image" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                    @error('image')
                     <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
-                <input type="submit" value="submit" class="d-block mt-2 btn btn-outline-primary rounded align-middle">
+                <button type="submit" class="d-block mt-2 btn btn-outline-primary rounded align-middle">submit</button>
 
 
             </form>
@@ -147,6 +137,6 @@
 
 
 
-@section('jsAjax')
+{{-- @section('jsAjax')
 <script type="text/javascript" src="{{ asset('js/jsAjax.js') }}"></script>
-@endsection
+@endsection --}}

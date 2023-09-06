@@ -3,6 +3,7 @@
             @foreach($specializations as $item)
         $('li#spec{{ $item->id }}').click(function(){
             var spec = $('#spec{{ $item->id }}').val();
+            console.log(spec)
             $.ajax({
                 type:'post',
                 dataType:'html',
@@ -12,16 +13,13 @@
 
                     $('#doctorData').html(data)
                     $('.result').text($('li#spec{{ $item->id }}').text())
+                    $('.specializationTd').text($('li#spec{{ $item->id }}').text())
                 }
             })
         })
         
         @endforeach
-        
-        // function fetch_data(page){
-            //     $.ajax({
-                //         url:"http://docbook-laravel.test/admin/dashboard/fetchAllDoctorByCategory?page="+page,
-                //         success:function(data){
+
         $(document).on('click', '.pagination a', function(event){
             event.preventDefault();
             let page = $(this).attr('href').split('page=')[1];

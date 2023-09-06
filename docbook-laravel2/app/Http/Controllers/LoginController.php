@@ -34,7 +34,7 @@ class LoginController extends Controller
         ]);
 
         // login successfull 
-        if (Auth::guard('doctor')->attempt($credentials)) {
+        if (Auth::guard('doctor')->attempt(['user_name' => $credentials['user_name'], 'password' => $credentials['password']])) {
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }

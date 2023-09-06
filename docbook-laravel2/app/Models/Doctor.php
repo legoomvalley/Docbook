@@ -20,7 +20,7 @@ class Doctor extends Authenticatable
     }
     public function appointments()
     {
-        return $this->hasMany(Appointment::class);
+        return $this->hasMany(Appointment::class, 'doctor_id');
     }
     public function comments()
     {
@@ -32,6 +32,6 @@ class Doctor extends Authenticatable
     }
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class, 'id');
     }
 }

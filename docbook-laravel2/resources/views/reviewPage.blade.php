@@ -10,8 +10,7 @@
         <div class="d-flex flex-column justify-content-start col-sm-12 col-12 col-md-11 col-lg-9">
             <div class="profileHeader reviewHeader">
                 <h2>Dr .
-                    {{$doctor['first_name']}}
-                    {{ $doctor['last_name'] }}
+                    {{$doctor->user->name}}
                 </h2>
                 <p>
                     {{ $doctor['location'] }}
@@ -99,10 +98,8 @@
                             <div class="row d-flex justify-content-center ">
                                 <div class="col-md-12">
                                     {{-- form --}}
-                                    @foreach ($doctorComments as $comment)
-                                    <form action="/review-page/{{ $comment->doctor->user_name }}" method="post"
+                                    <form action="/review-page/{{ $doctor->user_name }}" method="post"
                                         enctype="multipart/form-data" id="doctor-comment-form">
-                                        @endforeach
                                         @csrf
                                         {{-- comment input --}}
                                         <div class="mb-4">

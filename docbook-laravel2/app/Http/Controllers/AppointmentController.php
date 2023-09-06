@@ -59,22 +59,31 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        $appointment = new Appointment();
-        $appointment->patient_id = Auth::user()->id;
-        $appointment->full_name = Auth::user()->name;
-        $appointment->doctor_id = $request->get('doctor_id');
-        $appointment->date = $request->get('date');
-        $appointment->time = $request->get('time');
-        $appointment->disease = $request->get('disease');
-        $appointment->status = 'upcoming';
-        $appointment->save();
+        $doctor = Doctor::where('specialization_id', $request->get('specialization_id'))->where('status', 'available')
+            ->latest()->first();
+        $user = User::where('id', Auth::guard('patient')->user()->patient_id)->first();
 
-        // $jsonPatientId = 
+        $validatedData = $request->validate([
+            'date' => 'required',
+            'time' => 'required',
+            'disease' => 'required'
+        ]);
+        // var_dump($validatedData['disease']);
+        Appointment::create([
+            'full_name' => $user->name,
+            'date' => Carbon::parse($validatedData['date'])->format('Y-m-d'),
+            'time' => $validatedData['time'],
+            'disease' => $validatedData['disease'],
+            'specialization_id' => $request->get('specialization_id'),
+            'remark' => 'not updated yet',
+            'status' => 'pending',
+            'doctor_id' => $doctor->doc_id,
+            'patient_id' => $user->id
+        ]);
 
-        return response()->json([
-            'success' => 'New Appointment has been made successfully!',
-        ], 200);
+        return redirect('/')->with('success', 'successfully sent, check your appointment status <a href="/check-appointment/' . Auth::guard('patient')->user()->user_name  . '">here</a>');
     }
+
 
     public function storeBookDoctor(Request $request)
     {
@@ -105,12 +114,13 @@ class AppointmentController extends Controller
      */
     public function storeByDoctor(Request $request, Doctor $doctor)
     {
+        $userData = DB::table('users')
+            ->where('id', Auth::guard('patient')->user()->patient_id)
+            ->first();
         $validatedData = Validator::make($request->all(), [
             'date' => 'required',
             'time' => 'required',
             'disease' => 'required',
-            'additional_message' => 'required'
-
         ]);
         if (!$validatedData->passes()) {
             return response()->json(['status' => 0, 'error' => $validatedData->errors()->toArray()]);
@@ -119,17 +129,17 @@ class AppointmentController extends Controller
                 'date' => Carbon::parse($request->date)->format('Y-m-d'),
                 'time' => $request->time,
                 'disease' => $request->disease,
-                'additional_message' => $request->additional_message,
-                'full_name' => Auth::guard('patient')->user()->full_name,
+                'full_name' => $userData->name,
                 'patient_id' => Auth::guard('patient')->user()->id,
                 'doctor_id' => $doctor->id,
                 'status' => "Pending",
+                'specialization_id' => $request->specialization_id,
                 'remark' => 'not updated yet'
             ];
-            // dd($values);
 
-            $query = DB::table('appointments')->insert($values);
-            if ($query) {
+            $appointment = new Appointment($values);
+            $appointment->save();
+            if ($appointment) {
                 return response()->json(['status' => 1, 'msg' => 'successfully sent, check your appointment status <a href="/check-appointment/' . Auth::guard('patient')->user()->user_name  . '">here</a>']);
             }
         }
@@ -144,7 +154,7 @@ class AppointmentController extends Controller
             "title" => "Edit Appointment Page",
             "container" => "generalContainer",
             "appointment" => $appointment,
-            "doctor" => $doctor,
+            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
             'patient' => $patient,
         ]);
     }
@@ -161,7 +171,7 @@ class AppointmentController extends Controller
 
         Appointment::where('id', $appointment->id)->update($validatedData);
 
-        return redirect('/dashboard/appointment-request/')->with('success', 'your message successfully sent');
+        return back()->with('success', 'your message successfully sent');
     }
     public function editActionAppointmentApprove(Patient $patient, Appointment $appointment)
     {
@@ -171,7 +181,7 @@ class AppointmentController extends Controller
             "title" => "Edit Appointment Page",
             "container" => "generalContainer",
             "appointment" => $appointment,
-            "doctor" => $doctor,
+            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
             'patient' => $patient,
             'action' => 'appointment-approve'
         ]);
@@ -192,7 +202,7 @@ class AppointmentController extends Controller
 
         Appointment::where('id', $appointment->id)->update($validatedData);
 
-        return redirect('/dashboard/appointment-approve/')->with('success', 'your message successfully sent');
+        return redirect('/dashboard')->with('success', 'your message successfully sent');
     }
     public function editActionAppointmentCancel(Patient $patient, Appointment $appointment)
     {
@@ -202,7 +212,7 @@ class AppointmentController extends Controller
             "title" => "Edit Appointment Page",
             "container" => "generalContainer",
             "appointment" => $appointment,
-            "doctor" => $doctor,
+            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
             'patient' => $patient,
             'action' => 'appointment-cancel'
         ]);
@@ -226,6 +236,13 @@ class AppointmentController extends Controller
         return redirect('/dashboard/appointment-cancel/')->with('success', 'your message successfully sent');
     }
 
+    public function deleteAppointmentApprove(Request $request, Appointment $appointment)
+    {
+        // status, time, date, additionalMessage or remark
+        $appointment->delete();
+        return redirect('/dashboard/appointment-cancel/')->with('success', 'Appointment deleted successfully');
+    }
+
 
 
     // mobile 
@@ -237,6 +254,25 @@ class AppointmentController extends Controller
     public function edit(Appointment $appointment)
     {
         //
+    }
+
+    public function storeDoctorMobile(Request $request)
+    {
+        $appointment = new Appointment();
+        $appointment->patient_id = Auth::user()->id;
+        $appointment->full_name = Auth::user()->name;
+        $appointment->doctor_id = $request->get('doctor_id');
+        $appointment->date = $request->get('date');
+        $appointment->time = $request->get('time');
+        $appointment->disease = $request->get('disease');
+        $appointment->status = 'upcoming';
+        $appointment->save();
+
+        // $jsonPatientId = 
+
+        return response()->json([
+            'success' => 'New Appointment has been made successfully!',
+        ], 200);
     }
 
     /**

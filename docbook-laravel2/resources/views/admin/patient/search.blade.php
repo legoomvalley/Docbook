@@ -60,11 +60,12 @@
                     <tr class="shadow-sm rounded">
                         <th scope="row" class="align-middle">{{ $loop->iteration }}</th>
 
-                        <td class="align-middle">{{ $item->full_name }}</td>
-                        <td class="align-middle text-center">{{ $item->phone_no }}</td>
+                        <td class="align-middle">{{ $item->name }}</td>
+                        <td class="align-middle text-center">{{ optional($item->patient)->phone_no }}</td>
                         <td class="align-middle text-center">{{ $item->email }}</td>
                         <td class="align-middle text-center">
-                            <form action="/admin/dashboard/reject-patient/{{$item->full_name}}" method="post">
+                            <form action="/admin/dashboard/reject-patient/{{optional($item->patient)->id}}"
+                                method="post">
                                 @csrf
                                 <button class="bg-transparent border border-0"
                                     onclick="return confirm('Are you sure to delete?')"><i

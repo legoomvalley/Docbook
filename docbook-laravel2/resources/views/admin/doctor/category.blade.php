@@ -17,6 +17,7 @@
                     <li>All Doctor</li>
                 </a>
                 @foreach ($specializations as $item)
+
                 <li id="spec{{ $item->id }}" value="{{ $item->id }}" class="spec">{{ $item->name }}</li>
                 @endforeach
             </ul>
@@ -50,8 +51,8 @@
                 <thead>
                     <tr>
                         <th scope="col" class="text-center"></th>
-                        <th scope="col" class="text-center">first name</th>
-                        <th scope="col" class="text-center">last name</th>
+                        <th scope="col" class="text-center">full name</th>
+                        <th scope="col" class="text-center">user name</th>
                         <th scope="col" class="text-center">detail</th>
                         <th scope="col" class="text-center">email</th>
                         <th scope="col" class="text-center">contact</th>
@@ -62,14 +63,14 @@
                     @foreach ($doctors as $item)
                     <tr class="shadow-sm rounded">
                         <th scope="row" class="align-middle">{{ $loop->iteration }}</th>
-                        <td class="align-middle text-center">{{ $item->first_name }}</td>
-                        <td class="align-middle text-center">{{ $item->last_name }}</td>
+                        <td class="align-middle text-center">{{ $item->name }}</td>
+                        <td class="align-middle text-center">{{ $item->user_name }}</td>
                         <td class="align-middle text-center">
                             <form action="" method="post">
                                 @csrf
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
                                     class="bg-transparent border border-0 align-middle displayDetailsDoctor"
-                                    data-id='{{ $item->first_name }}'><i class="fa-sharp fa-solid fa-circle-info"></i>
+                                    data-id='{{ $item->id }}'><i class="fa-sharp fa-solid fa-circle-info"></i>
                                 </button>
                             </form>
                         </td>
@@ -86,7 +87,6 @@
         </div>
         {{-- endof indexDashboard --}}
         <div class="col-xl-12 col-md-12 d-flex justify-content-end" id="tblPagination" style="padding: 0">
-            {{ $doctors->links() }}
         </div>
     </div>
 </div>
@@ -112,10 +112,6 @@ justify-content-between" style="height: 35px;">
                     </h1>
                     <p id="mobile_no" class="justify-content-center d-flex fw-bolder text-body">
                     </p>
-                    <h1 class="fs-6 justify-content-center d-flex text-body-tertiary" id="exampleModalLabel">
-                        location
-                    </h1>
-                    <p id="location" class="justify-content-center d-flex fw-bolder text-body text-center">
                 </div>
                 <div class="modal-footer border-dark-subtle border-2 mx-2">
                     <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>

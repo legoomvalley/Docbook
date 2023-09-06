@@ -3,15 +3,14 @@
 <!-- <h1>brobeo beo</h1> -->
 <div class="dashboard-main homeDashboard requestDashboardContainer" style="margin-left:260px">
     @if(session()->has('success'))
-    <div class="alert alert-success alert-dismissible fade show ol-10 col-md-6 col-lg-4 mx-auto" role="alert">
+    <div class="alert alert-success alert-dismissible fade show col-10 col-md-6 col-lg-4 mx-auto" role="alert">
         <i class="fa-sharp fa-solid fa-square-check me-1"></i>
         {{ session('success') }}
         <button type="button" class="btn-close align-middle" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
     <div class="dashboardHistoryTableContainer justify-content-center">
-        <div
-            class="shadow indexDashboard rounded-4 col-11 col-sm-11 col-md-11 col-lg-11 px-4 mb-2 mx-auto cancelTablePageContainer mb-5">
+        <div class="shadow indexDashboard rounded-4  col-lg-12 px-4 mb-2 mx-auto cancelTablePageContainer mb-5">
             @if (count($doctorAppointments) < 1) <h5 class="my-3 me-5" style="width: 100%">You don't have cancel
                 Appointment</h5>
                 @else
@@ -27,7 +26,7 @@
                         <th scope="col" class="text-center">Diseases</th>
                         <th scope="col" class="text-center">Time</th>
                         <th scope="col" class="text-center">Approval</th>
-                        <th scope="col" class="text-center">Edit</th>
+                        <th scope="col" class="text-center">Action</th>
                     </tr>
                     @foreach ($doctorAppointments as $appointment)
 
@@ -37,8 +36,8 @@
                             +
                             1}}
                         </td>
-                        <td class="align-middle">
-                            {{$appointment->patient->full_name }}
+                        <td class="align-middle text-center">
+                            {{$appointment->full_name }}
                         </td>
                         <td class="align-middle text-center">
                             <form action="/dashboard" method="post">
@@ -64,12 +63,37 @@
                         <td class="align-middle text-center">
                             {{$appointment->status}}
                         </td>
-                        <td class="align-middle text-center">
-                            <a href=" /dashboard/appointment-cancel/{{ $appointment->patient->user_name
-                            }}/{{$appointment->id}}/edit">
-                                <i class="fa-sharp fa-regular fa-pen-to-square"></i>
-                            </a>
+                        <td class="align-middle text-center" style="white-space: nowrap;">
+                            <div class="row ms-1">
+                                <div class="col p-0 m-0">
+                                    <a href=" /dashboard/appointment-cancel/{{ $appointment->patient->user_name
+                                }}/{{$appointment->id}}/edit">
+                                        <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+                                    </a>
+                                </div>
+                                <div class="col p-0 m-0 ps-1 pe-2 me-3" style="width: 0;">
+                                    <form action="/appointment-cancel/{{ $appointment->id }}" method="POST"
+                                        id="deleteForm">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type=" submit"
+                                            class="text-decoration-none border border-0 bg-transparent"
+                                            onclick="return confirm('Are you sure to delete?')">
+                                            <i class=" fa-solid fa-trash text-danger"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </td>
+                        {{-- <div class="row">
+                            <div class="col p-0 m-0" style="width: 0">
+                                <a href="/dashboard/appointment-approve/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
+                                    class="text-decoration-none" style="margin-left: 20px; padding: 0;">
+                                    <i class=" fa-sharp fa-regular fa-pen-to-square"></i>
+                                </a>
+                            </div>
+
+                        </div> --}}
                     </tr>
                     @endforeach
                 </table>

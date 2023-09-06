@@ -7,11 +7,10 @@ use App\Models\Admin;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\TmpDoctor;
-use Laravel\Dusk\Browser;
 use App\Models\TmpComment;
 use Illuminate\Http\Request;
 use App\Models\Specialization;
-use Illuminate\Support\Carbon;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -45,7 +44,9 @@ class AdminController extends Controller
     }
     public function showDetailDoctor()
     {
-        echo json_encode(Doctor::join('specializations', 'specializations.id', '=', 'doctors.specialization_id')->where('doctors.first_name', $_POST['id'])->get()[0]);
+        echo json_encode(Doctor::join('specializations', 'specializations.id', '=', 'doctors.specialization_id')
+            ->join('users', 'users.id', '=', 'doctors.doc_id')
+            ->where('doctors.id', $_POST['id'])->get()[0]);
     }
     public function destroyRejectDoctor(TmpDoctor $tmpDoctor)
     {
@@ -54,9 +55,25 @@ class AdminController extends Controller
     }
     public function storeApproveDoctor(TmpDoctor $tmpDoctor)
     {
-        // dd($tmpDoctor);
-        $doctor = $tmpDoctor::find($tmpDoctor->id);
-        $doctor->replicate()->setTable('doctors')->save();
+        $user = User::create([
+            'name' => $tmpDoctor->full_name,
+            'email' => $tmpDoctor->email,
+            'password' => bcrypt($tmpDoctor->password),
+            'type' => 'doctor',
+        ]);
+
+        $doctor = new Doctor([
+            'doc_id' => $user->id,
+            'user_name' => $tmpDoctor->user_name,
+            'email' => $tmpDoctor->email,
+            'mobile_number' => $tmpDoctor->mobile_number,
+            'specialization_id' => $tmpDoctor->specialization_id,
+            'bio_data' => $tmpDoctor->bio_data,
+            'experience_year' => $tmpDoctor->experience_year,
+            'status' => $tmpDoctor->status,
+            'password' => bcrypt($tmpDoctor->password),
+        ]);
+        $doctor->save();
         TmpDoctor::destroy($tmpDoctor->id);
         return redirect('/admin/dashboard')->with('success', 'Doctor has been added');
     }
@@ -81,25 +98,39 @@ class AdminController extends Controller
     public function storeDoctor(Request $request)
     {
         $validatedData = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'full_name' => 'required',
             'user_name' => 'required|unique:doctors',
-            'email' => 'required|email:dns|unique:doctors|',
+            'email' => 'required|email:dns|unique:users|',
             'mobile_number' => 'required',
             'specialization_id' => 'required',
             'status' => 'required',
             'password' => 'required|min:3',
-            'location' => 'required',
             'experience' => 'required',
-            'img' => 'required|image|file|max:5000'
-            // 'img' => 'required',
+            'bio_data' => 'required',
+            'image' => 'image|file|max:5000'
         ]);
-        if ($request->file('img')) {
-            $validatedData['img'] = $request->file('img')->store('doctor-img');
+        if ($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('profile_photos');
         }
 
         $validatedData['password'] = Hash::make($validatedData['password']);
-        Doctor::create($validatedData);
+        $user = User::create([
+            'name' => $validatedData['full_name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'type' => 'doctor',
+            'profile_photo_path' => $validatedData['image'],
+        ]);
+
+        Doctor::create([
+            'user_name' => $validatedData['user_name'],
+            'mobile_number' => $validatedData['mobile_number'],
+            'specialization_id' => $validatedData['specialization_id'],
+            'bio_data' => $validatedData['bio_data'],
+            'status' => $validatedData['status'],
+            'experience' => $validatedData['experience'],
+            'doc_id' => $user->id,
+        ]);
 
         return redirect('admin/dashboard/addDoctor')->with('success', 'doctor successfully added');
     }
@@ -117,13 +148,22 @@ class AdminController extends Controller
     }
     public function showAllDoctorCategory()
     {
-        $doctors = Doctor::latest();
+        $doctors = Doctor::latest()->get();
+        $users = User::latest()->get();
         $specializations = Specialization::get();
+        foreach ($doctors as $doctor) {
+            foreach ($users as $user) {
+                if ($user->id == $doctor->doc_id) {
+                    $doctor->email = $user->email;
+                    $doctor->name = $user->name;
+                }
+            }
+        }
 
         return view('admin.doctor.category', [
             "title" => "Category Page",
             "container" => "generalContainer",
-            "doctors" => $doctors->paginate(100),
+            "doctors" => $doctors,
             "specializations" => $specializations,
         ]);
     }
@@ -142,16 +182,32 @@ class AdminController extends Controller
     public function getDoctorByCategory(Request $request)
     {
         $spec_id = $request->id;
-        $data = DB::table('doctors')->join('specializations', 'specializations.id', 'doctors.specialization_id')->where('doctors.specialization_id', $spec_id);
+        $data = Doctor::latest()->where('doctors.specialization_id', $spec_id)->get();
+        $users = User::latest()->get();
+        $specializations = Specialization::get();
+        foreach ($data as $doctor) {
+            foreach ($users as $user) {
+                if ($user->id == $doctor->doc_id) {
+                    $doctor->email = $user->email;
+                    $doctor->name = $user->name;
+                }
+            }
+        }
+
+        // return $data;
         return view('admin.doctor.DoctorsCategoryPage', [
-            'doctors' => $data->paginate(100),
+            'doctors' => $data,
         ]);
     }
     public function showDoctorBySearch(Request $request)
     {
-        $data = DB::table('doctors')->join('specializations', 'specializations.id', 'doctors.specialization_id');
+        $data = DB::table('doctors')
+            ->join('specializations', 'specializations.id', 'doctors.specialization_id')
+            ->join('users', 'users.id', 'doctors.doc_id')
+            ->select('doctors.*', 'users.*', 'users.name as full_name', 'specializations.name as specialization_name', 'doctors.id as doctor_id');
+
         if (request('searchDoctor')) {
-            $data->where('first_name', 'like', '%' . request('searchDoctor') . '%')->orWhere('last_name', 'like', '%' . request('searchDoctor') . '%');
+            $data->where('user_name', 'like', '%' . request('searchDoctor') . '%')->orWhere('users.name', 'like', '%' . request('searchDoctor') . '%');
         }
         return view('admin.doctor.search', [
             "title" => "Search Page",
@@ -164,35 +220,11 @@ class AdminController extends Controller
         Doctor::destroy($doctor->id);
         return redirect('admin/dashboard/showDoctorBySearch')->with('success', 'Doctor has been deleted');
     }
-
-
-    public function createPatient()
-    {
-        return view('admin.patient.addPatient', [
-            "title" => "Add Patient"
-        ]);
-    }
-    public function storePatient(Request $request)
-    {
-        $validatedData = $request->validate([
-            'full_name' => 'required',
-            'user_name' => 'required|unique:doctors',
-            'email' => 'required|email:dns|unique:patients|',
-            'phone_no' => 'required',
-            'password' => 'required|min:3',
-        ]);
-
-        $validatedData['password'] = Hash::make($validatedData['password']);
-        Patient::create($validatedData);
-
-        return redirect('admin/dashboard/addPatient')->with('success', 'patient successfully added');
-    }
-
     public function showPatientBySearch(Request $request)
     {
-        $data = Patient::latest();
+        $data = User::latest()->where('type', 'patient');
         if (request('searchPatient')) {
-            $data = Patient::where('full_name', 'like', '%' . request('searchPatient') . '%');
+            $data = User::where('name', 'like', '%' . request('searchPatient') . '%');
         }
         return view('admin.patient.search', [
             "title" => "Search Page",
@@ -203,11 +235,16 @@ class AdminController extends Controller
     public function destroyRejectPatient(Patient $patient)
     {
         Patient::destroy($patient->id);
+        User::destroy($patient->patient_id);
         return redirect('admin/dashboard/showPatientBySearch')->with('success', 'Patient has been deleted');
     }
 
     public function showComment()
     {
+        // $data = DB::table('doctors')
+        //     ->join('specializations', 'specializations.id', 'doctors.specialization_id')
+        //     ->join('users', 'users.id', 'doctors.doc_id')
+        //     ->select('doctors.*', 'users.*', 'users.name as full_name', 'specializations.name as specialization_name', 'doctors.id as doctor_id');
         $tmpComment = TmpComment::latest();
         return view('admin.patient.comment', [
             "title" => "Comment Page",
@@ -273,3 +310,5 @@ class AdminController extends Controller
 // search doctor by date and name and category and add pagination
 
 // update admin data
+
+// doctors.id : ajax detail

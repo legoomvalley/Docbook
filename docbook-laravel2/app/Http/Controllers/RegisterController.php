@@ -28,27 +28,25 @@ class RegisterController extends Controller
     {
 
         $validatedData = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'full_name' => 'required',
             'user_name' => 'required|unique:doctors',
-            'email' => 'required|email:dns|unique:doctors|',
+            'email' => 'required|email:dns|unique:users|',
             'mobile_number' => 'required',
             'specialization_id' => 'required',
             'status' => 'required',
             'password' => 'required|min:3',
-            'location' => 'required',
             'experience' => 'required',
-            'img' => 'required|image|file|max:5000'
-            // 'img' => 'required',
+            'bio_data' => 'required',
+            'image' => 'required|image|file|max:5000'
         ]);
-        if ($request->file('img')) {
-            $validatedData['img'] = $request->file('img')->store('doctor-img');
+        if ($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('profile_photos');
         }
 
         $validatedData['password'] = Hash::make($validatedData['password']);
         TmpDoctor::create($validatedData);
 
-        return redirect('/doctor-login')->with('success', 'Registration successfull! Please wait admin to approve you');
+        return redirect('/doctor-login')->with('success', 'Registration successfull! Please wait for admin to approve');
     }
 
 
@@ -59,7 +57,7 @@ class RegisterController extends Controller
             [
                 'full_name' => 'required',
                 'user_name' => 'required|unique:patients|',
-                'email' => 'required|email:dns|unique:patients|',
+                'email' => 'required|email:dns|unique:users|',
                 'phone_no' => 'required',
                 'password' => 'required|min:3',
             ]
@@ -68,16 +66,20 @@ class RegisterController extends Controller
         if (!$validatedData->passes()) {
             return response()->json(['status' => 0, 'error' => $validatedData->errors()->toArray()]);
         } else {
-            $values = [
-                'full_name' => $request->full_name,
-                'user_name' => $request->user_name,
+            $user = User::create([
+                'name' => $request->full_name,
                 'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'type' => 'patient'
+            ]);
+            Patient::create([
+                'user_name' => $request->user_name,
                 'phone_no' => $request->phone_no,
-                'password' => Hash::make($request->password)
-            ];
+                'patient_id' => $user->id,
+                'password' => Hash::make($request->password),
+            ]);
 
-            $query = DB::table('patients')->insert($values);
-            if ($query) {
+            if ($user) {
                 return response()->json(['status' => 1, 'msg' => 'registration successfull']);
             }
             return redirect('/')->with('success', 'Registration successfull! Please login');
@@ -109,7 +111,9 @@ class RegisterController extends Controller
         Patient::create([
             'user_name' => $request->user_name,
             'phone_no' => $request->phone_no,
-            'patient_id' => $user->id
+            'patient_id' => $user->id,
+            'password' => Hash::make($request->password),
+
         ]);
         return $user;
     }

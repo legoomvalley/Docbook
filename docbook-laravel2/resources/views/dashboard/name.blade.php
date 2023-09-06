@@ -15,7 +15,7 @@
     </div>
     <div class="dashboardHistoryTableContainer mt-2 mx-auto">
         <div
-            class="shadow indexDashboard rounded-4 col-11 col-sm-11 col-md-11 col-lg-11 px-2 mb-4 mx-auto nameTablePageContainer overflow-x-hidden">
+            class="shadow indexDashboard rounded-4 col-12 col-sm-12 col-md-12 col-lg-12 px-2 mb-4 mx-auto nameTablePageContainer overflow-x-hidden">
             {{-- @if ($patient->count() && null !== (request('search'))) --}}
             @if ($patient->count() && null !== (request('search')))
             <h5 class="fw-normal">Result for <span class="fst-italic">"{{ request('search') }}"</span> keyword</h5>
@@ -38,9 +38,9 @@
                     <td class="align-middle text-center">
                         {{ $loop->iteration}}
                     </td>
-                    <td class="align-middle">
+                    <td class="align-middle text-center">
                         {{-- {{$p->patient->full_name }} --}}
-                        {{$p->patient->full_name }}
+                        {{$p->full_name }}
                     </td>
                     <td class="align-middle text-center">
                         <form action="/dashboard" method="post">
@@ -64,7 +64,7 @@
                         {{ $p->time}}
                     </td>
                     <td class="align-middle text-center">
-                        {{ $p->patient->email}}
+                        {{ $p->patient->user->email}}
                     </td>
                 </tr>
                 @endforeach

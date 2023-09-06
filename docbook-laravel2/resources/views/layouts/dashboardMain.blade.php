@@ -95,7 +95,8 @@
             </div>
             <div class="dashboard-container profileBar2">
                 <a href="/dashboard/{{ $doctor->user_name }}/edit"><i class="far fa-user"></i></a>
-                <img style="border-radius:100%;" src="{{ asset('storage/' . $doctor->img) }}" alt="">
+                <img style="border-radius:100%;" src="{{ asset('storage/' . $doctor->user->profile_photo_path) }}"
+                    alt="">
             </div>
         </div>
     </div>

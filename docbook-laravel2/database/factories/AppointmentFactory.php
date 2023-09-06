@@ -21,12 +21,11 @@ class AppointmentFactory extends Factory
             'full_name' => 'Hadley Stroman',
             'time' => $this->faker->time(),
             'disease' => $this->faker->sentence(1),
-            // 'additional_message' => $this->faker->sentence(10),
             'specialization_id' => mt_rand(1, 4),
             'remark' => $this->faker->sentence(10),
             'status' => $this->faker->randomElement(['approved', 'not approved', 'pending', 'completed']),
-            'patient_id' => 15,
-            'doctor_id' => mt_rand(1, 10),
+            'patient_id' => 14,
+            'doctor_id' => 63,
         ];
     }
 }

@@ -42,13 +42,20 @@
         <div
             class="mt-1 indexDashboard shadow rounded-3 px-1 mb-5 mx-auto table-responsive border-top border-5 border-primary">
             @if (count($doctors) > 0)
-            <h5 class="text-uppercase mt-3 ms-3 text-primary result">All Doctor</h5>
+            <h5 class="text-uppercase mt-3 ms-3 text-primary result">
+                @if (empty(request('searchDoctor')))
+                All Doctor
+                @else
+                Search results for: "{{ request('searchDoctor') }}"
+                @endif
+            </h5>
+
             <table class="table table-borderless col-sm-12  allDoctorTable">
                 <thead>
                     <tr>
                         <th scope="col" class="text-center"></th>
-                        <th scope="col" class="text-center">first name</th>
-                        <th scope="col" class="text-center">last name</th>
+                        <th scope="col" class="text-center">full name</th>
+                        <th scope="col" class="text-center">username</th>
                         <th scope="col" class="text-center">detail</th>
                         <th scope="col" class="text-center">email</th>
                         <th scope="col" class="text-center">contact</th>
@@ -60,20 +67,20 @@
                     @foreach ($doctors as $item)
                     <tr class="shadow-sm rounded">
                         <th scope="row" class="align-middle">{{ $loop->iteration }}</th>
-                        <td class="align-middle text-center firstName">{{ $item->first_name }}</td>
-                        <td class="align-middle text-center lastName">{{ $item->last_name }}</td>
+                        <td class="align-middle firstName">{{ $item->full_name}}</td>
+                        <td class="align-middle text-center lastName">{{ $item->user_name }}</td>
                         <td class="align-middle text-center">
                             <form action="" method="post">
                                 @csrf
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
                                     class="bg-transparent border border-0 align-middle displayDetailsDoctor"
-                                    data-id='{{ $item->first_name }}'><i class="fa-sharp fa-solid fa-circle-info"></i>
+                                    data-id='{{ $item->doctor_id }}'><i class="fa-sharp fa-solid fa-circle-info"></i>
                                 </button>
                             </form>
                         </td>
                         <td class="align-middle text-center email">{{ $item->email }}</td>
                         <td class="align-middle text-center mobile_no">{{ $item->mobile_number }}</td>
-                        <td class="align-middle text-center specialization">{{ $item->name }}</td>
+                        <td class="align-middle text-center specialization">{{ $item->specialization_name }}</td>
                         <td class="align-middle text-center">
                             <form action="/admin/dashboard/showDoctorBySearch/reject-doctor/{{$item->user_name}}"
                                 method="post">
@@ -88,7 +95,7 @@
                 </tbody>
             </table>
             @else
-            <h5 class="text-uppercase mt-3 ms-3 text-primary result mb-3">Don't have doctor for now</h5>
+            <h5 class="text-uppercase mt-3 ms-3 text-primary result mb-3">No result</h5>
             @endif
         </div>
         {{-- endof indexDashboard
@@ -116,10 +123,6 @@ justify-content-between" style="height: 35px;">
                     </h1>
                     <p id="mobile_no" class="justify-content-center d-flex fw-bolder text-body ">
                     </p>
-                    <h1 class="fs-6 justify-content-center d-flex text-body-tertiary" id="exampleModalLabel">
-                        location
-                    </h1>
-                    <p id="location" class="justify-content-center d-flex fw-bolder text-body text-center">
                 </div>
                 <div class="modal-footer border-dark-subtle border-2 mx-2">
                     <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>
@@ -136,33 +139,4 @@ justify-content-between" style="height: 35px;">
 <script src="{{ asset('js/jquery.timepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/jsAjax.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/selectMenu.js') }}"></script>
-
-<script>
-    $(function () {
-    fetch_doctor_data();
-    function fetch_doctor_data(query = '') {
-        $.ajax({
-            url: "{{ route('admin.showDoctorBySearch') }}",
-            method: 'GET',
-            data: { query: query },
-            dataType: 'json',
-            success: function (data) {
-                if ($('#keyword').val() !== "") {
-                    $('.result').html("keyword for " + $('#keyword').val());
-                } else {
-                    $('.result').html("All doctor");
-                }
-                // $('#total_records').text(data.total_data);
-            }
-        })
-    }
-    $(document).on('keyup', '#keyword', function () {
-        var query = $(this).val();
-        fetch_doctor_data(query);
-    });
-    $(document).on('click', '.test', function () {
-        console.log("rr")
-    })
-    })
-</script>
 @endsection

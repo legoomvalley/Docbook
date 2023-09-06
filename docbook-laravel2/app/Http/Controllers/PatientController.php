@@ -11,6 +11,7 @@ use App\Models\TmpComment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PatientController extends Controller
 {
@@ -19,10 +20,12 @@ class PatientController extends Controller
      */
     public function index(Patient $patient)
     {
+        $appointmentData = DB::table('appointments')->where('patient_id', $patient->patient_id)
+            ->join('users', 'users.id', '=', 'appointments.doctor_id')->select('appointments.*', 'users.name as doctor_name')->get();
         return view('check-appointment', [
             "title" => "search record",
             "container" => "generalContainer",
-            "patients" => Appointment::where('patient_id', $patient->id)->get()
+            "patients" => $appointmentData
         ]);
     }
 
@@ -48,7 +51,7 @@ class PatientController extends Controller
      */
     public function showDetails()
     {
-        echo json_encode(Appointment::join('doctors', 'doctors.id', '=', 'appointments.doctor_id')->where('patient_id', $_POST['id'])->get()[0]);
+        echo json_encode(Appointment::where('appointments.id', $_POST['id'])->get()[0]);
     }
 
     /**
@@ -129,5 +132,16 @@ class PatientController extends Controller
         $comments->save();
 
         return response()->json(200);
+    }
+
+    public function deleteAppointment(Appointment $appointment)
+    {
+        $appointment->delete();
+        return redirect('check-appointment/' . Auth::guard('patient')->user()->user_name)->with('success', 'Appointment deleted succesfully');;
+    }
+    public function updateAppointmentToComplete(Appointment $appointment)
+    {
+        $appointment->update(['status' => 'completed']);
+        return redirect('check-appointment/' . Auth::guard('patient')->user()->user_name)->with('success', 'Appointment updated succesfully');;
     }
 }

@@ -37,46 +37,53 @@
         </div>
         @auth('patient')
         @if(isset($doctorsSpecialization) && $doctorsSpecialization->count() )
-        <p class="doctorListMessage">{{ $option }}</p>
-        @foreach ($doctorsSpecialization as $doctor)
+        {{-- <p class="doctorListMessage">{{ $option }}</p> --}}
+        <p class="doctorListMessage">
+            @if (empty(request('searchDoctor')))
+            {{ $option }}
+            @else
+            Search results for: "{{ request('searchDoctor') }}"
+            @endif
+        </p>
+        @foreach ($doctorsSpecialization as $item)
         <div class="allDoctorLists">
             <div class="allDoctorImg">
                 <img src="{{ asset('img/doctor.jpg') }}" alt="">
             </div>
             <div class="doctorGeneralInformation">
                 <div class="list1">
-                    <a href="/profile-page/{{ $doctor['user_name'] }}">
+                    <a href="/profile-page/{{ $item->doctor->user_name }}">
                         <h1>
-                            {{ $doctor['first_name'] }}
+                            {{ $item->name }}
                         </h1>
                     </a>
                     <p class="bg-info border border-0 py-2 px-2 rounded-4 shadow-sm fw-bold text-white">
 
-                        {{ $doctor['status'] }}
+                        {{ $item->doctor->status }}
                     </p>
                 </div>
 
 
                 <div class="generalInformation">
-                    {{-- $_SESSION['specialization'] = $doctor['Specialization'] --}}
-                    <a href="/profile-page/{{ $doctor['user_name'] }}">
+                    {{-- $_SESSION['specialization'] = $item['Specialization'] --}}
+                    <a href="/profile-page/{{ $item->doctor->user_name }}">
                         <h2>
-                            {{$doctor['specialization']->name }}
+                            {{$item->doctor->specialization->name }}
                         </h2>
                     </a>
                     <div class="list2">
                         <p>
-                            {{$doctor['experience'] }}
+                            {{$item->doctor->bio_data }}
                         </p>
                         <br>
                         <p>
-                            {{$doctor['location'] }}
+                            Expereience : {{$item->doctor->experience_year }} year
                         </p>
                     </div>
                 </div>
             </div>
             <div class="allDoctorBookBtn">
-                <a href="/book-doctor/{{ $doctor['user_name'] }}" class="text-decoration-none">Book Now</a>
+                <a href="/profile-page/{{ $item->doctor->user_name }}" class="text-decoration-none">Book Now</a>
             </div>
         </div>
         <div class="allDocListLine">
@@ -84,48 +91,55 @@
         </div>
 
         @endforeach
-        @elseif ($doctors->count())
-        @foreach ($doctors as $doctor)
+        @elseif ($doctors->count() && !isset($doctorsSpecialization))
+        <p class="doctorListMessage">
+            @if (empty(request('searchDoctor')))
+            @else
+            Search results for: "{{ request('searchDoctor') }}"
+            @endif
+        </p>
+        @foreach ($doctors as $item)
+
         <div class="allDoctorLists">
             <div class="allDoctorImg">
                 <img src="{{ asset('img/doctor.jpg') }}" alt="">
                 <div class="smallDoctorBtn justify-content-center mt-2">
-                    <a href="/book-doctor/{{ $doctor['user_name'] }}" class="btn btn-primary btn-sm">Book Now</a>
+                    <a href="/profile-page/{{ $item->doctor->user_name }}" class="btn btn-primary btn-sm">Book Now</a>
                 </div>
             </div>
             <div class="doctorGeneralInformation">
                 <div class="list1">
-                    <a href="/profile-page/{{ $doctor['user_name'] }}">
+                    <a href="/profile-page/{{ $item->doctor->user_name }}">
                         <h1>
-                            {{ $doctor['first_name'] }}
+                            {{ $item->name }}
                         </h1>
                     </a>
                     <p class="bg-info border border-0 py-2 px-2 rounded-4 shadow-sm fw-bold text-white">
-                        {{ $doctor['status'] }}
+                        {{ $item->doctor->status }}
                     </p>
                 </div>
 
 
                 <div class="generalInformation">
                     {{-- $_SESSION['specialization'] = $doctor['Specialization'] --}}
-                    <a href="/profile-page/{{ $doctor['user_name'] }}">
+                    <a href="/profile-page/{{ $item->doctor->user_name }}">
                         <h2>
-                            {{$doctor['specialization']->name }}
+                            {{$item->doctor->specialization->name }}
                         </h2>
                     </a>
                     <div class="list2">
                         <p>
-                            {{$doctor['experience'] }}
+                            {{$item->doctor->bio_data }}
                         </p>
                         <br>
-                        <p class="">
-                            {{$doctor['location'] }}
+                        <p>
+                            Expereience : {{$item->doctor->experience_year }} year
                         </p>
                     </div>
                 </div>
             </div>
             <div class="allDoctorBookBtn">
-                <a href="/book-doctor/{{ $doctor['user_name'] }}" class="text-decoration-none">Book Now</a>
+                <a href="/profile-page/{{ $item->doctor->user_name }}" class="text-decoration-none">Book Now</a>
             </div>
         </div>
         <div class="allDocListLine">
@@ -133,16 +147,21 @@
         </div>
 
         @endforeach
+
         @else
         <div class="allDoctorLists" style="justify-content: center">
             <h1 style="text-align: center">no doctors found...</h1>
         </div>
         @endif
 
+        {{--the else means not auth patient --}}
+        {{-- ============================================================================== --}}
         @else
         @if(isset($doctorsSpecialization) && $doctorsSpecialization->count() )
+        {{-- @dd($doctorsSpecialization->count()) --}}
+
         <p class="doctorListMessage">{{ $option }}</p>
-        @foreach ($doctorsSpecialization as $doctor)
+        @foreach ($doctorsSpecialization as $item)
         <div class="allDoctorLists">
             <div class="allDoctorImg">
                 <img src="{{ asset('img/doctor.jpg') }}" alt="">
@@ -150,26 +169,26 @@
             <div class="doctorGeneralInformation">
                 <div class="list1">
                     <h1 class="me-2">
-                        {{ $doctor['first_name'] }}
+                        {{ $item->name }}
                     </h1>
                     <p class="bg-info border border-0 py-2 px-2 rounded-4 shadow-sm fw-bold text-white">
-                        {{ $doctor['status'] }}
+                        {{ $item->doctor->status }}
                     </p>
                 </div>
 
 
                 <div class="generalInformation">
-                    {{-- $_SESSION['specialization'] = $doctor['Specialization'] --}}
+                    {{-- $_SESSION['specialization'] = $item['Specialization'] --}}
                     <h2>
-                        {{$doctor['specialization']->name }}
+                        {{-- {{$item['specialization']->name }} --}}
                     </h2>
                     <div class="list2">
                         <p>
-                            {{$doctor['experience'] }}
+                            {{$item->doctor->bio_data }}
                         </p>
                         <br>
                         <p>
-                            {{$doctor['location'] }}
+                            Expereience : {{$item->doctor->experience_year }} year
                         </p>
 
                     </div>
@@ -181,35 +200,44 @@
         </div>
 
         @endforeach
-        @elseif ($doctors->count())
-        @foreach ($doctors as $doctor)
+        @elseif ($doctors->count() && !isset($doctorsSpecialization))
+        <p class="doctorListMessage">
+            @if (empty(request('searchDoctor')))
+            @else
+            Search results for: "{{ request('searchDoctor') }}"
+            @endif
+        </p>
+        @foreach ($doctors as $item)
+
         <div class="allDoctorLists">
             <div class="allDoctorImg">
                 <img src="{{ asset('img/doctor.jpg') }}" alt="">
+                <div class="smallDoctorBtn justify-content-center mt-2">
+                    <a href="/profile-page/{{ $item->doctor->user_name }}" class="btn btn-primary btn-sm">Book Now</a>
+                </div>
             </div>
             <div class="doctorGeneralInformation">
                 <div class="list1">
-                    <h1 class="me-2">
-                        {{ $doctor['first_name'] }}
+                    <h1>
+                        {{ $item->name }}
                     </h1>
                     <p class="bg-info border border-0 py-2 px-2 rounded-4 shadow-sm fw-bold text-white">
-                        {{ $doctor['status'] }}
+                        {{ $item->doctor->status }}
                     </p>
                 </div>
 
 
                 <div class="generalInformation">
-                    {{-- $_SESSION['specialization'] = $doctor['Specialization'] --}}
                     <h2>
-                        {{$doctor['specialization']->name }}
+                        {{$item->doctor->specialization->name }}
                     </h2>
                     <div class="list2">
                         <p>
-                            {{$doctor['experience'] }}
+                            {{$item->doctor->bio_data }}
                         </p>
                         <br>
                         <p>
-                            {{$doctor['location'] }}
+                            Expereience : {{$item->doctor->experience_year }} year
                         </p>
                     </div>
                 </div>
@@ -221,6 +249,7 @@
         </div>
 
         @endforeach
+
         @else
         <div class="allDoctorLists" style="justify-content: center">
             <h1 style="text-align: center">no doctors found...</h1>

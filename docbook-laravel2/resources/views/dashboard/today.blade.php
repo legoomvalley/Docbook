@@ -5,7 +5,7 @@
     <div class="dashboardHistoryTableContainer justify-content-center">
         <div
             class="shadow indexDashboard rounded-4 col-11 col-sm-11 col-md-11 col-lg-11 px-4 mb-4 todayTablePageContainer">
-            @if (count($doctorAppointments) < 1) <h5 class="my-3 me-5" style="width: 100%">You Don't Have Appointment
+            @if (count($doctorAppointments) < 1) <h5 class="my-3 me-5" style="width: 100%">Don't Have Appointment
                 Today</h5>
 
                 @else
@@ -32,7 +32,7 @@
                             1}}
                         </td>
                         <td class="align-middle">
-                            {{$appointment->patient->full_name }}
+                            {{$appointment->full_name }}
                         </td>
                         <td class="align-middle text-center">
                             <form action="/dashboard" method="post">
