@@ -24,8 +24,6 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool obsecurePass = true;
-  String _emailErr = "";
-  String _passwordErr = "";
   bool isLoading = false;
 
   @override
@@ -92,7 +90,7 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                         color: Config.doctorTheme,
                       ),
               ),
-              enabledBorder: OutlineInputBorder(
+              enabledBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.transparent,
@@ -138,57 +136,41 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                 backgroundColor: Colors.indigo.shade100,
                 borderRadius: BorderRadius.circular(0),
                 onPressed: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  final token = await DioProvider()
-                      .getTokenDoctor('london32@example.com', '123');
-                  // if (_formKey.currentState!.validate()) {
-                  if (token) {
-                    final SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    final tokenValue = prefs.getString('token') ?? '';
-                    // auth.loginSuccess();
-                    if (tokenValue.isNotEmpty && tokenValue != '') {
-                      //get user data
-                      final response =
-                          await DioProvider().getUserDoctor(tokenValue);
-                      if (response != null) {
-                        setState(() {
-                          final user = json.decode(response);
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    final token = await DioProvider()
+                        .getTokenDoctor('london32@example.com', '123');
+                    if (token) {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      final tokenValue = prefs.getString('token') ?? '';
+                      // auth.loginSuccess();
+                      if (tokenValue.isNotEmpty && tokenValue != '') {
+                        //get user data
+                        final response =
+                            await DioProvider().getUserDoctor(tokenValue);
+                        if (response != null) {
+                          setState(() {
+                            final user = json.decode(response);
 
-                          auth.loginSuccessDoctor(
-                              user, tokenValue, user['doctor'][0]);
-                          print(user['doctor'][0]);
-                        });
-                        MyApp.navigatorKey.currentState!
-                            .pushNamed('main_doctor');
-                        setState(() {
-                          isLoading = false;
-                        });
+                            auth.loginSuccessDoctor(
+                                user, tokenValue, user['doctor'][0]);
+                          });
+                          MyApp.navigatorKey.currentState!
+                              .pushNamed('main_doctor');
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
                       }
+                    } else {
+                      snackBar(context, 'Incorrect email or password',
+                          Color.fromRGBO(244, 67, 54, 1), Duration(seconds: 4));
                     }
-                  } else {
-                    snackBar(context, 'Incorrect email or password',
-                        Color.fromRGBO(244, 67, 54, 1), Duration(seconds: 4));
                   }
-                  // }
-                  // final token = await DioProvider().getTokenDoctor(
-                  //     _emailController.text, _passwordController.text);
-                  // if (_formKey.currentState!.validate()) {
-                  //   print(token);
-                  //   if (token) {
-                  //     // auth.loginSuccess();
-                  //     MyApp.navigatorKey.currentState!.pushNamed('main');
-                  //   } else {
-                  //     snackBar(context, 'Incorrect email or password',
-                  //         Color.fromRGBO(244, 67, 54, 1), Duration(seconds: 4));
-                  //   }
-                  // }
                 },
-                // onPressed: () {
-                //   Navigator.of(context).pushNamed('main_doctor');
-                // },
               );
             },
           )

@@ -1,20 +1,13 @@
-// ignore_for_file: unused_import, prefer_const_constructors
-
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_docbook/components/button.dart';
 import 'package:flutter_docbook/components/confirmation_dialog.dart';
-import 'package:flutter_docbook/components/schedule_card.dart';
-import 'package:flutter_docbook/models/datetime_converter.dart';
+import 'package:flutter_docbook/components/datetime_converter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:developer';
 
 import '../providers/dio_provider.dart';
 import '../utils/config.dart';
 import 'patient_update_appointment_page.dart';
-import 'home_page.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -23,8 +16,6 @@ class SchedulePage extends StatefulWidget {
   State<SchedulePage> createState() => _SchedulePageState();
 }
 
-// enum for schedule status
-// ignore: constant_identifier_names
 // enum FilterStatus { pending, completed, not_approved, approved }
 enum FilterStatus {
   pending('pending'),
@@ -55,7 +46,6 @@ class _SchedulePageState extends State<SchedulePage> {
       setState(() {
         schedules = decodeData;
       });
-      print(schedules);
     }
   }
 
@@ -65,14 +55,10 @@ class _SchedulePageState extends State<SchedulePage> {
     super.initState;
   }
 
-  // int current = 0;
-
   @override
   Widget build(BuildContext context) {
     Config().init(context);
 
-    // double itemWidth = 150 / itemsCount;
-    // ignore: unused_local_variable
     List<dynamic> filteredSchedules = schedules.where((var schedule) {
       switch (schedule['status']) {
         case 'pending':
@@ -95,7 +81,7 @@ class _SchedulePageState extends State<SchedulePage> {
         child: CustomScrollView(slivers: [
           SliverToBoxAdapter(
             child: Container(
-              margin: EdgeInsets.only(top: 30),
+              margin: const EdgeInsets.only(top: 30),
               height: 60,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -105,7 +91,7 @@ class _SchedulePageState extends State<SchedulePage> {
                       children: [
                         for (FilterStatus filterStatus in FilterStatus.values)
                           Container(
-                            margin: EdgeInsets.all(5),
+                            margin: const EdgeInsets.all(5),
                             child: Material(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(40),
@@ -138,8 +124,8 @@ class _SchedulePageState extends State<SchedulePage> {
                                     ),
                                     duration: const Duration(milliseconds: 100),
                                     height: 60,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
                                     width: 150,
                                     child: Center(
                                       child: Text(
@@ -147,7 +133,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                         style: TextStyle(
                                           color: filterStatus.value == status
                                               ? Config.primaryColor
-                                              : Color.fromRGBO(
+                                              : const Color.fromRGBO(
                                                   134, 150, 187, 1),
                                         ),
                                       ),
@@ -162,177 +148,196 @@ class _SchedulePageState extends State<SchedulePage> {
                   }),
             ),
           ),
-          SliverToBoxAdapter(child: Config.spaceSmall),
-          filteredSchedules.isEmpty
-              ? SliverToBoxAdapter(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 200),
-                    child: Text(
-                      'no record',
-                      textAlign: TextAlign.center,
+          const SliverToBoxAdapter(child: Config.spaceSmall),
+          FutureBuilder(
+              future: Future.delayed(const Duration(milliseconds: 800)),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 150),
+                        Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ],
                     ),
-                  ),
-                )
-              : SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      var schedule = filteredSchedules[index];
-                      schedule['status'] == FilterStatus.completed.value
-                          ? completed = true
-                          : completed = false;
-                      schedule['status'] == FilterStatus.approved.value
-                          ? approved = true
-                          : approved = false;
-                      schedule['status'] == FilterStatus.notApproved.value
-                          ? notApproved = true
-                          : notApproved = false;
-
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        child: Material(
-                          shadowColor: Colors.black38,
-                          elevation: 20,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                  );
+                } else {
+                  return filteredSchedules.isEmpty
+                      ? SliverToBoxAdapter(
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 200),
+                            child: const Text(
+                              'no record',
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundImage:
-                                            AssetImage('assets/user.jpg'),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Config.spaceSmall,
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            schedule['doctor_name'],
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            schedule['specialization_name'],
-                                            style: const TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w100,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  // Schedule Card
-                                  ScheduleCard(
-                                    date: schedule['date'],
-                                    day: DateConverter.getDayOfWeek(
-                                        DateTime.parse(schedule['date'])),
-                                    time: schedule['time'],
-                                  ),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                        )
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            var schedule = filteredSchedules[index];
+                            schedule['status'] == FilterStatus.completed.value
+                                ? completed = true
+                                : completed = false;
+                            schedule['status'] == FilterStatus.approved.value
+                                ? approved = true
+                                : approved = false;
+                            schedule['status'] == FilterStatus.notApproved.value
+                                ? notApproved = true
+                                : notApproved = false;
+
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              child: Material(
+                                shadowColor: Colors.black38,
+                                elevation: 20,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
                                       children: [
-                                        notApproved
-                                            ? Container()
-                                            : Expanded(
+                                        Row(
+                                          children: [
+                                            const CircleAvatar(
+                                              backgroundImage:
+                                                  AssetImage('assets/user.jpg'),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Config.spaceSmall,
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  schedule['doctor_name'],
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  schedule[
+                                                      'specialization_name'],
+                                                  style: const TextStyle(
+                                                    color: Colors.black54,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w100,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 15,
+                                        ),
+                                        ScheduleCard(
+                                          date: schedule['date'],
+                                          day: DateConverter.getDayOfWeek(
+                                              DateTime.parse(schedule['date'])),
+                                          time: schedule['time'],
+                                        ),
+                                        const SizedBox(
+                                          height: 15,
+                                        ),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              notApproved
+                                                  ? Container()
+                                                  : Expanded(
+                                                      child: OutlinedButton(
+                                                          style: OutlinedButton
+                                                              .styleFrom(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .blue
+                                                                          .shade50),
+                                                          onPressed: () async {
+                                                            await showConfirmationDialog(
+                                                                context,
+                                                                'Do you want to cancel this appointment',
+                                                                () async {
+                                                              final response =
+                                                                  await DioProvider()
+                                                                      .deletePatientAppointment(
+                                                                          schedule[
+                                                                              'id'],
+                                                                          token);
+                                                              if (response) {
+                                                                setState(() {
+                                                                  schedules.remove(
+                                                                      schedule);
+                                                                });
+                                                              }
+                                                            });
+                                                          },
+                                                          child: Text(
+                                                            completed
+                                                                ? 'remove'
+                                                                : 'Cancel',
+                                                            style: const TextStyle(
+                                                                color: Config
+                                                                    .primaryColor),
+                                                          )),
+                                                    ),
+                                              notApproved
+                                                  ? Container()
+                                                  : const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                              Expanded(
                                                 child: OutlinedButton(
                                                     style: OutlinedButton
                                                         .styleFrom(
-                                                            backgroundColor:
-                                                                Colors.blue
-                                                                    .shade50),
-                                                    onPressed: () async {
-                                                      await showConfirmationDialog(
-                                                          context,
-                                                          'Do you want to cancel this appointment',
-                                                          () async {
-                                                        final response =
-                                                            await DioProvider()
-                                                                .deletePatientAppointment(
-                                                                    schedule[
-                                                                        'id'],
-                                                                    token);
-                                                        if (response) {
-                                                          setState(() {
-                                                            schedules.remove(
-                                                                schedule);
-                                                          });
-                                                        }
-                                                      });
+                                                      backgroundColor:
+                                                          Config.primaryColor,
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PatientUpdateAppointment(
+                                                                  scheduleData:
+                                                                      schedule),
+                                                        ),
+                                                      );
                                                     },
                                                     child: Text(
-                                                      completed
-                                                          ? 'remove'
-                                                          : 'Cancel',
-                                                      style: TextStyle(
-                                                          color: Config
-                                                              .primaryColor),
+                                                      completed ||
+                                                              approved ||
+                                                              notApproved
+                                                          ? 'details'
+                                                          : 'Reschedule',
+                                                      style: const TextStyle(
+                                                          color: Colors.white),
                                                     )),
                                               ),
-                                        notApproved
-                                            ? Container()
-                                            : const SizedBox(
-                                                width: 20,
-                                              ),
-                                        Expanded(
-                                          child: OutlinedButton(
-                                              style: OutlinedButton.styleFrom(
-                                                backgroundColor:
-                                                    Config.primaryColor,
-                                              ),
-                                              onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PatientUpdateAppointment(
-                                                            scheduleData:
-                                                                schedule),
-                                                  ),
-                                                );
-                                              },
-                                              child: Text(
-                                                completed ||
-                                                        approved ||
-                                                        notApproved
-                                                    ? 'details'
-                                                    : 'Reschedule',
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              )),
-                                        ),
-                                      ])
-                                ]),
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: filteredSchedules.length,
-                  ),
-                )
+                                            ])
+                                      ]),
+                                ),
+                              ),
+                            );
+                          },
+                          childCount: filteredSchedules.length,
+                        ));
+                }
+              })
         ]),
       ),
     );
@@ -349,38 +354,38 @@ class ScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Column(
         children: [
-          Divider(color: Colors.black26),
-          SizedBox(height: 10),
+          const Divider(color: Colors.black26),
+          const SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Row(children: [
-                Icon(
+                const Icon(
                   Icons.calendar_month_outlined,
                   color: Colors.black54,
                   size: 15,
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 Text(
                   '$day, $date',
                   style: const TextStyle(color: Colors.black54),
                 ),
               ]),
               Row(children: [
-                Icon(
+                const Icon(
                   Icons.watch_later_outlined,
                   color: Colors.black54,
                   size: 17,
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 Text(
-                  '$time',
-                  style: TextStyle(color: Colors.black54),
+                  time,
+                  style: const TextStyle(color: Colors.black54),
                 ),
               ])
             ],

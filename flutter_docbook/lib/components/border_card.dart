@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/config.dart';
-
 class BorderCard extends StatelessWidget {
-  BorderCard({
+  const BorderCard({
     Key? key,
     required this.topWidget,
     required this.btmWidget,
@@ -27,7 +25,7 @@ class BorderCard extends StatelessWidget {
         children: [
           cardHeader,
           Container(
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

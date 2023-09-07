@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_docbook/components/button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -59,17 +58,17 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Results'),
+        title: const Text('Search Results'),
       ),
       body: FutureBuilder(
         future: getData(query: _searchController.text),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            return Center(
+            return const Center(
               child: Text('Error fetching data'),
             );
           } else {
@@ -78,7 +77,8 @@ class _SearchState extends State<Search> {
               itemCount: searchResults.length,
               itemBuilder: (context, index) {
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: Material(
                     elevation: 10,
                     child: InkWell(
@@ -93,12 +93,12 @@ class _SearchState extends State<Search> {
                       },
                       child: Row(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 100,
                             height: 100,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
-                              child: FittedBox(
+                              child: const FittedBox(
                                 // ignore: sort_child_properties_last
                                 child: Image(
                                   image: AssetImage('assets/user.jpg'),
@@ -108,19 +108,19 @@ class _SearchState extends State<Search> {
                             ),
                           ),
                           // sentence
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               // SizedBox(height: 5),
-                              Container(
+                              SizedBox(
                                 width: 250,
                                 child: Text(
                                   'Dr ${searchResults[index]['doctor_name']}',
                                   // overflow: TextOverflow.clip,
                                   style: GoogleFonts.rubik(
-                                    textStyle: TextStyle(
+                                    textStyle: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black,
@@ -128,18 +128,18 @@ class _SearchState extends State<Search> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               Text(
                                 'Dr ${searchResults[index]['specialization_name']}',
                                 style: GoogleFonts.rubik(
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
                                     color: Color.fromRGBO(168, 168, 168, 1),
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 15),
+                              const SizedBox(height: 15),
                               Row(children: [
                                 ElevatedButton(
                                   onPressed: () {
@@ -152,11 +152,11 @@ class _SearchState extends State<Search> {
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 0, vertical: 0),
                                     backgroundColor: Colors.green.shade50,
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     'details',
                                     style: TextStyle(color: Colors.green),
                                   ),

@@ -13,6 +13,7 @@ class DoctorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Config().init(context);
     return Container(
+      margin: const EdgeInsets.only(bottom: 10),
       child: Material(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 15,
@@ -20,12 +21,12 @@ class DoctorCard extends StatelessWidget {
           color: Colors.transparent,
           elevation: 0,
           child: Container(
-            padding: EdgeInsets.only(left: 15, top: 15, right: 15),
+            padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
             child: Column(
               children: [
                 Row(
                   children: <Widget>[
-                    SizedBox(
+                    const SizedBox(
                       child: CircleAvatar(
                         radius: 30,
                         backgroundImage: AssetImage('assets/user.jpg'),
@@ -39,29 +40,29 @@ class DoctorCard extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               "Dr ${doctor['doctor_name']}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Text(
                               "${doctor['specialization_name']}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 color: Color.fromRGBO(134, 150, 187, 1),
                               ),
                             ),
-                            SizedBox(height: 13),
+                            const SizedBox(height: 13),
                           ],
                         ),
                       ),
                     )
                   ],
                 ),
-                SizedBox(height: 13),
-                Divider(
+                const SizedBox(height: 13),
+                const Divider(
                   color: Color.fromRGBO(175, 175, 175, 0.3),
                 ),
                 Button(
@@ -97,13 +98,12 @@ class DoctorCard extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),
         ),
       ),
-      margin: EdgeInsets.only(bottom: 10),
     );
   }
 }

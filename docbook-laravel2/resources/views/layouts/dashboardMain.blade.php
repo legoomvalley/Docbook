@@ -71,7 +71,7 @@
         </div>
 
         <!-- <a href="/Doctors/reportDashboardPage/class="dashboard-bar-item dashboard-button">Report</a> -->
-        <form action="/doctor-logout" method="POST">
+        <form action="/doctors/logout" method="POST">
             <a href="" class="dashboard-bar-item dashboard-button" style="padding: 0">
                 <button type="submit" class="border border-0 bg-transparent text-white text-start ps-3"
                     style="min-width:100%; min-height:100%">

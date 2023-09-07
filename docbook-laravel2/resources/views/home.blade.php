@@ -17,7 +17,7 @@
         {{-- col-sm-12 col-md-10 col-lg-9 col-xl-5 --}}
         {{-- appointment section --}}
         <main class="form-signin" style="z-index: 1000">
-            <form action="/make-appointment" method="POST">
+            <form action="appointment" method="POST">
                 @csrf
                 <h1 class="h3 fw-bold font-monospace text-center">Make An Appointment Here</h1>
                 @if(session()->has('success'))
@@ -96,7 +96,7 @@
             </form>
 
 
-            <form action="/make-appointment" method="POST">
+            <form action="appointment" method="POST">
                 @csrf
                 {{-- form 2 --}}
                 <div class="form2">
@@ -339,7 +339,7 @@
         </div>
         <div class="imageSpeciality">
             <figure style="position: relative; overflow:hidden" class="rounded-4">
-                <a class="text-white" href="all-doctors/specialization/{{ '3'}}">
+                <a class="text-white" href="{{ route('specialization', ['specialization' => '3']) }}">
                     <img src="{{ asset('img/specialityImg3.png') }}" alt="">
                     <div class="imgTitle">
                         <h3>Orthopedics</h3>
@@ -350,7 +350,7 @@
         </div>
         <div class="imageSpeciality">
             <figure style="position: relative; overflow:hidden" class="rounded-4">
-                <a class="text-white" href="all-doctors/specialization/{{ '4'}}">
+                <a class="text-white" href="{{ route('specialization', ['specialization' => '4']) }}">
                     <img src="{{ asset('img/specialityImg4.png') }}" alt="">
                     <div class="imgTitle">
                         <h3>Eye Specialist</h3>

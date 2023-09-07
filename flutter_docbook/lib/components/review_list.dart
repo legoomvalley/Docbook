@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/expanded_widget.dart';
 
@@ -44,43 +42,43 @@ class _ReviewListState extends State<ReviewList> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.patientName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Text(
                     widget.date,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.normal,
                       color: Colors.black54,
                     ),
                   ),
-                  SizedBox(height: 5)
+                  const SizedBox(height: 5)
                 ],
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               ExpandedWidget(
                 text: widget.comment,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
             ],
           ),
         ),
         Row(
           children: [
-            Container(
+            SizedBox(
               width: widget.dividerWidth,
               child: widget.divider,
             ),

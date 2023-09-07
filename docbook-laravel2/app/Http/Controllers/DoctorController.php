@@ -20,12 +20,15 @@ class DoctorController extends Controller
 
     public function index()
     {
-        $doctors = User::latest()->where('type', 'doctor');
+        $doctors = User::latest()->where('type', 'doctor')->join('doctors', 'doctors.doc_id', '=', 'users.id')
+            ->select('users.*');
         $specializationName = Specialization::get();
 
         if (request('searchDoctor')) {
-            $doctors->where('name', 'like', '%' . request('searchDoctor') . '%')->get();
+            $searchTerm = '%' . request('searchDoctor') . '%';
+            $doctors->where('users.name', 'like', $searchTerm);
         }
+
         // dd($doctors);
 
         return view('doctors', [
@@ -48,7 +51,8 @@ class DoctorController extends Controller
         if (request()->specialization) {
             $resultCategory = request()->specialization;
             if ($resultCategory == 'all') {
-                $doctorsSpecialization = User::latest()->where('type', 'doctor');
+                $doctorsSpecialization = User::latest()->where('type', 'doctor')->join('doctors', 'doctors.doc_id', '=', 'users.id')
+                    ->select('users.*');
             } else {
                 $doctorsSpecialization = User::whereHas('doctor', function ($query) use ($resultCategory, $specialization) {
                     $query->where('specialization_id', $resultCategory)->orWhere('specialization_id', $specialization->id);

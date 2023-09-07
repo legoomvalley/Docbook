@@ -5,8 +5,6 @@ import 'package:flutter_docbook/screens/profile_page.dart';
 import 'package:flutter_docbook/screens/schedule_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'components/filter_specialization.dart';
-
 class MainPatientLayout extends StatefulWidget {
   const MainPatientLayout({super.key});
   @override
@@ -41,8 +39,8 @@ class _MainPatientLayoutState extends State<MainPatientLayout> {
               },
             ),
             DoctorListPageWrapper(specialization: selectedSpecialization),
-            SchedulePage(),
-            ProfilePage(),
+            const SchedulePage(),
+            const ProfilePage(),
           ]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
@@ -82,7 +80,7 @@ class _MainPatientLayoutState extends State<MainPatientLayout> {
 class DoctorListPageWrapper extends StatelessWidget {
   final String specialization;
 
-  DoctorListPageWrapper({required this.specialization});
+  const DoctorListPageWrapper({super.key, required this.specialization});
 
   @override
   Widget build(BuildContext context) {

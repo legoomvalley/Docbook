@@ -82,8 +82,7 @@
                         <td class="align-middle text-center mobile_no">{{ $item->mobile_number }}</td>
                         <td class="align-middle text-center specialization">{{ $item->specialization_name }}</td>
                         <td class="align-middle text-center">
-                            <form action="/admin/dashboard/showDoctorBySearch/reject-doctor/{{$item->user_name}}"
-                                method="post">
+                            <form action="/admin/dashboard/search-doctor/doctor/{{$item->user_name}}" method="post">
                                 @csrf
                                 <button class="bg-transparent border border-0"
                                     onclick="return confirm('Are you sure to delete?')"><i

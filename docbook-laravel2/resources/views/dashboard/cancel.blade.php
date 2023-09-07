@@ -66,8 +66,8 @@
                         <td class="align-middle text-center" style="white-space: nowrap;">
                             <div class="row ms-1">
                                 <div class="col p-0 m-0">
-                                    <a href=" /dashboard/appointment-cancel/{{ $appointment->patient->user_name
-                                }}/{{$appointment->id}}/edit">
+                                    <a href=" /dashboard/patients/{{ $appointment->patient->user_name
+                                }}/appointments/{{$appointment->id}}/edit">
                                         <i class="fa-sharp fa-regular fa-pen-to-square"></i>
                                     </a>
                                 </div>
@@ -85,15 +85,6 @@
                                 </div>
                             </div>
                         </td>
-                        {{-- <div class="row">
-                            <div class="col p-0 m-0" style="width: 0">
-                                <a href="/dashboard/appointment-approve/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
-                                    class="text-decoration-none" style="margin-left: 20px; padding: 0;">
-                                    <i class=" fa-sharp fa-regular fa-pen-to-square"></i>
-                                </a>
-                            </div>
-
-                        </div> --}}
                     </tr>
                     @endforeach
                 </table>

@@ -25,7 +25,7 @@ class DioProvider {
 
   Future<dynamic> getUserDoctor(String token) async {
     try {
-      var user = await Dio().get('http://10.0.2.2:8000/api/doctor',
+      var user = await Dio().get('http://10.0.2.2:8000/api/doctors',
           options: Options(headers: {'Authorization': 'Bearer $token'}));
 
       // if request successfully, then return user data
@@ -47,7 +47,7 @@ class DioProvider {
     dynamic status,
     String password,
     String bioData,
-    String experience_year,
+    String experienceYear,
   ) async {
     try {
       var response = await Dio().post(
@@ -61,7 +61,7 @@ class DioProvider {
           'status': status,
           'password': password,
           'bio_data': bioData,
-          'experience_year': experience_year,
+          'experience_year': experienceYear,
         },
       );
 
@@ -95,8 +95,7 @@ class DioProvider {
       if (response.statusCode == 200 && response.data != '') {
         return response.data;
       } else {
-        print('API request failed with status code: ${response.statusCode}');
-        print('Response data: ${response.data}');
+        return 'Response data: ${response.data}';
       }
     } catch (error) {
       return error;
@@ -179,7 +178,7 @@ class DioProvider {
   // get user data
   Future<dynamic> getUserPatient(String token) async {
     try {
-      var user = await Dio().get('http://10.0.2.2:8000/api/patient',
+      var user = await Dio().get('http://10.0.2.2:8000/api/patients',
           options: Options(headers: {'Authorization': 'Bearer $token'}));
 
       // if request successfully, then return user data
@@ -238,7 +237,7 @@ class DioProvider {
   ) async {
     try {
       var response = await Dio().put(
-        'http://10.0.2.2:8000/api/profile/update/patient',
+        'http://10.0.2.2:8000/api/patient-profile',
         data: {
           'name': name,
           'phone_no': mobileNumber,
@@ -267,7 +266,7 @@ class DioProvider {
   ) async {
     try {
       var response = await Dio().put(
-        'http://10.0.2.2:8000/api/appointment/update/$appointmentId',
+        'http://10.0.2.2:8000/api/appointment/$appointmentId',
         data: {
           'date': date,
           'time': time,
@@ -326,7 +325,7 @@ class DioProvider {
   ) async {
     try {
       var response = await Dio().put(
-        'http://10.0.2.2:8000/api/appointment/status/update/$appointmentId',
+        'http://10.0.2.2:8000/api/appointment/$appointmentId/status',
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
       if (response.statusCode == 200 && response.data != '') {
@@ -364,7 +363,7 @@ class DioProvider {
   ) async {
     try {
       var response = await Dio().delete(
-        'http://10.0.2.2:8000/api/appointment/delete/$appointmentId',
+        'http://10.0.2.2:8000/api/appointment/$appointmentId',
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
       if (response.statusCode == 200 && response.data != '') {
@@ -380,7 +379,7 @@ class DioProvider {
   Future<dynamic> getCommentsForDoctor(int doctorId, String token) async {
     try {
       final response = await Dio().get(
-        'http://10.0.2.2:8000/api/doctors/$doctorId/comments',
+        'http://10.0.2.2:8000/api/doctor/$doctorId/comments',
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
       if (response.statusCode == 200) {
@@ -408,7 +407,7 @@ class DioProvider {
   Future<dynamic> uploadProfileImage(String token, FormData formData) async {
     try {
       final response = await Dio().post(
-        'http://10.0.2.2:8000/api/upload-image',
+        'http://10.0.2.2:8000/api/image',
         data: formData,
         options: Options(
           headers: {

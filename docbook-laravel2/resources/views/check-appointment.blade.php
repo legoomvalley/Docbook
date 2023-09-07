@@ -43,7 +43,7 @@
                         <td class="align-middle">{{ $p->remark }}</td>
                         <td class="align-middle">{{ $p->status }}</td>
                         <td class="align-middle">
-                            <form action="/make-appointments" method="post">
+                            <form action="" method="post">
                                 @csrf<button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
                                     class="bg-transparent border border-0 displayDetailsModal" data-id='{{ $p->id }}'><i
                                         class="fa-sharp fa-solid fa-circle-info"></i></button></form>

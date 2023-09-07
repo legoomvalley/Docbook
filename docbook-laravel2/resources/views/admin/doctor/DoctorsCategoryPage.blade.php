@@ -94,7 +94,7 @@ justify-content-between" style="height: 35px;">
     console.log(id)
 
     $.ajax({
-        url: 'http://docbook-laravel2.test/admin/dashboard/allDoctor',
+        url: 'http://docbook-laravel2.test/admin/dashboard/doctors',
         data: { id: id },
         method: 'post',
         headers: {

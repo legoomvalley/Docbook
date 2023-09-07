@@ -1,11 +1,7 @@
-// // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
-// ignore_for_file: prefer_const_constructors, duplicate_ignore
-
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/calendar.dart';
 import 'package:flutter_docbook/components/select_time.dart';
-import 'package:flutter_docbook/models/datetime_converter.dart';
+import 'package:flutter_docbook/components/datetime_converter.dart';
 import 'package:flutter_docbook/providers/dio_provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,12 +26,12 @@ class _PatientMakeAppointmentState extends State<PatientMakeAppointment> {
   bool _dateSelected = false;
   bool _timeSelected = false;
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _diseaseController = TextEditingController();
+  final TextEditingController _diseaseController = TextEditingController();
   String? token;
-  CalendarFormat _format = CalendarFormat.month;
+  final CalendarFormat _format = CalendarFormat.month;
   late DateTime _focusDay = DateTime.now();
   late DateTime _currentDay = DateTime.now();
-  late DateTime _firstDay = DateTime.now();
+  final DateTime _firstDay = DateTime.now();
 
   Future<void> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -53,243 +49,235 @@ class _PatientMakeAppointmentState extends State<PatientMakeAppointment> {
     Config().init(context);
 
     return Scaffold(
-      // ignore: prefer_const_constructors
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         appTitle: 'Appointment',
-        icon: const FaIcon(Icons.arrow_back_ios),
+        icon: FaIcon(Icons.arrow_back_ios),
       ),
-      body: Container(
-        // ignore: prefer_const_constructors
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverToBoxAdapter(
-              child: Column(
-                children: <Widget>[
-                  // ignore: avoid_unnecessary_containers
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 12),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      elevation: 4,
-                      child: Container(
-                        width: double.infinity,
-                        child: Row(children: [
-                          Container(
-                            width: 110,
-                            height: 110,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: FittedBox(
-                                // ignore: sort_child_properties_last
-                                child: Image(
-                                  image: AssetImage('assets/user.jpg'),
-                                ),
-                                fit: BoxFit.cover,
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    elevation: 4,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Row(children: [
+                        SizedBox(
+                          width: 110,
+                          height: 110,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: const FittedBox(
+                              fit: BoxFit.cover,
+                              child: Image(
+                                image: AssetImage('assets/user.jpg'),
                               ),
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Dr ${widget.doctor?['doctor_name']}',
-                                  style: GoogleFonts.rubik(
-                                    textStyle: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  'dr reviews',
-                                  style: GoogleFonts.rubik(
-                                    textStyle: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color.fromRGBO(103, 114, 148, 1),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 36),
-                                Text(
-                                  widget.doctor?['specialization_name'],
-                                  style: GoogleFonts.rubik(
-                                    textStyle: TextStyle(
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Dr ${widget.doctor?['doctor_name']}',
+                                style: GoogleFonts.rubik(
+                                  textStyle: const TextStyle(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: Config.primaryColor,
-                                    ),
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                'dr reviews',
+                                style: GoogleFonts.rubik(
+                                  textStyle: const TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color.fromRGBO(103, 114, 148, 1),
                                   ),
                                 ),
-                              ],
-                            ),
-                          )
-                        ]),
+                              ),
+                              const SizedBox(height: 36),
+                              Text(
+                                widget.doctor?['specialization_name'],
+                                style: GoogleFonts.rubik(
+                                  textStyle: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: Config.primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ]),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 12, right: 12, top: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Enter Your Disease',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 12, right: 12, top: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Enter Your Disease',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      const SizedBox(height: 5),
+                      Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          controller: _diseaseController,
+                          keyboardType: TextInputType.emailAddress,
+                          cursorColor: Config.primaryColor,
+                          decoration: const InputDecoration(
+                            hintText: 'Disease',
+                            labelText: 'Disease',
+                            fillColor: Color.fromRGBO(206, 222, 239, 1),
+                            alignLabelWithHint: true,
+                            prefixIconColor: Config.primaryColor,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(
+                                color: Colors.black12,
+                              ),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == '') {
+                              return 'disease field is required';
+                            } else {
+                              return null;
+                            }
+                          },
                         ),
-                        SizedBox(height: 5),
-                        Form(
-                          key: _formKey,
-                          child: TextFormField(
-                            controller: _diseaseController,
-                            keyboardType: TextInputType.emailAddress,
-                            cursorColor: Config.primaryColor,
-                            decoration: const InputDecoration(
-                              hintText: 'Disease',
-                              labelText: 'Disease',
-                              fillColor: Color.fromRGBO(206, 222, 239, 1),
-                              alignLabelWithHint: true,
-                              prefixIconColor: Config.primaryColor,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                  color: Colors.black12,
+                      ),
+                    ],
+                  ),
+                ),
+                // calendar section -------------------------------------------------------------------
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                  child: Calendar(
+                    format: _format,
+                    focusDay: _focusDay,
+                    currentDay: _currentDay,
+                    firstDay: _firstDay,
+                    dateSelected: _dateSelected,
+                    currentIndex: _currentIndex,
+                    isWeekend: _isWeekend,
+                    timeSelected: _timeSelected,
+                    onDaySelected: (selectedDay, focusedDay) {
+                      setState(() {
+                        _currentDay = selectedDay;
+                        _focusDay = focusedDay;
+                        _dateSelected = true;
+                        if (selectedDay.weekday == 5 ||
+                            selectedDay.weekday == 6) {
+                          _isWeekend = true;
+                          _timeSelected = false;
+                          _currentIndex = null;
+                        } else {
+                          _isWeekend = false;
+                        }
+                      });
+                    },
+                  ),
+                ),
+
+                // select time section ----------------------------------------------------------------
+                SelectTime(
+                  isWeekend: _isWeekend,
+                  buttonNumber: List.generate(
+                    10,
+                    (index) {
+                      return InkWell(
+                        splashColor: Colors.transparent,
+                        onTap: () {
+                          setState(() {
+                            _currentIndex = index;
+                            _timeSelected = true;
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          decoration: BoxDecoration(
+                              color: _currentIndex == index
+                                  ? const Color.fromRGBO(68, 138, 255, 1)
+                                  : const Color.fromRGBO(68, 138, 255, 0.1),
+                              shape: BoxShape.circle),
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${index + 10}:30',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13,
+                                  color: _currentIndex == index
+                                      ? Colors.white
+                                      : Config.primaryColor,
                                 ),
                               ),
-                            ),
-                            validator: (value) {
-                              if (value == '') {
-                                return 'disease field is required';
-                              } else {
-                                return null;
-                              }
-                            },
+                              Text(
+                                index + 9 > 11 ? "PM" : "AM",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13,
+                                  color: _currentIndex == index
+                                      ? Colors.white
+                                      : Config.primaryColor,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                  // calendar section -------------------------------------------------------------------
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
-                    child: Calendar(
-                      format: _format,
-                      focusDay: _focusDay,
-                      currentDay: _currentDay,
-                      firstDay: _firstDay,
-                      dateSelected: _dateSelected,
-                      currentIndex: _currentIndex,
-                      isWeekend: _isWeekend,
-                      timeSelected: _timeSelected,
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          _currentDay = selectedDay;
-                          _focusDay = focusedDay;
-                          _dateSelected = true;
-                          if (selectedDay.weekday == 5 ||
-                              selectedDay.weekday == 6) {
-                            _isWeekend = true;
-                            _timeSelected = false;
-                            _currentIndex = null;
-                          } else {
-                            _isWeekend = false;
-                          }
-                        });
-                      },
-                    ),
-                  ),
+                  button: Button(
+                      color: Colors.white,
+                      backgroundColor: Config.primaryColor,
+                      borderRadius: BorderRadius.circular(6),
+                      width: double.infinity,
+                      title: 'Confirm',
+                      padding: const EdgeInsets.symmetric(vertical: 13),
+                      disable: _timeSelected && _dateSelected ? false : true,
+                      onPressed: () async {
+                        // convert date & time into string
+                        final getDate = DateConverter.getDate(_currentDay);
+                        final getTime = DateConverter.getTime(_currentIndex!);
+                        if (_formKey.currentState!.validate()) {}
 
-                  // select time section ----------------------------------------------------------------
-                  SelectTime(
-                    isWeekend: _isWeekend,
-                    buttonNumber: List.generate(
-                      10,
-                      (index) {
-                        return Container(
-                          child: InkWell(
-                            splashColor: Colors.transparent,
-                            onTap: () {
-                              setState(() {
-                                _currentIndex = index;
-                                _timeSelected = true;
-                              });
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(vertical: 4),
-                              decoration: BoxDecoration(
-                                  color: _currentIndex == index
-                                      ? const Color.fromRGBO(68, 138, 255, 1)
-                                      : const Color.fromRGBO(68, 138, 255, 0.1),
-                                  shape: BoxShape.circle),
-                              alignment: Alignment.center,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '${index + 10}:30',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 13,
-                                      color: _currentIndex == index
-                                          ? Colors.white
-                                          : Config.primaryColor,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${index + 9 > 11 ? "PM" : "AM"}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 13,
-                                      color: _currentIndex == index
-                                          ? Colors.white
-                                          : Config.primaryColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    button: Button(
-                        color: Colors.white,
-                        backgroundColor: Config.primaryColor,
-                        borderRadius: BorderRadius.circular(6),
-                        width: double.infinity,
-                        title: 'Confirm',
-                        padding: EdgeInsets.symmetric(vertical: 13),
-                        disable: _timeSelected && _dateSelected ? false : true,
-                        onPressed: () async {
-                          // convert date & time into string
-                          final getDate = DateConverter.getDate(_currentDay);
-                          final getTime = DateConverter.getTime(_currentIndex!);
-                          if (_formKey.currentState!.validate()) {}
-
-                          final booking = await DioProvider().bookAppointment(
-                              getDate,
-                              getTime,
-                              _diseaseController.text,
-                              widget.doctor?['id'],
-                              token!);
-                          if (booking == 200) {
-                            MyApp.navigatorKey.currentState!.pushNamed(
-                                'success_appointment',
-                                arguments: 'Successfully booked');
-                          }
-                          print(booking);
-                        }),
-                  )
-                ],
-              ),
+                        final booking = await DioProvider().bookAppointment(
+                            getDate,
+                            getTime,
+                            _diseaseController.text,
+                            widget.doctor?['id'],
+                            token!);
+                        if (booking == 200) {
+                          MyApp.navigatorKey.currentState!.pushNamed(
+                              'success_appointment',
+                              arguments: 'Successfully booked');
+                        }
+                      }),
+                )
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

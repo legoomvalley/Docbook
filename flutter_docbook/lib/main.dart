@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
             prefixIconColor: Colors.black38,
           ),
           scaffoldBackgroundColor: Colors.white,
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             backgroundColor: Config.primaryColor,
             selectedItemColor: Colors.white,
             showSelectedLabels: true,
@@ -67,17 +67,17 @@ class MyApp extends StatelessWidget {
           'patient_update_appointment_page': (context) =>
               const PatientUpdateAppointment(),
           'patient_make_appointment_page': (context) =>
-              PatientMakeAppointment(),
-          'appointment_msg': (context) => AppointmentMsg(),
+              const PatientMakeAppointment(),
+          'appointment_msg': (context) => const AppointmentMsg(),
           'doctor_details': (context) => DoctorDetails(),
-          'review_list': (context) => ReviewListPage(),
+          'review_list': (context) => const ReviewListPage(),
 
           // doctor
           'main_doctor': (context) => const MainDoctorLayout(),
-          'doctor_list': (context) => DoctorListPage(),
-          'register_doctor': (context) => RegisterDoctorPage(),
-          'auth_doctor': (context) => AuthDoctorPage(),
-          'appointment_lisjt': (context) => AppointmentPage(),
+          'doctor_list': (context) => const DoctorListPage(),
+          'register_doctor': (context) => const RegisterDoctorPage(),
+          'auth_doctor': (context) => const AuthDoctorPage(),
+          'appointment_list': (context) => const AppointmentPage(),
         },
       ),
     );

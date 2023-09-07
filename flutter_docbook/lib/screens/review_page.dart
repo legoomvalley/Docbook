@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_docbook/models/datetime_converter.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_docbook/components/datetime_converter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../components/review_list.dart';
 import '../utils/config.dart';
 
 class ReviewListPage extends StatefulWidget {
-  ReviewListPage({Key? key, this.comments}) : super(key: key);
+  const ReviewListPage({Key? key, this.comments}) : super(key: key);
 
   final List? comments;
   @override
@@ -25,7 +24,6 @@ class _ReviewListPageState extends State<ReviewListPage> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    print(widget.comments?[0]['created_at']);
   }
 
   @override
@@ -57,10 +55,8 @@ class _ReviewListPageState extends State<ReviewListPage> {
     });
   }
 
-  // double appBarHeight = constraints.biggest.height;
   @override
   Widget build(BuildContext context) {
-    // final List? comments = widget.comments;
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -71,16 +67,16 @@ class _ReviewListPageState extends State<ReviewListPage> {
               elevation: showShadow ? 2 : 0,
               backgroundColor: Colors.white,
               centerTitle: true,
-              leading: BackButton(color: Config.primaryColor),
+              leading: const BackButton(color: Config.primaryColor),
             ),
             SliverToBoxAdapter(
               child: Container(
-                margin: EdgeInsets.only(left: 20, bottom: 20),
+                margin: const EdgeInsets.only(left: 20, bottom: 20),
                 child: Text(
                   'Dr Username',
                   style: GoogleFonts.rubik(
-                    textStyle:
-                        TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                    textStyle: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -96,22 +92,21 @@ class _ReviewListPageState extends State<ReviewListPage> {
             ),
             SliverToBoxAdapter(
               child: Container(
-                margin: EdgeInsets.only(top: 20),
-                // height: 10,
+                margin: const EdgeInsets.only(top: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: EdgeInsets.only(left: 15),
+                      padding: const EdgeInsets.only(left: 15),
                       child: Text(
                         'Reviews',
                         style: GoogleFonts.rubik(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 22, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -123,10 +118,10 @@ class _ReviewListPageState extends State<ReviewListPage> {
                   patientName: "${widget.comments?[index]['patientName']}",
                   date: DateConverter.formatDate(
                       widget.comments?[index]['created_at']),
-                  //  DateTime.parse()${widget.comments?[index]['created_at']}
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-                  margin: EdgeInsets.only(bottom: 0),
-                  border: Border(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+                  margin: const EdgeInsets.only(bottom: 0),
+                  border: const Border(
                     bottom: BorderSide(color: Colors.transparent),
                   ),
                   dividerWidth: MediaQuery.of(context).size.width,
@@ -170,7 +165,7 @@ class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             border: Border(
               bottom: BorderSide(
@@ -202,7 +197,7 @@ class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
                                 ? Colors.white70
                                 : Colors.white54,
                             border: currentTabIndex == index
-                                ? Border(
+                                ? const Border(
                                     bottom: BorderSide(
                                       color: Colors.black,
                                       width: 2,
@@ -218,7 +213,7 @@ class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
                                     ? FontWeight.w800
                                     : FontWeight.normal,
                                 color: currentTabIndex == index
-                                    ? Color.fromRGBO(0, 0, 0, 1)
+                                    ? const Color.fromRGBO(0, 0, 0, 1)
                                     : Colors.black87,
                               ),
                             ),

@@ -32,6 +32,6 @@ class Doctor extends Authenticatable
     }
     public function user()
     {
-        return $this->hasOne(User::class, 'id');
+        return $this->belongsTo(User::class, 'doc_id');
     }
 }

@@ -21,11 +21,11 @@
             </div>
             <form action="" method="post" class="d-flex bg-secondary-subtle col-sm-5 col-8 justify-content-around py-1">
                 <div>
-                    <a href="/profile-page/{{ $doctor['user_name'] }}" class="text-decoration-none">My
+                    <a href="/doctor-profile/{{ $doctor['user_name'] }}" class="text-decoration-none">My
                         Profile</a>
                 </div>
                 <div>
-                    <a href="/review-page/{{ $doctor['user_name'] }}" class="text-decoration-none">reviews</a>
+                    <a href="/review/{{ $doctor['user_name'] }}" class="text-decoration-none">reviews</a>
                 </div>
             </form>
             <!-- <div style="margin-top: 60px;"> -->
@@ -107,7 +107,7 @@
                                 <div class="form1">
                                     {{-- form --}}
                                     {{-- date, time, disease, pediatrics, additional message --}}
-                                    <form action="{{ $doctor['user_name'] }}/make-appointment" method="post"
+                                    <form action="{{ $doctor['user_name'] }}" method="post"
                                         enctype="multipart/form-data" id="patient-appointment-form">
                                         @csrf
                                         <!-- date Input -->

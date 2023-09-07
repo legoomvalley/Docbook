@@ -61,7 +61,7 @@
                         </td>
                         <td class="align-middle text-center">
                             <a class="myBtn"
-                                href="/dashboard/appointment-request/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
+                                href="/dashboard/patients/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit"
                                 class=""><i class=" fa-sharp fa-regular fa-pen-to-square"></i></a>
                         </td>
                     </tr>

@@ -41,7 +41,7 @@
         const id = $(this).data('id')
         console.log("muazz")
         $.ajax({
-            url: 'http://docbook-laravel.test/admin/dashboard/allDoctor',
+            url: 'http://docbook-laravel.test/admin/dashboard/doctors',
             data: { id: id },
             method: 'post',
             headers: {

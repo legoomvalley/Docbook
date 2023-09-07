@@ -25,7 +25,7 @@ class AppointmentMsg extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   message,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),

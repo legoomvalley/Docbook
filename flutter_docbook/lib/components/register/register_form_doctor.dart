@@ -1,13 +1,8 @@
-import 'dart:convert';
-
-import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
 import 'package:flutter_docbook/components/snackBar.dart';
-import 'package:flutter_docbook/main.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/auth_model.dart';
@@ -31,7 +26,6 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
   final _emailController = TextEditingController();
   final _mobileNumberController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _locationController = TextEditingController();
   final _bioDataController = TextEditingController();
   final _experienceController = TextEditingController();
   bool obsecurePass = true;

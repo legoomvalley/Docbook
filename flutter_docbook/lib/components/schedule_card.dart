@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -23,10 +21,10 @@ class _ScheduleCardState extends State<ScheduleCard> {
         elevation: 15,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Container(
-          padding: EdgeInsets.only(left: 15, top: 15, right: 15),
+          padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
           child: Column(
             children: [
-              Row(
+              const Row(
                 children: <Widget>[
                   SizedBox(
                     child: CircleAvatar(
@@ -34,10 +32,10 @@ class _ScheduleCardState extends State<ScheduleCard> {
                       backgroundImage: AssetImage('assets/user.jpg'),
                     ),
                   ),
-                  Flexible(
-                    child: Padding(
+                  const Flexible(
+                    child: const Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
+                      child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const <Widget>[
                           Text(
@@ -63,12 +61,12 @@ class _ScheduleCardState extends State<ScheduleCard> {
                   )
                 ],
               ),
-              SizedBox(height: 13),
-              Divider(
+              const SizedBox(height: 13),
+              const Divider(
                 color: Color.fromRGBO(175, 175, 175, 0.9),
               ),
-              SizedBox(height: 10),
-              Row(
+              const SizedBox(height: 10),
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
@@ -111,22 +109,22 @@ class _ScheduleCardState extends State<ScheduleCard> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Button(
                 width: double.infinity,
                 title: "Details",
                 disable: false,
                 color: Config.primaryColor,
-                backgroundColor: Color.fromRGBO(239, 247, 255, 1),
+                backgroundColor: const Color.fromRGBO(239, 247, 255, 1),
                 borderRadius: BorderRadius.circular(40),
                 onPressed: () {},
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
           ),
         ),
       ),
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
     );
   }
 }

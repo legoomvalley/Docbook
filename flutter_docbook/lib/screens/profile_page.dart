@@ -1,10 +1,7 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_const_constructors
-
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_docbook/components/confirmation_dialog.dart';
 import 'package:flutter_docbook/components/snackBar.dart';
 import 'package:flutter_docbook/components/button.dart';
@@ -19,7 +16,7 @@ import '../models/auth_model.dart';
 import '../providers/dio_provider.dart';
 import '../utils/config.dart';
 
-typedef void DataRefreshCallback();
+typedef DataRefreshCallback = void Function();
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -40,11 +37,11 @@ class _ProfilePageState extends State<ProfilePage> {
   bool editableContactNumberTextField = false;
   bool editableEmailTextField = false;
 
-  // final TextEditingController _searchController = TextEditingController();
   String _contactNumberInput = "";
   String _nameInput = "";
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _contactNumberController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _contactNumberController =
+      TextEditingController();
   bool isLoading = false;
 
   Future<void> getData() async {
@@ -78,7 +75,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Config().init(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: user.isEmpty
@@ -92,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: <Widget>[
                       Container(
                         height: 200.0,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         width: double.infinity,
                         decoration: const BoxDecoration(
                           color: Config.primaryColor,
@@ -103,9 +99,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         child: SafeArea(
                           child: Column(
-                            // ignore: prefer_const_literals_to_create_immutables
                             children: <Widget>[
-                              Padding(padding: EdgeInsets.only(top: 20)),
+                              const Padding(padding: EdgeInsets.only(top: 20)),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -118,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                 ],
                               ),
                               Stack(
@@ -142,27 +137,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         'http://10.0.2.2:8000/storage/${user['profile_photo_path']}',
                                                       ),
                                                     )
-                                                  : CircleAvatar(
+                                                  : const CircleAvatar(
                                                       radius: 50,
                                                       backgroundImage:
                                                           AssetImage(
                                                               'assets/user.jpg'),
-                                                    ))
-                                      // CircleAvatar(
-                                      //     radius: 30,
-                                      //     backgroundImage: user['profile_photo_path'] !=
-                                      //             null
-                                      //         ? AssetImage(user['profile_photo_path'])
-                                      //         : AssetImage('assets/user.jpg')),
-                                      ),
+                                                    ))),
                                   Container(
-                                    margin: EdgeInsets.only(top: 40, left: 70),
+                                    margin: const EdgeInsets.only(
+                                        top: 40, left: 70),
                                     color: Colors.white30,
                                     child: Material(
                                       color: Colors.transparent,
                                       child: InkWell(
                                         child: IconButton(
-                                          icon: Icon(Icons.camera_alt),
+                                          icon: const Icon(Icons.camera_alt),
                                           onPressed: () => pickImage(),
                                         ),
                                       ),
@@ -177,8 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 20, top: 40, right: 20),
-                    // width: double.infinity,
+                    margin: const EdgeInsets.only(left: 20, top: 40, right: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -189,7 +177,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Form(
                           key: _formKey,
                           child: Column(children: [
@@ -198,7 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               textField: editableNameTextField
                                   ? TextFormField(
                                       autofocus: true,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w200),
                                       controller: _nameController,
@@ -213,14 +201,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                       decoration: const InputDecoration(
                                         contentPadding: EdgeInsets.only(
                                             left: 0, bottom: 14),
-                                        focusedBorder: InputBorder
-                                            .none, // No border when focused
+                                        focusedBorder: InputBorder.none,
                                         enabledBorder: InputBorder.none,
                                       ),
                                     )
                                   : Text(
                                       user['name'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w200),
                                     ),
@@ -233,10 +220,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                     _nameInput = user['name'];
                                   });
                                 },
-                                padding: EdgeInsets.all(0),
+                                padding: const EdgeInsets.all(0),
                                 icon: !editableNameTextField
-                                    ? Icon(Icons.mode_edit_sharp)
-                                    : Icon(Icons.cancel),
+                                    ? const Icon(Icons.mode_edit_sharp)
+                                    : const Icon(Icons.cancel),
                               ),
                             ),
                             ProfileTextField(
@@ -249,7 +236,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           _contactNumberInput = newValue;
                                         });
                                       },
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w200),
                                       controller: _contactNumberController,
@@ -263,7 +250,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     )
                                   : Text(
                                       user['mobile_number'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w200),
                                     ),
@@ -278,12 +265,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                           user['mobile_number'];
                                     });
                                   },
-                                  padding: EdgeInsets.all(0),
+                                  padding: const EdgeInsets.all(0),
                                   icon: !editableContactNumberTextField
-                                      ? Icon(Icons.mode_edit_sharp)
-                                      : Icon(Icons.cancel)),
+                                      ? const Icon(Icons.mode_edit_sharp)
+                                      : const Icon(Icons.cancel)),
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Button(
                               width: double.infinity,
                               title: isLoading ? 'Saving...' : 'Save',
@@ -346,7 +333,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         globalToken, nameVal, contactNumberVal);
 
                                 snackBar(context, token['message'],
-                                    Colors.green, Duration(seconds: 4));
+                                    Colors.green, const Duration(seconds: 4));
 
                                 await getData();
                                 setState(() {

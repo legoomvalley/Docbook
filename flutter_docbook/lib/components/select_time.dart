@@ -18,7 +18,7 @@ class _SelectTimeState extends State<SelectTime> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 62, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 62, vertical: 12),
       alignment: Alignment.center,
       width: double.infinity,
       height: 300,
@@ -27,12 +27,12 @@ class _SelectTimeState extends State<SelectTime> {
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            offset: Offset(0, -3), // Negative y offset for the top shadow
+            offset: const Offset(0, -3),
             blurRadius: 10,
             spreadRadius: 1,
           ),
         ],
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(45), topRight: Radius.circular(45)),
       ),
       child: Column(
@@ -52,7 +52,7 @@ class _SelectTimeState extends State<SelectTime> {
                       ),
                     ),
                   )
-                : Container(
+                : SizedBox(
                     height: 200,
                     child: GridView.count(
                       crossAxisCount: 4,

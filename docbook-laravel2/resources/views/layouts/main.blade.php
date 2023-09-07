@@ -44,12 +44,12 @@
                     class="text-decoration-none text-body {{ ($title === 'home') ? 'fw-bold' : '' }}">Home
                     <hr class="">
                 </a></li>
-            <li class=" item"><a href="/all-doctors" class="text-decoration-none text-body {{ ($title === 'doctor list') ? 'fw-bold' : ''
+            <li class=" item"><a href="/doctors" class="text-decoration-none text-body {{ ($title === 'doctor list') ? 'fw-bold' : ''
             }}">All Doctors
                     <hr class="">
                 </a></li>
             @auth('patient')
-            <li class="item"><a href="/check-appointment/{{
+            <li class="item"><a href="/patient-record/{{
                 \Auth::guard('patient')->user()->user_name }}" class="text-decoration-none text-body {{ ($title === 'search record') ? 'fw-bold' : ''
             }}">Check Appointment
                     <hr class="">
@@ -64,7 +64,7 @@
                         {{-- <li><a href="/dashboard"><span><i class="fas fa-columns fa-xs"></i> My Dashboard</span></a>
                         </li> --}}
                         <li>
-                            <form action="/patient-logout" method="POST">
+                            <form action="/patient/{{ Auth::guard('patient')->user()->id }}" method="POST">
                                 @csrf
                                 <button type="submit" class="">
                                     <span class="doctorLogout"><i class="fas fa-sign-out fa-xs"></i>
@@ -75,26 +75,8 @@
                     </div>
                 </ul>
             </li>
-
-            {{-- <li class="item dropdown-header">
-                <ul class="nav-dropdown">
-                    <div class="nav-dropdown2">
-                        <li><a href="/dashboard"><span><i class="fas fa-columns fa-xs"></i> Make Appointemnt</span></a>
-                        </li>
-                        <li>
-                            <form action="/doctor-logout" method="POST">
-                                @csrf
-                                <button type="submit" class="">
-                                    <span class="doctorLogout"><i class="fas fa-sign-out fa-xs"></i>
-                                        Logout</span>
-                                </button>
-                            </form>
-                        </li>
-                    </div>
-                </ul>
-            </li> --}}
             @else
-            <li class="item" id="doctor-login"><a href="/doctor-login" class="text-decoration-none text-body">Doctor
+            <li class="item" id="doctor-login"><a href="/doctors/login" class="text-decoration-none text-body">Doctor
                     <hr class="">
                 </a>
             </li>

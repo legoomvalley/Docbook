@@ -218,11 +218,12 @@ class AdminController extends Controller
     public function destroyRejectDoctor2(Doctor $doctor)
     {
         Doctor::destroy($doctor->id);
-        return redirect('admin/dashboard/showDoctorBySearch')->with('success', 'Doctor has been deleted');
+        return redirect('admin/dashboard/search-doctor')->with('success', 'Doctor has been deleted');
     }
     public function showPatientBySearch(Request $request)
     {
-        $data = User::latest()->where('type', 'patient');
+        $data = User::latest()->where('type', 'patient')->join('patients', 'patients.patient_id', '=', 'users.id')
+            ->select('users.*');;
         if (request('searchPatient')) {
             $data = User::where('name', 'like', '%' . request('searchPatient') . '%');
         }
@@ -236,16 +237,15 @@ class AdminController extends Controller
     {
         Patient::destroy($patient->id);
         User::destroy($patient->patient_id);
-        return redirect('admin/dashboard/showPatientBySearch')->with('success', 'Patient has been deleted');
+        return redirect('admin/dashboard/search-patient')->with('success', 'Patient has been deleted');
     }
 
     public function showComment()
     {
-        // $data = DB::table('doctors')
-        //     ->join('specializations', 'specializations.id', 'doctors.specialization_id')
-        //     ->join('users', 'users.id', 'doctors.doc_id')
-        //     ->select('doctors.*', 'users.*', 'users.name as full_name', 'specializations.name as specialization_name', 'doctors.id as doctor_id');
-        $tmpComment = TmpComment::latest();
+        $tmpComment = TmpComment::latest()
+            ->join('patients', 'patients.patient_id', '=', 'tmp_comments.patient_id')
+            ->join('doctors', 'doctors.doc_id', '=', 'tmp_comments.doctor_id')
+            ->select('tmp_comments.*');
         return view('admin.patient.comment', [
             "title" => "Comment Page",
             "container" => "generalContainer",

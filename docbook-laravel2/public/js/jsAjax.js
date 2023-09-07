@@ -170,7 +170,7 @@ $(function () {
         const id = $(this).data('id')
         console.log(id)
         $.ajax({
-            url: 'http://docbook-laravel2.test/check-appointment',
+            url: 'http://docbook-laravel2.test/patient-record',
             data: { id: id },
             method: 'post',
             headers: {
@@ -342,7 +342,7 @@ $(function () {
         console.log(id)
 
         $.ajax({
-            url: 'http://docbook-laravel2.test/admin/dashboard/allDoctor',
+            url: 'http://docbook-laravel2.test/admin/dashboard/doctors',
             data: { id: id },
             method: 'post',
             headers: {
@@ -359,15 +359,3 @@ $(function () {
 
 
 })
-
-// const doctorGreeting = document.getElementById("doctor-greeting")
-// const doctorLogin = document.getElementById("doctor-login")
-// if (typeof (doctorGreeting) != 'undifined' && doctorGreeting != null) {
-//     doctorLogin.style.display = "none";
-// }
-// const patientGreeting = document.getElementById("patient-greeting")
-// if (typeof (patientGreeting) != 'undifined' && patientGreeting != null) {
-//     doctorLogin.style.display = "none";
-// }
-
-    // console.log(doctorGreeting)

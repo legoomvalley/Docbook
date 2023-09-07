@@ -46,7 +46,7 @@ class RegisterController extends Controller
         $validatedData['password'] = Hash::make($validatedData['password']);
         TmpDoctor::create($validatedData);
 
-        return redirect('/doctor-login')->with('success', 'Registration successfull! Please wait for admin to approve');
+        return redirect('/doctor')->with('success', 'Registration successfull! Please wait for admin to approve');
     }
 
 

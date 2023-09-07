@@ -40,12 +40,12 @@ class _ExpandedWidgetState extends State<ExpandedWidget> {
               children: [
                 AnimatedSize(
                   curve: Curves.easeOut,
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   child: Text(
                     flag ? firstHalf : widget.text,
                   ),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 InkWell(
                   onTap: () {
                     setState(() {
@@ -54,7 +54,7 @@ class _ExpandedWidgetState extends State<ExpandedWidget> {
                   },
                   child: Text(
                     flag ? "show more" : "show less",
-                    style: TextStyle(color: Config.primaryColor),
+                    style: const TextStyle(color: Config.primaryColor),
                   ),
                 )
               ],

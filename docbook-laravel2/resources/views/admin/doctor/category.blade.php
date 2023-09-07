@@ -13,7 +13,7 @@
                 <div class="caret"></div>
             </div>
             <ul class="menu2">
-                <a href=" {{ route('admin.showDoctorByCategory') }}">
+                <a href=" {{ route('admin.showAllDoctor') }}">
                     <li>All Doctor</li>
                 </a>
                 @foreach ($specializations as $item)

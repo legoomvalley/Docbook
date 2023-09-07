@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
+import 'package:flutter_docbook/components/snackBar.dart';
 import 'package:flutter_docbook/providers/dio_provider.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,8 +23,6 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool obsecurePass = true;
-  String _emailErr = "";
-  String _passwordErr = "";
   bool isLoading = false;
 
   @override
@@ -52,13 +51,13 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                 ),
               ),
             ),
-            // validator: (value) {
-            //   if (value == '') {
-            //     return 'email field is required';
-            //   } else {
-            //     return null;
-            //   }
-            // },
+            validator: (value) {
+              if (value == '') {
+                return 'email field is required';
+              } else {
+                return null;
+              }
+            },
           ),
           Config.spaceSmall,
           TextFormField(
@@ -70,7 +69,7 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
               hintText: 'Password',
               labelText: 'Password',
               filled: true,
-              fillColor: Color.fromRGBO(206, 222, 239, 1),
+              fillColor: const Color.fromRGBO(206, 222, 239, 1),
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.lock_outlined),
               prefixIconColor: Config.primaryColor,
@@ -90,20 +89,20 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                         color: Config.primaryColor,
                       ),
               ),
-              enabledBorder: OutlineInputBorder(
+              enabledBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.transparent,
                 ),
               ),
             ),
-            // validator: (value) {
-            //   if (value == '') {
-            //     return "password field is required";
-            //   } else {
-            //     return null;
-            //   }
-            // },
+            validator: (value) {
+              if (value == '') {
+                return "password field is required";
+              } else {
+                return null;
+              }
+            },
           ),
           Row(
             children: <Widget>[
@@ -121,7 +120,7 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                   ),
                 ),
               ),
-              Spacer(),
+              const Spacer(),
             ],
           ),
           // Config.spaceSmall,
@@ -132,57 +131,44 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                 title: isLoading ? 'Please wait' : 'Sign In',
                 disable: isLoading ? true : false,
                 color: Config.primaryColor,
-                backgroundColor: Color.fromRGBO(239, 247, 255, 1),
+                backgroundColor: const Color.fromRGBO(239, 247, 255, 1),
                 borderRadius: BorderRadius.circular(0),
                 onPressed: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  final token = await DioProvider()
-                      .getTokenPatient('lindgren.ashley@example.org', '123');
-                  print("muax");
-                  if (token) {
-                    final SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    final tokenValue = prefs.getString('token') ?? '';
-                    if (tokenValue.isNotEmpty && tokenValue != '') {
-                      //get user data
-                      final response =
-                          await DioProvider().getUserPatient(tokenValue);
-                      print(response);
-                      if (response != null) {
-                        setState(() {
-                          final user = json.decode(response);
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    final token = await DioProvider().getTokenPatient(
+                        _emailController.text, _passwordController.text);
+                    if (token) {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      final tokenValue = prefs.getString('token') ?? '';
+                      if (tokenValue.isNotEmpty && tokenValue != '') {
+                        //get user data
+                        final response =
+                            await DioProvider().getUserPatient(tokenValue);
+                        if (response != null) {
+                          setState(() {
+                            final user = json.decode(response);
 
-                          print('this is token:$token');
-                          auth.loginSuccess(user, tokenValue);
-                        });
-                        MyApp.navigatorKey.currentState!
-                            .pushNamed('main_patient');
+                            auth.loginSuccess(user, tokenValue);
+                          });
+                          MyApp.navigatorKey.currentState!
+                              .pushNamed('main_patient');
+                        }
                         setState(() {
                           isLoading = false;
                         });
                       }
+                    } else {
+                      snackBar(
+                          context,
+                          'Incorrect email or password',
+                          const Color.fromRGBO(244, 67, 54, 1),
+                          const Duration(seconds: 4));
                     }
                   }
-                  // ---------------------------------------------------------------
-                  //   final token = await DioProvider().getTokenPatient(
-                  //       _emailController.text, _passwordController.text);
-                  //   // _emailErr = token?.data['email'].join('\n');
-                  //   // _passwordErr = token?.data['password'].join('\n');
-                  //   // if (_formKey.currentState!.validate()) {
-                  //   print(token);
-                  //   if (token) {
-                  //     auth.loginSuccess();
-                  //     MyApp.navigatorKey.currentState!.pushNamed('main_patient');
-                  //   } else {
-                  //     snackBar(context, 'Incorrect email or password', Colors.red,
-                  //         Duration(seconds: 2));
-                  //   }
-                  //   // }
-                  // },
-                  // onPressed: () {
-                  //   Navigator.of(context).pushNamed('main_patient');
                 },
               );
             },

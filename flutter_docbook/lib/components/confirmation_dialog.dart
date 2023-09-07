@@ -4,11 +4,10 @@ Future<void> showConfirmationDialog(
     BuildContext context, String question, Function onConfirm) async {
   return showDialog<void>(
     context: context,
-    barrierDismissible:
-        false, // Prevent dialog from closing when tapped outside
+    barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Are you sure?'),
+        title: const Text('Are you sure?'),
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
@@ -18,15 +17,15 @@ Future<void> showConfirmationDialog(
         ),
         actions: <Widget>[
           TextButton(
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           TextButton(
-            child: Text('Confirm'),
+            child: const Text('Confirm'),
             onPressed: () {
-              onConfirm(); // Call the provided callback when Confirm is pressed
+              onConfirm();
               Navigator.of(context).pop();
             },
           ),

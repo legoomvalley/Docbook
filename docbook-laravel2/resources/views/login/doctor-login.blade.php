@@ -33,7 +33,7 @@
                 </div>
             </div>
             @endif
-            <form action="/doctor-login" method="POST">
+            <form action="/doctors/login" method="POST">
                 @csrf
                 <label for="fname" style="display: block;">Username</label>
                 {{-- --}}
@@ -53,7 +53,7 @@
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
                 <div class="registerLinkContainer">
-                    <a href="/doctor-register" data-toggle="modal" data-target="#login-modal"
+                    <a href="/doctors/register" data-toggle="modal" data-target="#login-modal"
                         class="registerLink">register here
                     </a>
                 </div>

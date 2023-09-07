@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
 import 'package:flutter_docbook/components/date_time_ui.dart';
 import 'package:flutter_docbook/models/auth_model.dart';
-import 'package:flutter_docbook/models/datetime_converter.dart';
+import 'package:flutter_docbook/components/datetime_converter.dart';
 import 'package:flutter_docbook/providers/dio_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +26,8 @@ class AppointmentDetails extends StatefulWidget {
 
 class _AppointmentDetailsState extends State<AppointmentDetails> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _additionalMsgController = TextEditingController();
+  final TextEditingController _additionalMsgController =
+      TextEditingController();
   bool _selectedApproved = false;
   bool _selectedNotApproved = false;
   String? _selectedStatus;
@@ -57,18 +57,16 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.token);
     String? convertedDate = DateConverter.formatDate(selectedDate.toString());
     String? convertedTime = selectedTime!.format(context);
-    print(widget.appointment);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Config.doctorTheme,
         elevation: 5,
-        title: Text('Appointment details'),
+        title: const Text('Appointment details'),
         automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context); // Navigate back to the previous screen
           },
@@ -82,7 +80,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                 ? Container()
                 : Container(
                     height: 80,
-                    margin: EdgeInsets.only(top: 30, left: 10, right: 10),
+                    margin: const EdgeInsets.only(top: 30, left: 10, right: 10),
                     // color: Colors.green,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,7 +112,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                 });
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 25),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -122,8 +121,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                           color: _selectedApproved
                                               ? Config.doctorTheme
                                               : Colors.black),
-                                      SizedBox(width: 15),
-                                      Text(
+                                      const SizedBox(width: 15),
+                                      const Text(
                                         'Approved',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -161,7 +160,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                 });
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 25),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -169,8 +169,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                           color: _selectedNotApproved
                                               ? Config.doctorTheme
                                               : Colors.black),
-                                      SizedBox(width: 15),
-                                      Text(
+                                      const SizedBox(width: 15),
+                                      const Text(
                                         'Not\napproved',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
@@ -185,19 +185,20 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       ],
                     ),
                   ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 15),
+              margin: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Patient Name',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -208,10 +209,10 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       children: [
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.person_3_outlined,
                             ),
-                            SizedBox(width: 5),
+                            const SizedBox(width: 5),
                             Text(widget.appointment?['full_name']),
                           ],
                         ),
@@ -219,13 +220,14 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     ),
                   ),
                   Config.spaceSmall,
-                  Text(
+                  const Text(
                     'Disease',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -236,10 +238,10 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       children: [
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.medical_information_outlined,
                             ),
-                            SizedBox(width: 5),
+                            const SizedBox(width: 5),
                             Text(widget.appointment?['disease']),
                           ],
                         ),
@@ -247,13 +249,14 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     ),
                   ),
                   Config.spaceSmall,
-                  Text(
+                  const Text(
                     'Time',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -264,10 +267,10 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       children: [
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.timelapse_outlined,
                             ),
-                            SizedBox(width: 5),
+                            const SizedBox(width: 5),
                             Text(convertedTime),
                           ],
                         ),
@@ -289,13 +292,14 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     ),
                   ),
                   Config.spaceSmall,
-                  Text(
+                  const Text(
                     'Date',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -306,38 +310,36 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       children: [
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.calendar_month_outlined,
                             ),
-                            SizedBox(width: 5),
-                            Text(convertedDate ?? ''),
+                            const SizedBox(width: 5),
+                            Text(convertedDate),
                           ],
                         ),
-                        Container(
-                          child: Button(
-                              title: 'Change Date',
-                              disable:
-                                  widget.appointment?['status'] == "completed"
-                                      ? true
-                                      : false,
-                              color: Colors.white,
-                              backgroundColor: Config.doctorTheme,
-                              onPressed: () async {
-                                final date = await pickDate(
-                                    context, _handleDateSelected);
-                              },
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(8))),
-                        )
+                        Button(
+                            title: 'Change Date',
+                            disable:
+                                widget.appointment?['status'] == "completed"
+                                    ? true
+                                    : false,
+                            color: Colors.white,
+                            backgroundColor: Config.doctorTheme,
+                            onPressed: () async {
+                              final date =
+                                  await pickDate(context, _handleDateSelected);
+                            },
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)))
                       ],
                     ),
                   ),
                   Config.spaceSmall,
-                  Text(
+                  const Text(
                     'Additional message',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Form(
                     key: _formKey,
                     child: TextFormField(
@@ -353,20 +355,20 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                         filled: true,
                         fillColor: Colors.grey.shade200,
                         alignLabelWithHint: true,
-                        prefixIcon: Padding(
+                        prefixIcon: const Padding(
                             padding: EdgeInsets.only(bottom: 80),
                             child: Icon(
                               Icons.add_box_outlined,
                               color: Colors.black,
                             )),
                         prefixIconColor: Config.doctorTheme,
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.transparent),
                         ),
                       ),
@@ -383,7 +385,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   widget.appointment?['status'] == "completed"
                       ? Container()
                       : Button(
-                          padding: EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                           width: double.infinity,
                           title: isLoading ? 'Saving...' : 'Confirm',
                           disable: _selectedStatus == null || isLoading
@@ -413,7 +415,6 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
 
                                   authModel.loginSuccessDoctor(
                                       user, widget.token!, user['doctor'][0]);
-                                  print(user['doctor'][0]);
                                 });
                                 snackBar(context, 'data successfully sent',
                                     Colors.green, Duration(seconds: 4));
@@ -422,7 +423,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               }
                             }
                           },
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
                   Config.spaceSmall,
                 ],
               ),

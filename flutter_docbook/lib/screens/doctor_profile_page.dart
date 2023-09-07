@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_const_constructors
-
 import 'dart:io';
 import 'package:dio/dio.dart';
 
@@ -28,7 +26,6 @@ class DoctorProfilePage extends StatefulWidget {
 
 class _DoctorProfilePageState extends State<DoctorProfilePage> {
   // user_id 1
-  // ignore: unused_field
   // fullName, username, mobile_number, specialization, status, location, bio_data, experience_year
 
   Map<String, dynamic> user = {};
@@ -36,14 +33,14 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
   dynamic doctor;
   String globalToken = "";
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _fullNameController = TextEditingController();
-  TextEditingController _userNameController = TextEditingController();
-  TextEditingController _mobileNumberController = TextEditingController();
-  TextEditingController _bioDataController = TextEditingController();
-  TextEditingController _experienceController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _mobileNumberController = TextEditingController();
+  final TextEditingController _bioDataController = TextEditingController();
+  final TextEditingController _experienceController = TextEditingController();
   int? _selectedSpecializationItems;
   String? _selectedStatusItems = 'Available';
-  String? _userNameErr = '';
+  final String _userNameErr = '';
   File? _pickedImage;
   bool isLoading = false;
 
@@ -59,14 +56,12 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     {'name': 'Orthopedics', 'index': 3},
     {'name': 'Eye Specialist', 'index': 4}
   ];
-  List<String> _statusItems = [
+  final List<String> _statusItems = [
     'available',
     'not available',
   ];
 
   Future<void> getData() async {
-    print('ll');
-
     setState(() {
       user = Provider.of<AuthModel>(context, listen: false).getUser;
       globalToken = Provider.of<AuthModel>(context, listen: false).getToken;
@@ -81,7 +76,6 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
       _bioDataController.text = doctor['bio_data'];
       _experienceController.text = doctor['experience_year'].toString();
     });
-    print(user);
   }
 
   Future<void> pickImage() async {
@@ -110,7 +104,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
           elevation: 0,
           automaticallyImplyLeading: false,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context); // Navigate back to the previous screen
             },
@@ -124,7 +118,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                   Container(
                     // color: Config.primaryColor,
                     height: 200.0,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       color: Config.doctorTheme,
@@ -136,7 +130,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                       child: Column(
                         // ignore: prefer_const_literals_to_create_immutables
                         children: <Widget>[
-                          Padding(padding: EdgeInsets.only(top: 20)),
+                          const Padding(padding: EdgeInsets.only(top: 20)),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -149,7 +143,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                   color: Colors.white,
                                 ),
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                             ],
                           ),
                           Stack(
@@ -171,19 +165,20 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                                     'http://10.0.2.2:8000/storage/${user['profile_photo_path']}',
                                                   ),
                                                 )
-                                              : CircleAvatar(
+                                              : const CircleAvatar(
                                                   radius: 50,
                                                   backgroundImage: AssetImage(
                                                       'assets/user.jpg'),
                                                 ))),
                               Container(
-                                margin: EdgeInsets.only(top: 40, left: 70),
+                                margin:
+                                    const EdgeInsets.only(top: 40, left: 70),
                                 color: Colors.white30,
                                 child: Material(
                                   color: Colors.transparent,
                                   child: InkWell(
                                     child: IconButton(
-                                      icon: Icon(Icons.camera_alt),
+                                      icon: const Icon(Icons.camera_alt),
                                       onPressed: () => pickImage(),
                                     ),
                                   ),
@@ -198,7 +193,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                 ],
               ),
               Container(
-                margin: EdgeInsets.only(left: 20, top: 40, right: 20),
+                margin: const EdgeInsets.only(left: 20, top: 40, right: 20),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,7 +205,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Theme(
                       data: ThemeData(primaryColor: Colors.grey),
                       child: Form(
@@ -223,23 +218,24 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               controller: _fullNameController,
                               decoration: InputDecoration(
                                 labelText: 'Full Name',
-                                labelStyle: TextStyle(
+                                labelStyle: const TextStyle(
                                   color: Colors.grey,
                                 ),
                                 hintText: '',
                                 filled: true,
                                 fillColor: Colors.grey.shade100,
                                 alignLabelWithHint: true,
-                                suffixIcon: Icon(Icons.people_alt_outlined),
+                                suffixIcon:
+                                    const Icon(Icons.people_alt_outlined),
                                 suffixIconColor: Colors.grey,
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(color: Colors.grey),
@@ -266,21 +262,21 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               decoration: InputDecoration(
                                 labelText: 'Username',
                                 filled: true,
-                                labelStyle: TextStyle(
+                                labelStyle: const TextStyle(
                                   color: Colors.grey,
                                 ),
                                 fillColor: Colors.grey.shade100,
                                 alignLabelWithHint: true,
                                 suffixIcon: const Icon(Icons.person_2_outlined),
                                 suffixIconColor: Colors.grey,
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(color: Colors.grey),
@@ -309,7 +305,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 hintText: '',
                                 labelText: 'Mobile Number',
                                 filled: true,
-                                labelStyle: TextStyle(
+                                labelStyle: const TextStyle(
                                   color: Colors.grey,
                                 ),
                                 fillColor: Colors.grey.shade100,
@@ -317,14 +313,14 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 suffixIcon:
                                     const Icon(Icons.phone_android_sharp),
                                 suffixIconColor: Colors.grey,
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(color: Colors.grey),
@@ -352,19 +348,19 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 hintText: '',
                                 labelText: 'Specialization',
                                 filled: true,
-                                labelStyle: TextStyle(
+                                labelStyle: const TextStyle(
                                   color: Colors.grey,
                                 ),
                                 fillColor: Colors.grey.shade100,
                                 alignLabelWithHint: true,
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(color: Colors.grey),
@@ -372,8 +368,8 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               ),
                               items: _specializationItems
                                   .map((e) => DropdownMenuItem(
-                                      child: Text(e['name']),
-                                      value: e['index']))
+                                      value: e['index'],
+                                      child: Text(e['name'])))
                                   .toList(),
                               onChanged: (val) {
                                 setState(() {
@@ -388,19 +384,19 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 hintText: '',
                                 labelText: 'Status',
                                 filled: true,
-                                labelStyle: TextStyle(
+                                labelStyle: const TextStyle(
                                   color: Colors.grey,
                                 ),
                                 fillColor: Colors.grey.shade100,
                                 alignLabelWithHint: true,
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(color: Colors.grey),
@@ -408,7 +404,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               ),
                               items: _statusItems
                                   .map((e) => DropdownMenuItem(
-                                      child: Text(e), value: e))
+                                      value: e, child: Text(e)))
                                   .toList(),
                               onChanged: (val) {
                                 setState(() {
@@ -425,12 +421,12 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 hintText: '',
                                 labelText: 'Bio Data',
                                 filled: true,
-                                labelStyle: TextStyle(
+                                labelStyle: const TextStyle(
                                   color: Colors.grey,
                                 ),
                                 fillColor: Colors.grey.shade100,
                                 alignLabelWithHint: true,
-                                suffixIcon: Padding(
+                                suffixIcon: const Padding(
                                     padding: EdgeInsets.only(
                                         bottom: 80), // Adjust padding as needed
                                     child: Icon(
@@ -438,14 +434,14 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                       color: Colors.grey,
                                     )),
                                 suffixIconColor: Colors.grey,
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(color: Colors.grey),
@@ -478,24 +474,24 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 hintText: '',
                                 labelText: 'Total Experience',
                                 filled: true,
-                                labelStyle: TextStyle(
+                                labelStyle: const TextStyle(
                                   color: Colors.grey,
                                 ),
                                 fillColor: Colors.grey.shade100,
                                 alignLabelWithHint: true,
-                                suffixIcon: Icon(
+                                suffixIcon: const Icon(
                                   Icons.medical_services,
                                   color: Colors.grey,
                                 ),
                                 suffixIconColor: Colors.grey,
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15)),
                                   borderSide: BorderSide(color: Colors.grey),
@@ -574,8 +570,8 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                       },
                                     ],
                                   });
-                                  final doctorUpdate =
-                                      await DioProvider().updateDoctor(
+
+                                  await DioProvider().updateDoctor(
                                     globalToken,
                                     user['id'],
                                     _fullNameController.text,
@@ -590,7 +586,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                     'name': _fullNameController.text
                                   };
                                   snackBar(context, 'data successfully updated',
-                                      Colors.green, Duration(seconds: 4));
+                                      Colors.green, const Duration(seconds: 4));
                                   await getData();
                                   Navigator.pop(context, updatedData);
 
@@ -641,4 +637,3 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     );
   }
 }
-// fullName, username, mobile_number, specialization, status, location, bio_data, experience_year

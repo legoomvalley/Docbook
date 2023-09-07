@@ -81,7 +81,7 @@ class AppointmentController extends Controller
             'patient_id' => $user->id
         ]);
 
-        return redirect('/')->with('success', 'successfully sent, check your appointment status <a href="/check-appointment/' . Auth::guard('patient')->user()->user_name  . '">here</a>');
+        return redirect('/')->with('success', 'successfully sent, check your appointment status <a href="/patient-record/' . Auth::guard('patient')->user()->user_name  . '">here</a>');
     }
 
 
@@ -140,13 +140,12 @@ class AppointmentController extends Controller
             $appointment = new Appointment($values);
             $appointment->save();
             if ($appointment) {
-                return response()->json(['status' => 1, 'msg' => 'successfully sent, check your appointment status <a href="/check-appointment/' . Auth::guard('patient')->user()->user_name  . '">here</a>']);
+                return response()->json(['status' => 1, 'msg' => 'successfully sent, check your appointment status <a href="/patient-record/' . Auth::guard('patient')->user()->user_name  . '">here</a>']);
             }
         }
     }
 
-
-    public function editActionAppointmentRequest(Patient $patient, Appointment $appointment)
+    public function editActionAppointment(Patient $patient, Appointment $appointment)
     {
 
         $doctor =  Auth::guard('doctor')->user();
@@ -156,38 +155,11 @@ class AppointmentController extends Controller
             "appointment" => $appointment,
             "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
             'patient' => $patient,
-        ]);
-    }
-    public function updateActionAppointmentRequest(Request $request, Patient $patient, Appointment $appointment)
-    {
-        // $appointment = Appointment::where('patient_id', $patient->id);
-        $validatedData = $request->validate([
-            'status' => 'required',
-            'remark' => 'required',
-            'date' => 'required',
-            'time' => 'required',
-        ]);
-        $validatedData['date'] = Carbon::parse($validatedData['date'])->format('Y-m-d');
-
-        Appointment::where('id', $appointment->id)->update($validatedData);
-
-        return back()->with('success', 'your message successfully sent');
-    }
-    public function editActionAppointmentApprove(Patient $patient, Appointment $appointment)
-    {
-
-        $doctor =  Auth::guard('doctor')->user();
-        return view('dashboard.editAction', [
-            "title" => "Edit Appointment Page",
-            "container" => "generalContainer",
-            "appointment" => $appointment,
-            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
-            'patient' => $patient,
-            'action' => 'appointment-approve'
+            'action' => 'update appointment'
         ]);
     }
 
-    public function updateActionAppointmentApprove(Request $request, Patient $patient, Appointment $appointment)
+    public function updateActionAppointment(Request $request, Patient $patient, Appointment $appointment)
     {
         // $appointment = Appointment::where('patient_id', $patient->id);
         $validatedData = $request->validate([
@@ -204,38 +176,6 @@ class AppointmentController extends Controller
 
         return redirect('/dashboard')->with('success', 'your message successfully sent');
     }
-    public function editActionAppointmentCancel(Patient $patient, Appointment $appointment)
-    {
-
-        $doctor =  Auth::guard('doctor')->user();
-        return view('dashboard.editAction', [
-            "title" => "Edit Appointment Page",
-            "container" => "generalContainer",
-            "appointment" => $appointment,
-            "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
-            'patient' => $patient,
-            'action' => 'appointment-cancel'
-        ]);
-    }
-
-    public function updateActionAppointmentCancel(Request $request, Patient $patient, Appointment $appointment)
-    {
-        // $appointment = Appointment::where('patient_id', $patient->id);
-        $validatedData = $request->validate([
-            'status' => 'required',
-            'remark' => 'required',
-            'date' => 'required',
-            'time' => 'required',
-            'action' => 'appointment-cancel'
-
-        ]);
-        $validatedData['date'] = Carbon::parse($validatedData['date'])->format('Y-m-d');
-
-        Appointment::where('id', $appointment->id)->update($validatedData);
-
-        return redirect('/dashboard/appointment-cancel/')->with('success', 'your message successfully sent');
-    }
-
     public function deleteAppointmentApprove(Request $request, Appointment $appointment)
     {
         // status, time, date, additionalMessage or remark

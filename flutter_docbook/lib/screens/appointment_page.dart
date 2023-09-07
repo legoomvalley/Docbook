@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/screens/appointment_details.dart';
-import 'package:flutter_docbook/screens/doctor/search_page.dart';
+import 'package:flutter_docbook/screens/search_page_doctor.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +8,7 @@ import '../components/border_card.dart';
 import '../components/button.dart';
 import '../components/confirmation_dialog.dart';
 import '../models/auth_model.dart';
-import '../models/datetime_converter.dart';
+import '../components/datetime_converter.dart';
 import '../providers/dio_provider.dart';
 
 class AppointmentPage extends StatefulWidget {
@@ -37,7 +36,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
   List<dynamic> appointments = [];
   List<dynamic> searchAppointments = [];
   List<dynamic> todayAppointments = [];
-  // String appBarTitle = 'All Appointemnt';
 
   FilterStatus selectedStatus = FilterStatus.all;
   String appBarTitle = FilterStatus.all.value;
@@ -128,14 +126,14 @@ class _AppointmentPageState extends State<AppointmentPage> {
       body: CustomScrollView(
         slivers: [
           const SliverToBoxAdapter(child: Config.spaceSmall),
-          appointments.length == 0
+          appointments.isEmpty
               ? SliverToBoxAdapter(
                   child: Container(
-                    margin: EdgeInsets.only(top: 180),
+                    margin: const EdgeInsets.only(top: 180),
                     height: 140,
                     width: double.infinity,
                     child: Stack(alignment: Alignment.center, children: [
-                      Container(
+                      SizedBox(
                         height: 130,
                         width: 150,
                         child: Image.asset(
@@ -143,7 +141,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                      Positioned(
+                      const Positioned(
                         bottom: 10,
                         child: Text(
                           'No Appointments Available',
@@ -159,33 +157,32 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     return const SizedBox(height: 20);
                   },
                   itemBuilder: (context, index) {
-                    var _appointment = appointments[index];
-                    var _convertedDate = DateConverter.formatDate2(
-                        _appointment['date'].toString());
+                    var appointment = appointments[index];
+                    var convertedDate = DateConverter.formatDate2(
+                        appointment['date'].toString());
 
                     return SizedBox(
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: BorderCard(
-                          cardHeader: _appointment['status'] != "pending"
+                          cardHeader: appointment['status'] != "pending"
                               ? Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(10)),
-                                    color:
-                                        const Color.fromRGBO(94, 94, 184, 0.3),
+                                    color: Color.fromRGBO(94, 94, 184, 0.3),
                                   ),
                                   width: double.infinity,
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         width: 30,
                                         height: 30,
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                              padding: EdgeInsets.all(0),
+                                              padding: const EdgeInsets.all(0),
                                               backgroundColor:
                                                   Colors.yellow[50],
                                               side: BorderSide(
@@ -201,7 +198,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                             color: Colors.red[600],
                                           ),
                                           onPressed: () async {
-                                            print(_appointment);
                                             await showConfirmationDialog(
                                                 context,
                                                 'are you sure to remove this appointment',
@@ -209,13 +205,12 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                               final response =
                                                   await DioProvider()
                                                       .deleteDoctorAppointment(
-                                                          _appointment['id'],
+                                                          appointment['id'],
                                                           token);
-                                              print(response);
                                               if (response) {
                                                 setState(() {
                                                   appointments
-                                                      .remove(_appointment);
+                                                      .remove(appointment);
                                                 });
                                               }
                                             });
@@ -223,18 +218,19 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                         ),
                                       ),
                                       SizedBox(
-                                          width: _appointment['status'] ==
+                                          width: appointment['status'] ==
                                                   "completed"
                                               ? 0
                                               : 10),
-                                      _appointment['status'] == "completed"
-                                          ? SizedBox()
-                                          : Container(
+                                      appointment['status'] == "completed"
+                                          ? const SizedBox()
+                                          : SizedBox(
                                               width: 30,
                                               height: 30,
                                               child: ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                    padding: EdgeInsets.all(0),
+                                                    padding:
+                                                        const EdgeInsets.all(0),
                                                     backgroundColor:
                                                         Colors.yellow[50],
                                                     side: BorderSide(
@@ -259,7 +255,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                                       builder: (context) =>
                                                           AppointmentDetails(
                                                               appointment:
-                                                                  _appointment,
+                                                                  appointment,
                                                               token: token,
                                                               index: index),
                                                     ),
@@ -282,7 +278,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Patient Name',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -292,29 +288,29 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                       ),
                                       Container(
                                         decoration: BoxDecoration(
-                                          color: (_appointment['status'] ==
+                                          color: (appointment['status'] ==
                                                       "approved" ||
-                                                  _appointment['status'] ==
+                                                  appointment['status'] ==
                                                       "completed")
                                               ? Colors.green[100]
-                                              : _appointment['status'] ==
+                                              : appointment['status'] ==
                                                       "not approved"
                                                   ? Colors.red[100]
                                                   : Colors.yellow[100],
                                           borderRadius:
                                               BorderRadius.circular(7),
                                         ),
-                                        padding: EdgeInsets.all(5),
+                                        padding: const EdgeInsets.all(5),
                                         child: Text(
-                                          _appointment['status'],
+                                          appointment['status'],
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: (_appointment['status'] ==
+                                            color: (appointment['status'] ==
                                                         "approved" ||
-                                                    _appointment['status'] ==
+                                                    appointment['status'] ==
                                                         "completed")
                                                 ? Colors.green[600]
-                                                : _appointment['status'] ==
+                                                : appointment['status'] ==
                                                         "not approved"
                                                     ? Colors.red[600]
                                                     : Colors.yellow[700],
@@ -325,8 +321,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                     ],
                                   ),
                                   Text(
-                                    _appointment['patient_name'],
-                                    style: TextStyle(
+                                    appointment['patient_name'],
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
@@ -336,9 +332,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             ),
                           ],
                           btmWidget: [
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Container(
-                              padding: EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(15),
                               decoration: BoxDecoration(
                                 color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(10),
@@ -349,7 +345,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Date & Time',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -358,20 +354,20 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                         ),
                                       ),
                                       Text(
-                                        "$_convertedDate At ${_appointment['time']}",
-                                        style: TextStyle(
+                                        "$convertedDate At ${appointment['time']}",
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 15,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 15),
+                                  const SizedBox(height: 15),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Disease',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -380,8 +376,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                         ),
                                       ),
                                       Text(
-                                        _appointment['disease'],
-                                        style: TextStyle(
+                                        appointment['disease'],
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 15,
                                         ),
@@ -391,17 +387,17 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 5),
-                            _appointment['status'] == "pending" ||
-                                    _appointment['status'] == "completed"
+                            const SizedBox(height: 5),
+                            appointment['status'] == "pending" ||
+                                    appointment['status'] == "completed"
                                 ? Button(
                                     width: double.infinity,
-                                    title: _appointment['status'] == "pending"
+                                    title: appointment['status'] == "pending"
                                         ? 'Take action'
                                         : 'Details',
                                     disable: false,
                                     color: Colors.white,
-                                    backgroundColor: _appointment['status'] ==
+                                    backgroundColor: appointment['status'] ==
                                             "pending"
                                         ? const Color.fromRGBO(253, 216, 53, 1)
                                         : Colors.greenAccent,
@@ -411,7 +407,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               AppointmentDetails(
-                                                  appointment: _appointment,
+                                                  appointment: appointment,
                                                   token: token,
                                                   index: index),
                                         ),
@@ -419,13 +415,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                     },
                                     borderRadius: BorderRadius.circular(5),
                                   )
-                                : SizedBox()
+                                : const SizedBox()
                           ],
                         ),
                       ),
                     );
                   }),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: SizedBox(height: 30),
           ),
         ],
@@ -433,7 +429,3 @@ class _AppointmentPageState extends State<AppointmentPage> {
     );
   }
 }
-
-
-// all appointment doc can edit unless pending and today
-// all,rejected(not approved), pending(doc don't give response yet), today(due date today and approved), approved

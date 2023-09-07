@@ -18,10 +18,10 @@
             </div>
             <form action="" method="post" class="d-flex bg-secondary-subtle col-sm-5 col-8 justify-content-around py-1">
                 <div>
-                    <a href=" /profile-page/{{ $doctor['user_name'] }}" class="text-decoration-none">My Profile</a>
+                    <a href=" /doctor-profile/{{ $doctor['user_name'] }}" class="text-decoration-none">My Profile</a>
                 </div>
                 <div>
-                    <a href="/review-page/{{ $doctor['user_name'] }}" class="text-decoration-none">reviews</a>
+                    <a href="/review/{{ $doctor['user_name'] }}" class="text-decoration-none">reviews</a>
                 </div>
             </form>
             <div class="mt-2">
@@ -98,7 +98,7 @@
                             <div class="row d-flex justify-content-center ">
                                 <div class="col-md-12">
                                     {{-- form --}}
-                                    <form action="/review-page/{{ $doctor->user_name }}" method="post"
+                                    <form action="/review/{{ $doctor->user_name }}" method="post"
                                         enctype="multipart/form-data" id="doctor-comment-form">
                                         @csrf
                                         {{-- comment input --}}

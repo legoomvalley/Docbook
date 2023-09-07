@@ -114,7 +114,7 @@
                 <p class="text-danger">{{ $message }}</p>
                 @enderror
             </div>
-            <a style="" href="/doctor-login" class="loginLink mt-3">dah login?
+            <a style="" href="/doctors/register" class="loginLink mt-3">dah login?
                 tekan sini kawan
             </a>
             <input type="submit" value="submit">

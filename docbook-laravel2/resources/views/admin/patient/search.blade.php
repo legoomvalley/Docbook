@@ -64,9 +64,9 @@
                         <td class="align-middle text-center">{{ optional($item->patient)->phone_no }}</td>
                         <td class="align-middle text-center">{{ $item->email }}</td>
                         <td class="align-middle text-center">
-                            <form action="/admin/dashboard/reject-patient/{{optional($item->patient)->id}}"
-                                method="post">
+                            <form action="/admin/dashboard/patient/{{$item->patient->id}}" method="post">
                                 @csrf
+                                @method('DELETE')
                                 <button class="bg-transparent border border-0"
                                     onclick="return confirm('Are you sure to delete?')"><i
                                         class="fa-solid fa-circle-xmark" style="color: #ff0000;"></i></button>

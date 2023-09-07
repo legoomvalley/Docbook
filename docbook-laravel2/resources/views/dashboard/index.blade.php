@@ -6,16 +6,16 @@
         {{-- <div class="flexHomeDashboard1"> --}}
             <h1 class="my-5 text-center font-monospace fw-bolder">Welcome Doctor {{ $doctor['user_name']}}
             </h1>
+            @if(session()->has('success'))
+            <div class="alert alert-success alert-dismissible fade show col-10 col-md-6 col-lg-4 mx-auto" role="alert">
+                <i class="fa-sharp fa-solid fa-square-check me-1"></i>
+                {{ session('success') }}
+                <button type="button" class="btn-close align-middle" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+            @endif
             <div class="d-flex allTable align-content-center justify-content-center">
-                @if(session()->has('success'))
-                <div class="alert alert-success alert-dismissible fade show col-10 col-md-6 col-lg-4 mx-auto"
-                    role="alert">
-                    <i class="fa-sharp fa-solid fa-square-check me-1"></i>
-                    {{ session('success') }}
-                    <button type="button" class="btn-close align-middle" data-bs-dismiss="alert"
-                        aria-label="Close"></button>
-                </div>
-                @endif
+
                 <div class="d-flex flex-column requestCancelContainer">
                     <div class="shadow indexDashboard rounded-4 col-11 col-sm-11 col-md-11 col-lg-11 px-4 mb-5">
                         @if (count($requestedAppointmentAll) > 2)
@@ -50,7 +50,7 @@
                                     strtotime($appointment->date)) }}</td>
                                 <td class="align-middle text-center">
                                     <a class="myBtn"
-                                        href="/dashboard/appointment-request/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
+                                        href="/dashboard/patients/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit"
                                         class=""><i class=" fa-sharp fa-regular fa-pen-to-square"></i></a>
                                 </td>
                             </tr>
@@ -100,7 +100,7 @@
                                 </td>
                                 <td class="align-middle text-center">
                                     <a class="myBtn"
-                                        href="/dashboard/appointment-request/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit"
+                                        href="/dashboard/patients/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit"
                                         class=""><i class=" fa-sharp fa-regular fa-pen-to-square"></i></a>
                                 </td>
                             </tr>
@@ -160,8 +160,8 @@
                                         {{ $appointment->status }}
                                     </td>
                                     <td class="align-middle text-center">
-                                        <a href=" /dashboard/appointment-cancel/{{ $appointment->patient->user_name
-                                        }}/{{$appointment->id}}/edit">
+                                        <a href=" /dashboard/patients/{{ $appointment->patient->user_name
+                                        }}/appointments/{{$appointment->id}}/edit">
                                             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
                                         </a>
                                     </td>
@@ -215,8 +215,8 @@
                                     </td>
                                     <td class="align-middle text-center">
                                     <td class="align-middle text-center">
-                                        <a href=" /dashboard/appointment-cancel/{{ $appointment->patient->user_name
-                                            }}/{{$appointment->id}}/edit">
+                                        <a href=" /dashboard/patients/{{ $appointment->patient->user_name
+                                            }}/appointments/{{$appointment->id}}/edit">
                                             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
                                         </a>
                                     </td>
@@ -290,7 +290,7 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <a
-                                            href="/dashboard/appointment-approve/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit">
+                                            href="/dashboard/patients/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit">
                                             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
                                         </a>
                                     </td>
@@ -344,7 +344,7 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <a
-                                            href="/dashboard/appointment-approve/{{ $appointment->patient->user_name }}/{{ $appointment->id }}/edit">
+                                            href="/dashboard/appointment-approve/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit">
                                             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
                                         </a>
                                     </td>

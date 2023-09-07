@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/screens/appointment_page.dart';
-import 'package:flutter_docbook/screens/doctor_profile_page.dart';
 import 'package:flutter_docbook/screens/home_doctor_page.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

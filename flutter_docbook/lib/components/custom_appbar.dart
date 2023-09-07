@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_docbook/utils/config.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -35,10 +34,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: const Color.fromRGBO(255, 255, 255, 1),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
-                      color: const Color.fromRGBO(0, 0, 0, 0.1),
-                      offset: const Offset(
+                      color: Color.fromRGBO(0, 0, 0, 0.1),
+                      offset: Offset(
                         4.0,
                         5.0,
                       ),
@@ -47,7 +46,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     ),
                   ]),
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 5),
                 child: IconButton(
                   onPressed: () {
                     // if is given, then this icon btn will navigate to that route
@@ -59,12 +58,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   },
                   icon: widget.icon!,
                   iconSize: 16,
-                  color: Color.fromRGBO(103, 114, 148, 1),
+                  color: const Color.fromRGBO(103, 114, 148, 1),
                 ),
               ))
           : null,
       // if action is not set, return null
-      actions: widget.actions ?? null,
+      actions: widget.actions,
     );
   }
 }

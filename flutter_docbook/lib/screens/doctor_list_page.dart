@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/doctor_card.dart';
 import 'package:flutter_docbook/screens/search_page.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/filter_specialization.dart';
 import '../models/auth_model.dart';
-import '../providers/dio_provider.dart';
 import '../utils/config.dart';
 
 class DoctorListPage extends StatefulWidget {
@@ -49,8 +45,8 @@ class _DoctorListPageState extends State<DoctorListPage> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 50),
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.only(top: 50),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Material(
                 elevation: 5,
                 color: Colors.white,
@@ -68,7 +64,7 @@ class _DoctorListPageState extends State<DoctorListPage> {
                       // filled: fale,
                       hintText: 'Search Doctor...',
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.search),
+                        icon: const Icon(Icons.search),
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -78,11 +74,11 @@ class _DoctorListPageState extends State<DoctorListPage> {
                               ));
                         },
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                         color: Colors.transparent,
                       )),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                         color: Colors.transparent,
                       )),
@@ -91,22 +87,22 @@ class _DoctorListPageState extends State<DoctorListPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            Container(
+            const SizedBox(height: 20),
+            SizedBox(
               height: 60,
               child: ListView.builder(
                   itemCount: 1,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     return Container(
-                      padding: EdgeInsets.symmetric(horizontal: 18),
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
                       child: Row(
                         children: [
                           for (FilterSpecialization filterSpecialization
                               in FilterSpecialization.values)
                             Container(
-                              margin: EdgeInsets.all(5),
-                              padding: EdgeInsets.symmetric(vertical: 3),
+                              margin: const EdgeInsets.all(5),
+                              padding: const EdgeInsets.symmetric(vertical: 3),
                               child: Material(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5),
@@ -141,15 +137,14 @@ class _DoctorListPageState extends State<DoctorListPage> {
                                             FilterSpecialization.all;
                                       }
                                     });
-                                    print(specialization);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(40),
                                     ),
                                     height: 60,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
                                     child: Center(
                                       child: Text(
                                         filterSpecialization.value,
@@ -175,26 +170,46 @@ class _DoctorListPageState extends State<DoctorListPage> {
                     );
                   }),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: filteredSpecializations.isEmpty
-                  ? Column(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: FutureBuilder(
+                future: Future.delayed(const Duration(milliseconds: 100)),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Column(
                       children: [
                         SizedBox(height: 150),
-                        const Center(
+                        Center(
                           child: CircularProgressIndicator(),
                         ),
                       ],
-                    )
-                  : Column(
-                      children: List.generate(filteredSpecializations.length,
-                          (index) {
-                        var doctor = filteredSpecializations[index];
-                        return DoctorCard(
-                            doctor: doctor, route: 'doctor_details');
-                      }),
-                    ),
+                    );
+                  } else {
+                    return filteredSpecializations.isEmpty
+                        ? const Column(
+                            children: [
+                              SizedBox(height: 150),
+                              Center(
+                                child: Text("No Doctors"),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: List.generate(
+                              filteredSpecializations.length,
+                              (index) {
+                                var doctor = filteredSpecializations[index];
+                                return DoctorCard(
+                                  doctor: doctor,
+                                  route: 'doctor_details',
+                                );
+                              },
+                            ),
+                          );
+                  }
+                },
+              ),
             ),
           ],
         ),

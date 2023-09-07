@@ -32,18 +32,12 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  // int? _currentIndex;
-  // bool _isWeekend = false;
-  // bool _dateSelected = false;
-  // bool _timeSelected = false;
-
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(10.0), // Set the desired border radius value
+        borderRadius: BorderRadius.circular(10.0),
       ),
       child: TableCalendar(
           focusedDay: widget.focusDay,
@@ -53,24 +47,24 @@ class _CalendarState extends State<Calendar> {
           currentDay: widget.currentDay,
           rowHeight: 48,
           headerStyle: HeaderStyle(
-            headerMargin: EdgeInsets.only(bottom: 10),
+            headerMargin: const EdgeInsets.only(bottom: 10),
             formatButtonVisible: false,
             titleTextStyle: GoogleFonts.rubik(
-              textStyle: TextStyle(
-                color: Colors.white, // Set the text color
-                fontSize: 20, // Set the font size
-                fontWeight: FontWeight.w500, // Set the font weight
+              textStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            leftChevronIcon: Icon(
+            leftChevronIcon: const Icon(
               Icons.chevron_left,
               color: Colors.white,
             ),
-            rightChevronIcon: Icon(
+            rightChevronIcon: const Icon(
               Icons.chevron_right,
               color: Colors.white,
             ),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.blue,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10.0),
@@ -93,48 +87,6 @@ class _CalendarState extends State<Calendar> {
             });
           },
           onDaySelected: widget.onDaySelected),
-
-      // (selectedDay, focusedDay) {
-      //   setState(() {
-      //     widget.currentDay = selectedDay;
-      //     widget.focusDay = focusedDay;
-      //     widget.dateSelected = true;
-      //     if (selectedDay.weekday == 5 || selectedDay.weekday == 6) {
-      //       widget.isWeekend = true;
-      //       widget.timeSelected = false;
-      //       widget.currentIndex = null;
-      //     } else {
-      //       widget.isWeekend = false;
-      //     }
-      //   });
-
-      //   print(widget.focusDay);
-      // },
-
-      // onDaySelected: (selectedDay, focusedDay) {
-      //   setState(() {
-      //     widget.currentDay = selectedDay;
-      //     widget.focusDay = focusedDay;
-      //     widget.dateSelected = true;
-      //   });
-      //   // widget.onDaySelected(selectedDay, focusedDay);
-      //   if (selectedDay.weekday == 5 || selectedDay.weekday == 6) {
-      //     widget.isWeekend = true;
-      //     widget.timeSelected = false;
-      //     widget.currentIndex = null;
-      //   } else {
-      //     widget.isWeekend = false;
-      //   }
-      //   print(widget.focusDay);
-      // },
-      // onDaySelected: (selectedDay, focusedDay) {
-      //   setState(() {
-      //     widget.currentDay = selectedDay;
-      //     widget.focusDay = focusedDay;
-      //     // _dateSelected = true
-      //     // widget.onDaySelected(selectedDay, focusedDay);
-      //   });
-      // }),
     );
   }
 }

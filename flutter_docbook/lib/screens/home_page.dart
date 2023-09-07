@@ -1,24 +1,15 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_docbook/main_patient_layout.dart';
 import 'package:flutter_docbook/screens/search_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/doctor_home_list_card.dart';
-import '../components/filter_specialization.dart';
 import '../models/auth_model.dart';
-import '../providers/dio_provider.dart';
-import 'doctor_list_page.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key, required this.onSpecializationSelected});
+  const HomePage({super.key, required this.onSpecializationSelected});
   final Function(String) onSpecializationSelected;
 
   @override
@@ -34,19 +25,19 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> specializationItems = [
     {
       "name": "Pediatrics",
-      "icon": FaIcon(FontAwesomeIcons.baby),
+      "icon": const FaIcon(FontAwesomeIcons.baby),
     },
     {
       "name": "General Medicine",
-      "icon": FaIcon(FontAwesomeIcons.stethoscope),
+      "icon": const FaIcon(FontAwesomeIcons.stethoscope),
     },
     {
       "name": "Orthopedics",
-      "icon": FaIcon(FontAwesomeIcons.bone),
+      "icon": const FaIcon(FontAwesomeIcons.bone),
     },
     {
       "name": "Eye Specialist",
-      "icon": FaIcon(FontAwesomeIcons.eye),
+      "icon": const FaIcon(FontAwesomeIcons.eye),
     },
   ];
 
@@ -68,9 +59,8 @@ class _HomePageState extends State<HomePage> {
                     clipBehavior: Clip.none,
                     children: <Widget>[
                       Container(
-                        // color: Config.primaryColor,
                         height: 150.0,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         width: double.infinity,
                         decoration: const BoxDecoration(
                           color: Config.primaryColor,
@@ -80,12 +70,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         child: Column(
-                          // ignore: prefer_const_literals_to_create_immutables
                           children: <Widget>[
-                            Padding(padding: EdgeInsets.only(top: 40)),
+                            const Padding(padding: EdgeInsets.only(top: 40)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              // ignore: prefer_const_literals_to_create_immutables
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,10 +115,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 120),
+                        margin: const EdgeInsets.only(top: 120),
                         width: double.infinity,
-                        // color: Colors.black12,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Material(
                           elevation: 20.0,
                           borderRadius: BorderRadius.circular(7.0),
@@ -138,12 +125,12 @@ class _HomePageState extends State<HomePage> {
                             controller: _searchController,
                             decoration: InputDecoration(
                               hintText: 'Search Doctor...',
-                              enabledBorder: OutlineInputBorder(
+                              enabledBorder: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Colors.transparent),
                               ),
                               suffixIcon: IconButton(
-                                  icon: Icon(Icons.search),
+                                  icon: const Icon(Icons.search),
                                   onPressed: () {
                                     Navigator.push(
                                         context,
@@ -159,13 +146,13 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          margin: EdgeInsets.only(left: 20, top: 40),
+                          margin: const EdgeInsets.only(left: 20, top: 40),
                           child: Text(
                             'Doctor\'s specialization',
                             style: GoogleFonts.openSans(
@@ -174,9 +161,9 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Container(
-                          margin: EdgeInsets.only(left: 20),
+                          margin: const EdgeInsets.only(left: 20),
                           height: 102,
                           width: double.infinity,
                           child: ListView.separated(
@@ -194,12 +181,12 @@ class _HomePageState extends State<HomePage> {
                                         widget.onSpecializationSelected(
                                             specializationItems[index]['name']);
                                       },
-                                      child: Container(
+                                      child: SizedBox(
                                         width: 70,
                                         height: 70,
                                         child: Center(
                                           child: IconTheme(
-                                            data: IconThemeData(
+                                            data: const IconThemeData(
                                                 color: Config.primaryColor),
                                             child: specializationItems[index]
                                                 ['icon'],
@@ -214,9 +201,8 @@ class _HomePageState extends State<HomePage> {
                                   style: GoogleFonts.openSans(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400,
-                                      color: Color.fromRGBO(123, 137, 171, 1)
-                                      // color: Colors.white,
-                                      ),
+                                      color: const Color.fromRGBO(
+                                          123, 137, 171, 1)),
                                 ),
                               ]);
                             },
@@ -225,7 +211,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 20, top: 40, right: 20),
+                          margin: const EdgeInsets.only(
+                              left: 20, top: 40, right: 20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -244,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Text(
                                     'see all',
                                     style: GoogleFonts.rubik(
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                         color: Colors.blue,
                                         fontSize: 13,
                                         fontWeight: FontWeight.normal,
@@ -256,8 +243,8 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Container(
+                        const SizedBox(height: 20),
+                        SizedBox(
                           height: 250,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -266,10 +253,12 @@ class _HomePageState extends State<HomePage> {
                               return DoctorHomeListCard(
                                 route: 'doctor_details',
                                 doctor: doctor,
-                                isLastCard: index == 4 - 1,
+                                isLastCard: index == user['doctor'].length - 1,
                               );
                             },
-                            itemCount: 4,
+                            itemCount: user['doctor'].length > 4
+                                ? 4
+                                : user['doctor'].length,
                           ),
                         ),
                       ],
@@ -281,12 +270,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-// islogin boolean,
-// list view
-// item builder
-// stream builder fetch data real time, continously upload data
-// future builder for one time upload data
-// connection state for
-// snapshot handle data from backend
-// cardview

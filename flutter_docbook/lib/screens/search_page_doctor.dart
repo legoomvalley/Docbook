@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../utils/config.dart';
-import '../appointment_details.dart';
+import '../utils/config.dart';
+import 'appointment_details.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({super.key, this.appointments, required this.token});
@@ -25,8 +24,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.appointments);
-    print(searchResults?.length);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Config.doctorTheme,
@@ -37,9 +34,9 @@ class _SearchPageState extends State<SearchPage> {
               child: Center(
                   child: TextField(
                 autofocus: true,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
                 cursorColor: Colors.white,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Search....',
                   hintStyle: TextStyle(color: Colors.white),
                   focusedBorder: OutlineInputBorder(
@@ -54,19 +51,16 @@ class _SearchPageState extends State<SearchPage> {
         ),
         body: Column(
           children: [
-            searchResults != null && searchResults!.length > 0
+            searchResults != null && searchResults!.isNotEmpty
                 ? Expanded(
                     child: ListView.builder(
                         itemCount: searchResults!.length,
                         itemBuilder: (context, index) {
                           final searchResult = searchResults![index];
                           return Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
+                            margin: const EdgeInsets.symmetric(vertical: 10),
                             child: InkWell(
                               onTap: () async {
-                                print(widget.token);
-                                print(searchResult);
-                                print(index);
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -81,7 +75,7 @@ class _SearchPageState extends State<SearchPage> {
                               child: ListTile(
                                 leading: Material(
                                   elevation: 1,
-                                  shape: CircleBorder(),
+                                  shape: const CircleBorder(),
                                   child: ClipOval(
                                     child: SizedBox(
                                       width: 50,
@@ -101,14 +95,14 @@ class _SearchPageState extends State<SearchPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(searchResult['full_name'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 17,
                                         )),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       'Disease : ${searchResult['disease']}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 15,
                                         color: Colors.black54,
                                       ),

@@ -25,12 +25,12 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
     Config().init(context);
 
     return Container(
-      margin: EdgeInsets.only(bottom: 5),
+      margin: const EdgeInsets.only(bottom: 5),
       width: double.infinity,
       child: Card(
         elevation: 30,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -40,14 +40,14 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
                   children: [
                     Text(
                       widget.labelText,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Config.primaryColor,
                         fontSize: 13,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    SizedBox(height: 5),
-                    Container(
+                    const SizedBox(height: 5),
+                    SizedBox(
                       height: 25,
                       child: widget.textField,
                     ),
@@ -63,7 +63,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
               ),
               // const SizedBox(
               //     width: 10),
-              Container(height: 30, child: widget.iconButton)
+              SizedBox(height: 30, child: widget.iconButton)
             ],
           ),
         ),

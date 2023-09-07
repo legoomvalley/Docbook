@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 import '../screens/doctor_details_page.dart';
@@ -31,8 +29,8 @@ class DoctorHomeListCard extends StatelessWidget {
                     child: AspectRatio(
                       aspectRatio: 4 / 4,
                       child: ClipRRect(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(10.0)),
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(10.0)),
                         child: Image.asset(
                           'assets/doctor.jpg',
                           fit: BoxFit.cover,
@@ -40,22 +38,20 @@ class DoctorHomeListCard extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                  // const SizedBox(height: 4),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(firstTwoWords,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       )),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Text(
                     doctor['specialization_name'],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                     ),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                 ],
               ),
             ),

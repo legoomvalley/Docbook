@@ -117,13 +117,13 @@
                     <td class="align-middle text-center">{{ $item->mobile_number }}</td>
                     <td class="align-middle text-center">{{ $item['specialization']->name }}</td>
                     <td class="align-middle text-center">
-                        <form action="/admin/dashboard/approve-doctor/{{$item->id}}" method="post">
+                        <form action="/admin/dashboard/approve-doctor/doctor/{{$item->id}}" method="post">
                             @csrf
                             <button class="bg-transparent border-0"
                                 onclick="return confirm('Are you sure to approve?')"><i class="fa-solid fa-circle-check"
                                     id="approve-doctor" style="color: #37ff00;"></i></button>
                         </form>
-                        <form action="/admin/dashboard/reject-doctor/{{$item->id}}" method="Post">
+                        <form action="/admin/dashboard/reject-doctor/doctor/{{$item->id}}" method="Post">
                             @csrf
                             <button class="bg-transparent border border-0"
                                 onclick="return confirm('Are you sure to delete?')"><i class="fa-solid fa-circle-xmark"

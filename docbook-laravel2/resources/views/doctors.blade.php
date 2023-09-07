@@ -6,7 +6,7 @@
 
     <div class="allDoctorContainer">
         <div class="doctorListBar">
-            <form action="/all-doctors/specialization" method="post">
+            <form action="/doctors/specialization" method="post">
                 @csrf
                 <select id="specialization" name="specialization" aria-placeholder="select speciality"
                     onchange="this.form.submit()">
@@ -14,7 +14,6 @@
                     <option id="all" value="all">All Doctors</option>
 
                     @foreach ($specializationName as $s)
-                    {{-- @dd($d) --}}
                     <option value="{{ $s->id }}">{{ $s->name }}
                     </option>
                     @endforeach
@@ -23,7 +22,7 @@
             <!-- </form> -->
         </div>
         <div class="searchLi mb-5">
-            <form action="/all-doctors">
+            <form action="/doctors">
                 <div class="search-root">
                     <div class="search-container">
                         <button class="searchBtnNav" type="submit">
@@ -52,7 +51,7 @@
             </div>
             <div class="doctorGeneralInformation">
                 <div class="list1">
-                    <a href="/profile-page/{{ $item->doctor->user_name }}">
+                    <a href="/doctor-profile/{{ $item->doctor->user_name }}">
                         <h1>
                             {{ $item->name }}
                         </h1>
@@ -66,7 +65,7 @@
 
                 <div class="generalInformation">
                     {{-- $_SESSION['specialization'] = $item['Specialization'] --}}
-                    <a href="/profile-page/{{ $item->doctor->user_name }}">
+                    <a href="/doctor-profile/{{ $item->doctor->user_name }}">
                         <h2>
                             {{$item->doctor->specialization->name }}
                         </h2>
@@ -83,7 +82,7 @@
                 </div>
             </div>
             <div class="allDoctorBookBtn">
-                <a href="/profile-page/{{ $item->doctor->user_name }}" class="text-decoration-none">Book Now</a>
+                <a href="/doctor-profile/{{ $item->doctor->user_name }}" class="text-decoration-none">Book Now</a>
             </div>
         </div>
         <div class="allDocListLine">
@@ -98,48 +97,47 @@
             Search results for: "{{ request('searchDoctor') }}"
             @endif
         </p>
-        @foreach ($doctors as $item)
-
+        @foreach ($doctors as $user)
         <div class="allDoctorLists">
             <div class="allDoctorImg">
                 <img src="{{ asset('img/doctor.jpg') }}" alt="">
                 <div class="smallDoctorBtn justify-content-center mt-2">
-                    <a href="/profile-page/{{ $item->doctor->user_name }}" class="btn btn-primary btn-sm">Book Now</a>
+                    <a href="/doctor-profile/{{ $user->doctor->user_name }}" class="btn btn-primary btn-sm">Book Now</a>
                 </div>
             </div>
             <div class="doctorGeneralInformation">
                 <div class="list1">
-                    <a href="/profile-page/{{ $item->doctor->user_name }}">
+                    <a href="/doctor-profile/{{ $user->doctor->user_name }}">
                         <h1>
-                            {{ $item->name }}
+                            {{ $user->name }}
                         </h1>
                     </a>
                     <p class="bg-info border border-0 py-2 px-2 rounded-4 shadow-sm fw-bold text-white">
-                        {{ $item->doctor->status }}
+                        {{ $user->doctor->status }}
                     </p>
                 </div>
 
 
                 <div class="generalInformation">
                     {{-- $_SESSION['specialization'] = $doctor['Specialization'] --}}
-                    <a href="/profile-page/{{ $item->doctor->user_name }}">
+                    <a href="/doctor-profile/{{ $user->doctor->user_name }}">
                         <h2>
-                            {{$item->doctor->specialization->name }}
+                            {{$user->doctor->specialization->name }}
                         </h2>
                     </a>
                     <div class="list2">
                         <p>
-                            {{$item->doctor->bio_data }}
+                            {{$user->doctor->bio_data }}
                         </p>
                         <br>
                         <p>
-                            Expereience : {{$item->doctor->experience_year }} year
+                            Expereience : {{$user->doctor->experience_year }} year
                         </p>
                     </div>
                 </div>
             </div>
             <div class="allDoctorBookBtn">
-                <a href="/profile-page/{{ $item->doctor->user_name }}" class="text-decoration-none">Book Now</a>
+                <a href="/doctor-profile/{{ $user->doctor->user_name }}" class="text-decoration-none">Book Now</a>
             </div>
         </div>
         <div class="allDocListLine">
@@ -158,7 +156,6 @@
         {{-- ============================================================================== --}}
         @else
         @if(isset($doctorsSpecialization) && $doctorsSpecialization->count() )
-        {{-- @dd($doctorsSpecialization->count()) --}}
 
         <p class="doctorListMessage">{{ $option }}</p>
         @foreach ($doctorsSpecialization as $item)
@@ -213,7 +210,7 @@
             <div class="allDoctorImg">
                 <img src="{{ asset('img/doctor.jpg') }}" alt="">
                 <div class="smallDoctorBtn justify-content-center mt-2">
-                    <a href="/profile-page/{{ $item->doctor->user_name }}" class="btn btn-primary btn-sm">Book Now</a>
+                    <a href="/doctor-profile/{{ $item->doctor->user_name }}" class="btn btn-primary btn-sm">Book Now</a>
                 </div>
             </div>
             <div class="doctorGeneralInformation">

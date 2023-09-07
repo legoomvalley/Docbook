@@ -88,7 +88,7 @@
                                 Search
                             </a>
                             <ul class="dropdown-menu sidebarDropdownMenu">
-                                <li><a class="dropdown-item" href="{{ route('admin.showDoctorByCategory') }}">By
+                                <li><a class="dropdown-item" href="{{ route('admin.showAllDoctor') }}">By
                                         Category</a></li>
                                 <li><a class="dropdown-item" href="{{ route('admin.showDoctorBySearch') }}">By Name</a>
                                 </li>
