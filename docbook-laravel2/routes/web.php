@@ -35,7 +35,7 @@ Route::middleware('guest:doctor')->group(function () {
 
 Route::get('/doctors', [DoctorController::class, 'index']);
 Route::post('/doctors/specialization', [DoctorController::class, 'getBySpecialization']);
-Route::get('/doctors?specialization={specialization}', [DoctorController::class, 'getBySpecialization'])->name('specialization');
+Route::get('/doctors/specialization/{specialization}', [DoctorController::class, 'getBySpecialization'])->name('specialization');
 Route::get('/doctors/login', [LoginController::class, 'doctorLogin'])->middleware('guest:doctor')->name('login');
 Route::post('/doctors/login', [LoginController::class, 'authenticateDoctor']);
 Route::get('/doctors/register', [RegisterController::class, 'createDoctor'])->middleware('guest:doctor');
@@ -56,9 +56,6 @@ Route::middleware('doctor-access:doctor')->group(function () {
     Route::get('/dashboard/appointment-approve', [DashboardController::class, 'showAppointmentApprove']);
     Route::get('/dashboard/appointment-search-by-name', [DashboardController::class, 'showAppointmentName']);
     Route::get('/dashboard/appointment-search-by-date', [DashboardController::class, 'showAppointmentDate']);
-
-
-    // start from here
     Route::get('/dashboard/patients/{patient:user_name}/appointments/{appointment}/edit', [AppointmentController::class, 'editActionAppointment']);
     Route::post('/dashboard/patients/{patient:user_name}/appointments/{appointment}/', [AppointmentController::class, 'updateActionAppointment']);
 

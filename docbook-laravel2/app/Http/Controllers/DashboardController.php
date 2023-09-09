@@ -27,14 +27,14 @@ class DashboardController extends Controller
             "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
 
             "requestedAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "pending")->paginate(2),
-            "requestedAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "pending")->get(),
+            "requestedAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "pending")->latest()->get(),
 
             "cancelledAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'not approved')->paginate(2),
-            "cancelledAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'not approved')->get(),
+            "cancelledAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'not approved')->latest()->get(),
 
 
             "todayAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('date', '=', $today)->where('status', '=', 'approved')->paginate(2),
-            "todayAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('date', '=', $today)->where('status', '=', 'approved')->get(),
+            "todayAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('date', '=', $today)->where('status', '=', 'approved')->latest()->get(),
         ]);
     }
     public function showDetails()

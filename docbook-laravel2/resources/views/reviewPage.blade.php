@@ -1,6 +1,7 @@
 @extends('layouts.main')
 @section('container')
 <div class="col-sm-12 col-xs-12 d-flex justify-content-center">
+
     <div
         class="profileContainer reviewContainer col-11 col-xl-9 d-flex flex-column justify-content-center align-items-center">
         <div class="imgGallery rounded-top col-12 bg-secondary">
@@ -130,6 +131,7 @@
             </div>
         </div>
     </div>
+
 </div>
 @endsection
 

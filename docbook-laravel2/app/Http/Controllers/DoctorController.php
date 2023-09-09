@@ -78,7 +78,6 @@ class DoctorController extends Controller
             "container" => "generalContainer",
             "specializationName" => $specializationName,
             "doctorsSpecialization" => $doctorsSpecialization->get(),
-            'doctors' => $doctor->get(),
             "option" => isset($option) ? $option : ""
         ]);
     }
@@ -139,11 +138,13 @@ class DoctorController extends Controller
             "title" => "review page",
             "container" => "generalContainer",
             "doctor" => $doctor,
-            "doctorComments" => $doctor->comments()->join('patients', 'patients.id', '=', 'comments.patient_id')->simplePaginate(2)
+            "doctorComments" => Comment::where('doctor_id', $doctor->doc_id)->join('patients', 'patients.patient_id', '=', 'comments.patient_id')->simplePaginate(2)
         ]);
     }
     public function comment(Doctor $doctor, Request $request)
     {
+        // 145
+        // 14
         $validatedData = Validator::make(
             $request->all(),
             [
@@ -155,8 +156,8 @@ class DoctorController extends Controller
         } else {
             $values = [
                 'comment' => $request->comment,
-                'patient_id' => Auth::guard('patient')->user()->id,
-                'doctor_id' => $doctor['id'],
+                'patient_id' => Auth::guard('patient')->user()->patient_id,
+                'doctor_id' => $doctor['doc_id'],
                 'created_at' => now()
             ];
         }
@@ -235,7 +236,7 @@ class DoctorController extends Controller
         $user = Auth::user();
         $patients = User::where('type', 'patient')->get();
         $doctor = Doctor::where('doc_id', Auth::user()->id)->get();
-        $appointments = Appointment::where('doctor_id', Auth::user()->id)->get();
+        $appointments = Appointment::where('doctor_id', Auth::user()->id)->latest()->get();
         $todayAppointments = [];
 
 
@@ -260,7 +261,12 @@ class DoctorController extends Controller
     public function showComment($doctorId)
     {
         $comments = Comment::where('doctor_id', $doctorId)->get();
+        $appointments = Appointment::where('doctor_id', $doctorId)->get();
         $patientsName = User::Select('name', 'id')->get();
+        $doctorData = [
+            'comment' => [],
+            'appointments' => []
+        ];
         foreach ($comments as $comment) {
             foreach ($patientsName as $patientName) {
                 if ($comment['patient_id'] == $patientName['id']) {
@@ -268,7 +274,9 @@ class DoctorController extends Controller
                 }
             }
         }
-        return $comments;
+        $doctorData['comment'] = $comments;
+        $doctorData['appointments'] = $appointments;
+        return $doctorData;
     }
     /**
      * Store a newly created resource in storage.

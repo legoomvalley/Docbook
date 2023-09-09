@@ -192,6 +192,7 @@ $(function () {
     })
     $('.displayDetailsRequest').on('click', function () {
         const id = $(this).data('id')
+        console.log(id)
         $.ajax({
             url: 'http://docbook-laravel2.test/dashboard',
             data: { id: id },
@@ -202,6 +203,7 @@ $(function () {
             dataType: 'json',
             success: function (data) {
                 console.log(data)
+
                 $('.patient-modal-body #mobile_no').text(data.phone_no);
                 $('.patient-modal-body #disease').text(data.disease);
                 let date = new Date(Date.parse(data.date));

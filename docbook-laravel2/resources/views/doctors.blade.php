@@ -35,7 +35,7 @@
             </form>
         </div>
         @auth('patient')
-        @if(isset($doctorsSpecialization) && $doctorsSpecialization->count() )
+        @if(isset($doctorsSpecialization) && ($doctorsSpecialization->count() || $doctors->count()) )
         {{-- <p class="doctorListMessage">{{ $option }}</p> --}}
         <p class="doctorListMessage">
             @if (empty(request('searchDoctor')))

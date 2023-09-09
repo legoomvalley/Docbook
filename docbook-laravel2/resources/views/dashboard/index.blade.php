@@ -28,6 +28,8 @@
                                     <th scope="col" class="text-center">details</th>
                                     <th scope="col" class="text-center">Mobile No.</th>
                                     <th scope="col" class="text-center">Date</th>
+                                    <th scope="col" class="text-center">Time</th>
+                                    <th scope="col" class="text-center">Disease</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -48,6 +50,8 @@
                                 <td class="align-middle text-center">{{ $appointment->patient->phone_no }}</td>
                                 <td class="align-middle text-center">{{ date('d/m/Y',
                                     strtotime($appointment->date)) }}</td>
+                                <td class="align-middle text-center">{{ $appointment->time }}</td>
+                                <td class="align-middle text-center">{{ $appointment->disease }}</td>
                                 <td class="align-middle text-center">
                                     <a class="myBtn"
                                         href="/dashboard/patients/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit"
@@ -127,6 +131,8 @@
                                     <th scope="col" class="text-center">details</th>
                                     <th scope="col" class="text-center">Mobile No</th>
                                     <th scope="col" class="text-center">Date</th>
+                                    <th scope="col" class="text-center">time</th>
+                                    <th scope="col" class="text-center">disease</th>
                                     <th scope="col" class="text-center">status</th>
                                     <th scope="col" class="text-center">action</th>
                                 </tr>
@@ -155,6 +161,12 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         {{ date('d/m/Y', strtotime($appointment->date)) }}
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        {{ $appointment->time }}
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        {{ $appointment->disease }}
                                     </td>
                                     <td class="align-middle text-center">
                                         {{ $appointment->status }}
@@ -429,12 +441,6 @@ justify-content-between" style="height: 30px;">
                                     Disease
                                 </h1>
                                 <p id="disease" class="justify-content-center d-flex fw-bolder text-body">
-                                <h1 class="fs-6 justify-content-center d-flex text-body-tertiary"
-                                    id="exampleModalLabel">
-                                    Approval
-                                </h1>
-                                <p id="approval" class="justify-content-center d-flex fw-bolder text-body">
-                                </p>
                             </div>
                             <div class="modal-footer border-dark-subtle border-2 mx-2">
                                 <button type="button" class="btn btn-danger btn-sm"

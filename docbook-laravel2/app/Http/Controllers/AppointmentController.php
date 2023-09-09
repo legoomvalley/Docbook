@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
+use App\Models\Comment;
 use App\Models\Specialization;
 use App\Models\User;
 
@@ -24,7 +25,9 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $appointment = Appointment::where('patient_id', Auth::user()->id)->get();
+        $appointment = Appointment::where('patient_id', Auth::user()->id)->latest()->get();
+        $doctor_experience = Doctor::all();
+        $comment = Comment::all();
         $doctor = User::where('type', 'doctor')->get();
         $specializations = Specialization::all();
 
@@ -32,12 +35,15 @@ class AppointmentController extends Controller
         // sorting appointment and doctor details 
         foreach ($appointment as $data) {
             foreach ($specializations as $specialization) {
-                foreach ($doctor as $info) {
-                    $details = $info->doctor;
-                    if ($data['doctor_id'] == $info['id'] && $details['specialization_id'] == $specialization['id']) {
-                        $data['doctor_name'] = $info['name'];
-                        $data['doctor_profile'] = $info['profile_photo_url'];
-                        $data['specialization_name'] = $specialization['name'];
+                foreach ($doctor_experience as $de) {
+                    foreach ($doctor as $info) {
+                        $details = $info->doctor;
+                        if ($data['doctor_id'] == $info['id'] && $details['specialization_id'] == $specialization['id'] && $data['doctor_id'] == $de['doc_id']) {
+                            $data['doctor_name'] = $info['name'];
+                            $data['doctor_profile'] = $info['profile_photo_path'];
+                            $data['specialization_name'] = $specialization['name'];
+                            $data['experience_year'] = $de['experience_year'];
+                        }
                     }
                 }
             }
@@ -114,9 +120,7 @@ class AppointmentController extends Controller
      */
     public function storeByDoctor(Request $request, Doctor $doctor)
     {
-        $userData = DB::table('users')
-            ->where('id', Auth::guard('patient')->user()->patient_id)
-            ->first();
+        $user = User::where('id', Auth::guard('patient')->user()->patient_id)->first();
         $validatedData = Validator::make($request->all(), [
             'date' => 'required',
             'time' => 'required',
@@ -129,9 +133,9 @@ class AppointmentController extends Controller
                 'date' => Carbon::parse($request->date)->format('Y-m-d'),
                 'time' => $request->time,
                 'disease' => $request->disease,
-                'full_name' => $userData->name,
-                'patient_id' => Auth::guard('patient')->user()->id,
-                'doctor_id' => $doctor->id,
+                'full_name' => $user->name,
+                'patient_id' => $user->id,
+                'doctor_id' => $doctor->doc_id,
                 'status' => "Pending",
                 'specialization_id' => $request->specialization_id,
                 'remark' => 'not updated yet'
@@ -205,7 +209,9 @@ class AppointmentController extends Controller
         $appointment->date = $request->get('date');
         $appointment->time = $request->get('time');
         $appointment->disease = $request->get('disease');
-        $appointment->status = 'upcoming';
+        $appointment->remark = 'not updated yet';
+        $appointment->specialization_id = $request->get('specialization');
+        $appointment->status = 'pending';
         $appointment->save();
 
         // $jsonPatientId = 
@@ -218,9 +224,9 @@ class AppointmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updatePatientAppointment(Request $request, $id)
+    public function updatePatientAppointment(Request $request, Appointment $appointment)
     {
-        $appointment = Appointment::find($id);
+        $appointment = Appointment::find($appointment->id);
 
         if (!$appointment) {
             return response()->json([
@@ -232,6 +238,7 @@ class AppointmentController extends Controller
             'disease' => $request->input('disease'),
             'date' => Carbon::parse($request->input('date'))->format('Y-m-d'),
             'time' => $request->input('time'),
+            'remark' => $request->input('additional_message'),
         ]);
 
         return response()->json([
@@ -245,9 +252,9 @@ class AppointmentController extends Controller
     public function destroyPatientAppointment(Appointment $appointment)
     {
         // Check if the authenticated user is the owner of the appointment
-        if (Auth::user()->id !== $appointment->patient_id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
+        // if (Auth::user()->id !== $appointment->patient_id) {
+        //     return response()->json(['error' => 'Unauthorized'], 403);
+        // }
 
         try {
             $appointment->delete();
@@ -285,7 +292,6 @@ class AppointmentController extends Controller
     }
     public function destroyAppointment(Request $request, Appointment $appointment)
     {
-        // status, time, date, additionalMessage or remark
         try {
             $appointment->delete();
             return response()->json(['success' => 'Appointment deleted successfully'], 200);

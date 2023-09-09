@@ -21,7 +21,7 @@ class PatientController extends Controller
     public function index(Patient $patient)
     {
         $appointmentData = DB::table('appointments')->where('patient_id', $patient->patient_id)
-            ->join('users', 'users.id', '=', 'appointments.doctor_id')->select('appointments.*', 'users.name as doctor_name')->get();
+            ->join('users', 'users.id', '=', 'appointments.doctor_id')->select('appointments.*', 'users.name as doctor_name')->latest()->get();
         return view('check-appointment', [
             "title" => "search record",
             "container" => "generalContainer",
@@ -104,7 +104,7 @@ class PatientController extends Controller
                 foreach ($doctor as $info) {
                     if ($data['doc_id'] == $info['id'] && $data['specialization_id'] == $specialization['id']) {
                         $data['doctor_name'] = $info['name'];
-                        $data['doctor_profile'] = $info['profile_photo_url'];
+                        $data['doctor_profile'] = $info['profile_photo_path'];
                         $data['specialization_name'] = $specialization['name'];
                         // $data['comments'] = $comment['comment'];
                         // $data['commentDate'] = $comment['created_at'];
@@ -137,11 +137,11 @@ class PatientController extends Controller
     public function deleteAppointment(Appointment $appointment)
     {
         $appointment->delete();
-        return redirect('check-appointment/' . Auth::guard('patient')->user()->user_name)->with('success', 'Appointment deleted succesfully');;
+        return redirect('patient-record/' . Auth::guard('patient')->user()->user_name)->with('success', 'Appointment deleted succesfully');;
     }
     public function updateAppointmentToComplete(Appointment $appointment)
     {
         $appointment->update(['status' => 'completed']);
-        return redirect('check-appointment/' . Auth::guard('patient')->user()->user_name)->with('success', 'Appointment updated succesfully');;
+        return redirect('patient-record/' . Auth::guard('patient')->user()->user_name)->with('success', 'Appointment updated succesfully');;
     }
 }

@@ -72,7 +72,7 @@
                     </td>
                     <td class="align-middle text-center">
                         {{-- {{ $p->patient->email}} --}}
-                        {{ $p->patient->email}}
+                        {{ $p->patient->user->email}}
                     </td>
                 </tr>
                 @endforeach

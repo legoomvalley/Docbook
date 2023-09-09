@@ -65,7 +65,7 @@
                         </td>
                         <td class="align-middle text-center">
                             <a href="/dashboard/patients/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit"
-                                class="text-decoration-none" style="margin-left: 20px; padding: 0;">
+                                class="text-decoration-none" style="margin-left: 5px; padding: 0;">
                                 <i class=" fa-sharp fa-regular fa-pen-to-square"></i>
                             </a>
                         </td>

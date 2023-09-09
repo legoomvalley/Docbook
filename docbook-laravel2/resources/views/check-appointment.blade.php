@@ -24,7 +24,7 @@
                 <thead>
                     <tr class=" rounded-top">
                         <th scope="col">No</th>
-                        <th scope="col">Name</th>
+                        <th scope="col">disease</th>
                         <th scope="col">Date | Time</th>
                         <th scope="col">Remark</th>
                         <th scope="col">Status</th>
@@ -34,11 +34,10 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider appointmentRecord">
-
                     @foreach($patients as $p)
                     <tr>
                         <td class="align-middle" scope="row">{{ $loop->iteration }}</td>
-                        <td class="align-middle text-start">{{ $p->full_name }}</td>
+                        <td class="align-middle text-center">{{ $p->disease }}</td>
                         <td class="align-middle">{{ date('d/m/Y', strtotime($p->date)) }} {{ $p->time }}</td>
                         <td class="align-middle">{{ $p->remark }}</td>
                         <td class="align-middle">{{ $p->status }}</td>

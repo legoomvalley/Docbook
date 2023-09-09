@@ -18,7 +18,7 @@ class DoctorFactory extends Factory
     public function definition(): array
     {
         return [
-            'doc_id' => $this->faker->unique()->numberBetween(63, 73),
+            'doc_id' => $this->faker->unique()->numberBetween(144, 153),
             'user_name' => $this->faker->unique()->sentence(1),
             'password' => Hash::make('123'),
             'mobile_number' => $this->faker->phoneNumber(),

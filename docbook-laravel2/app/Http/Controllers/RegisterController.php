@@ -92,8 +92,8 @@ class RegisterController extends Controller
     {
         $validatedData = Validator::make($request->all(), [
             'full_name' => 'required',
-            'user_name' => 'required|unique:patients|',
-            'email' => 'required|email:dns|unique:users|',
+            'user_name' => 'required|unique:patients|unique:tmp_doctors',
+            'email' => 'required|email:dns|unique:users|unique:tmp_doctors',
             'phone_no' => 'required',
             'password' => 'required|min:3',
         ]);
@@ -128,11 +128,9 @@ class RegisterController extends Controller
             'password' => 'required|min:3',
 
         ]);
-        // $validatedData['password'] = Hash::make($validatedData['password']);
         if (!$validatedData->passes()) {
             return response()->json($validatedData->errors(), 400);
         }
-        // else {
         $user = TmpDoctor::create([
             'full_name' => $request->full_name,
             'user_name' => $request->user_name,
@@ -146,26 +144,4 @@ class RegisterController extends Controller
         ]);
         return $user;
     }
-
-
-    // firstName
-    // lastName
-    // userName
-    // email
-    // mobileNumber
-    // specialization
-    // status
-    // password
-    // location
-    // experience
-    // image
 }
-
-// registration 
-// add csrf in form 
-// we also can add validation like how much word can entered by user and other, and we also can handle the validation err if we want
-// add 'old' laravel method to maintained the input value even the browser reloaded 
-
-
-// postponed task 
-// add validation and handle the invalid input with laravel :)
