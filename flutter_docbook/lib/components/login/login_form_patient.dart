@@ -162,6 +162,9 @@ class _LoginFormPatientState extends State<LoginFormPatient> {
                         });
                       }
                     } else {
+                      setState(() {
+                        isLoading = false;
+                      });
                       snackBar(
                           context,
                           'Incorrect email or password',

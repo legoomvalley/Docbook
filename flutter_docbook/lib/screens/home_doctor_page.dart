@@ -362,7 +362,6 @@ class _HomeDoctorPageState extends State<HomeDoctorPage> {
                                               .deleteDoctorAppointment(
                                                   todayAppointment['id'],
                                                   token);
-                                          print(response);
                                           if (response) {
                                             setState(() {
                                               todayAppointments

@@ -59,7 +59,7 @@ class _SchedulePageState extends State<SchedulePage> {
   Widget build(BuildContext context) {
     Config().init(context);
 
-    List<dynamic> filteredSchedules = schedules.where((var schedule) {
+    List<dynamic>? filteredSchedules = schedules.where((var schedule) {
       switch (schedule['status']) {
         case 'pending':
           schedule['status'] = FilterStatus.pending.value;
@@ -150,7 +150,7 @@ class _SchedulePageState extends State<SchedulePage> {
           ),
           const SliverToBoxAdapter(child: Config.spaceSmall),
           FutureBuilder(
-              future: Future.delayed(const Duration(milliseconds: 800)),
+              future: Future.delayed(const Duration(milliseconds: 100)),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SliverToBoxAdapter(
@@ -163,144 +163,134 @@ class _SchedulePageState extends State<SchedulePage> {
                       ],
                     ),
                   );
-                } else {
-                  return filteredSchedules.isEmpty
-                      ? SliverToBoxAdapter(
-                          child: Container(
-                            margin: const EdgeInsets.only(top: 200),
-                            child: const Text(
-                              'no record',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        )
-                      : SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            var schedule = filteredSchedules[index];
-                            schedule['status'] == FilterStatus.completed.value
-                                ? completed = true
-                                : completed = false;
-                            schedule['status'] == FilterStatus.approved.value
-                                ? approved = true
-                                : approved = false;
-                            schedule['status'] == FilterStatus.notApproved.value
-                                ? notApproved = true
-                                : notApproved = false;
+                }
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      var schedule = filteredSchedules[index];
+                      schedule['status'] == FilterStatus.completed.value
+                          ? completed = true
+                          : completed = false;
+                      schedule['status'] == FilterStatus.approved.value
+                          ? approved = true
+                          : approved = false;
+                      schedule['status'] == FilterStatus.notApproved.value
+                          ? notApproved = true
+                          : notApproved = false;
 
-                            return Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: Material(
-                                shadowColor: Colors.black38,
-                                elevation: 20,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Material(
+                          shadowColor: Colors.black38,
+                          elevation: 20,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                          backgroundImage: schedule[
+                                                      'doctor_profile'] ==
+                                                  null
+                                              ? const AssetImage(
+                                                  'assets/user.jpg')
+                                              : NetworkImage(
+                                                      'http://10.0.2.2:8000/storage/${schedule['doctor_profile']}')
+                                                  as ImageProvider<Object>),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Config.spaceSmall,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            schedule['doctor_name'],
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            schedule['specialization_name'],
+                                            style: const TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w100,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  ScheduleCard(
+                                    date: DateConverter.formatDate(
+                                        schedule['date']),
+                                    day: DateConverter.getDayOfWeek(
+                                        DateTime.parse(schedule['date'])),
+                                    time: schedule['time'],
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
-                                          children: [
-                                            const CircleAvatar(
-                                              backgroundImage:
-                                                  AssetImage('assets/user.jpg'),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Config.spaceSmall,
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  schedule['doctor_name'],
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  schedule[
-                                                      'specialization_name'],
-                                                  style: const TextStyle(
-                                                    color: Colors.black54,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w100,
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
+                                        Expanded(
+                                          child: OutlinedButton(
+                                              style: OutlinedButton.styleFrom(
+                                                  backgroundColor:
+                                                      Colors.blue.shade50),
+                                              onPressed: () async {
+                                                await showConfirmationDialog(
+                                                    context,
+                                                    'Do you want to cancel this appointment',
+                                                    () async {
+                                                  final response =
+                                                      await DioProvider()
+                                                          .deletePatientAppointment(
+                                                              schedule['id'],
+                                                              token);
+                                                  if (response) {
+                                                    setState(() {
+                                                      schedules
+                                                          .remove(schedule);
+                                                    });
+                                                  }
+                                                });
+                                              },
+                                              child: Text(
+                                                completed || notApproved
+                                                    ? 'remove'
+                                                    : 'Cancel',
+                                                style: const TextStyle(
+                                                    color: Config.primaryColor),
+                                              )),
                                         ),
-                                        const SizedBox(
-                                          height: 15,
-                                        ),
-                                        ScheduleCard(
-                                          date: schedule['date'],
-                                          day: DateConverter.getDayOfWeek(
-                                              DateTime.parse(schedule['date'])),
-                                          time: schedule['time'],
-                                        ),
-                                        const SizedBox(
-                                          height: 15,
-                                        ),
-                                        Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              notApproved
-                                                  ? Container()
-                                                  : Expanded(
-                                                      child: OutlinedButton(
-                                                          style: OutlinedButton
-                                                              .styleFrom(
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .blue
-                                                                          .shade50),
-                                                          onPressed: () async {
-                                                            await showConfirmationDialog(
-                                                                context,
-                                                                'Do you want to cancel this appointment',
-                                                                () async {
-                                                              final response =
-                                                                  await DioProvider()
-                                                                      .deletePatientAppointment(
-                                                                          schedule[
-                                                                              'id'],
-                                                                          token);
-                                                              if (response) {
-                                                                setState(() {
-                                                                  schedules.remove(
-                                                                      schedule);
-                                                                });
-                                                              }
-                                                            });
-                                                          },
-                                                          child: Text(
-                                                            completed
-                                                                ? 'remove'
-                                                                : 'Cancel',
-                                                            style: const TextStyle(
-                                                                color: Config
-                                                                    .primaryColor),
-                                                          )),
-                                                    ),
-                                              notApproved
-                                                  ? Container()
-                                                  : const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                              Expanded(
+                                        completed
+                                            ? Container()
+                                            : const SizedBox(
+                                                width: 20,
+                                              ),
+                                        completed
+                                            ? Container()
+                                            : Expanded(
                                                 child: OutlinedButton(
                                                     style: OutlinedButton
                                                         .styleFrom(
@@ -319,23 +309,31 @@ class _SchedulePageState extends State<SchedulePage> {
                                                       );
                                                     },
                                                     child: Text(
-                                                      completed ||
-                                                              approved ||
-                                                              notApproved
+                                                      approved || notApproved
                                                           ? 'details'
                                                           : 'Reschedule',
                                                       style: const TextStyle(
                                                           color: Colors.white),
                                                     )),
                                               ),
-                                            ])
-                                      ]),
-                                ),
-                              ),
-                            );
-                          },
-                          childCount: filteredSchedules.length,
-                        ));
+                                      ])
+                                ]),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: filteredSchedules.length,
+                  ));
+                } else {
+                  return SliverToBoxAdapter(
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 200),
+                      child: const Text(
+                        'no record',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
                 }
               })
         ]),

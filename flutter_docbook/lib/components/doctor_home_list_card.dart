@@ -31,10 +31,13 @@ class DoctorHomeListCard extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(10.0)),
-                        child: Image.asset(
-                          'assets/doctor.jpg',
-                          fit: BoxFit.cover,
-                        ),
+                        child: doctor['doctor_profile'] == null
+                            ? Image.asset(
+                                'assets/user.jpg',
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                'http://10.0.2.2:8000/storage/${doctor['doctor_profile']}'),
                       ),
                     ),
                   ),

@@ -44,8 +44,7 @@ class _PatientUpdateAppointmentState extends State<PatientUpdateAppointment> {
   late DateTime _focusDay = DateTime.parse(widget.scheduleData?['date'] ?? '');
   late DateTime _currentDay =
       DateTime.parse(widget.scheduleData?['date'] ?? '');
-  late final DateTime _firstDay =
-      DateTime.parse(widget.scheduleData?['date'] ?? '');
+  late final DateTime _firstDay = DateTime.now();
 
   Future<void> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -91,10 +90,15 @@ class _PatientUpdateAppointmentState extends State<PatientUpdateAppointment> {
                           height: 110,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: const FittedBox(
+                            child: FittedBox(
                               fit: BoxFit.cover,
                               child: Image(
-                                image: AssetImage('assets/user.jpg'),
+                                image: widget.scheduleData?['doctor_profile'] ==
+                                        null
+                                    ? const AssetImage('assets/user.jpg')
+                                    : NetworkImage(
+                                            'http://10.0.2.2:8000/storage/${widget.scheduleData?['doctor_profile']}')
+                                        as ImageProvider<Object>,
                               ),
                             ),
                           ),
@@ -115,7 +119,7 @@ class _PatientUpdateAppointmentState extends State<PatientUpdateAppointment> {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                'dr reviews',
+                                'Total experience : ${widget.scheduleData?['experience_year']} year',
                                 style: GoogleFonts.rubik(
                                   textStyle: const TextStyle(
                                     fontSize: 11,
@@ -336,91 +340,138 @@ class _PatientUpdateAppointmentState extends State<PatientUpdateAppointment> {
                               },
                             ),
                           ),
-                completed || notApproved || approved
+                approved
                     ? Container()
-                    :
-                    // select time section ----------------------------------------------------------------
-                    SelectTime(
-                        isWeekend: _isWeekend,
-                        buttonNumber: List.generate(
-                          10,
-                          (index) {
-                            return InkWell(
-                              splashColor: Colors.transparent,
-                              onTap: () {
-                                setState(() {
-                                  _currentIndex = index;
-                                  _timeSelected = true;
-                                });
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(vertical: 4),
-                                decoration: BoxDecoration(
-                                    color: _currentIndex == index
-                                        ? const Color.fromRGBO(68, 138, 255, 1)
-                                        : const Color.fromRGBO(
-                                            68, 138, 255, 0.1),
-                                    shape: BoxShape.circle),
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                    : notApproved
+                        ? Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 25),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '${index + 10}:30',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 13,
-                                        color: _currentIndex == index
-                                            ? Colors.white
-                                            : Config.primaryColor,
-                                      ),
-                                    ),
-                                    Text(
-                                      index + 9 > 11 ? "PM" : "AM",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 13,
-                                        color: _currentIndex == index
-                                            ? Colors.white
-                                            : Config.primaryColor,
+                                      "doctor's response",
+                                      style: GoogleFonts.rubik(
+                                        textStyle: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                        button: Button(
-                            color: Colors.white,
-                            backgroundColor: Config.primaryColor,
-                            borderRadius: BorderRadius.circular(6),
-                            width: double.infinity,
-                            title: 'Update',
-                            padding: const EdgeInsets.symmetric(vertical: 13),
-                            disable:
-                                _timeSelected && _dateSelected ? false : true,
-                            onPressed: () async {
-                              // convert date & time into string
-                              final getDate =
-                                  DateConverter.getDate(_currentDay);
-                              final getTime =
-                                  DateConverter.getTime(_currentIndex!);
+                                const SizedBox(height: 12),
+                                Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 15),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.black12,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                  child: Text(
+                                    widget.scheduleData?['remark'],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        :
+                        // select time section ----------------------------------------------------------------
+                        SelectTime(
+                            isWeekend: _isWeekend,
+                            buttonNumber: List.generate(
+                              10,
+                              (index) {
+                                return InkWell(
+                                  splashColor: Colors.transparent,
+                                  onTap: () {
+                                    setState(() {
+                                      _currentIndex = index;
+                                      _timeSelected = true;
+                                    });
+                                  },
+                                  child: Container(
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 4),
+                                    decoration: BoxDecoration(
+                                        color: _currentIndex == index
+                                            ? const Color.fromRGBO(
+                                                68, 138, 255, 1)
+                                            : const Color.fromRGBO(
+                                                68, 138, 255, 0.1),
+                                        shape: BoxShape.circle),
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '${index + 10}:30',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 13,
+                                            color: _currentIndex == index
+                                                ? Colors.white
+                                                : Config.primaryColor,
+                                          ),
+                                        ),
+                                        Text(
+                                          index + 9 > 11 ? "PM" : "AM",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 13,
+                                            color: _currentIndex == index
+                                                ? Colors.white
+                                                : Config.primaryColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            button: Button(
+                                color: Colors.white,
+                                backgroundColor: Config.primaryColor,
+                                borderRadius: BorderRadius.circular(6),
+                                width: double.infinity,
+                                title: 'Update',
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 13),
+                                disable: _timeSelected && _dateSelected
+                                    ? false
+                                    : true,
+                                onPressed: () async {
+                                  // convert date & time into string
+                                  final getDate =
+                                      DateConverter.getDate(_currentDay);
+                                  final getTime =
+                                      DateConverter.getTime(_currentIndex!);
 
-                              final booking = await DioProvider()
-                                  .updatePatientAppointment(
-                                      widget.scheduleData?['id'],
-                                      getDate,
-                                      getTime,
-                                      _diseaseController.text,
-                                      token!);
-                              if (booking) {
-                                MyApp.navigatorKey.currentState!.pushNamed(
-                                    'success_appointment',
-                                    arguments: 'Successfully Updated');
-                              }
-                            }),
-                      ),
+                                  final booking = await DioProvider()
+                                      .updatePatientAppointment(
+                                          widget.scheduleData?['id'],
+                                          getDate,
+                                          getTime,
+                                          _diseaseController.text,
+                                          token!);
+                                  if (booking) {
+                                    MyApp.navigatorKey.currentState!.pushNamed(
+                                        'appointment_msg',
+                                        arguments: 'Successfully Updated');
+                                  }
+                                }),
+                          ),
               ],
             ),
           ),

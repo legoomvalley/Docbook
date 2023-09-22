@@ -130,7 +130,7 @@ class _SearchState extends State<Search> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                'Dr ${searchResults[index]['specialization_name']}',
+                                searchResults[index]['specialization_name'],
                                 style: GoogleFonts.rubik(
                                   textStyle: const TextStyle(
                                     fontSize: 15,

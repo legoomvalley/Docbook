@@ -24,6 +24,8 @@ class DoctorDetails extends StatefulWidget {
 class _DoctorDetailsState extends State<DoctorDetails> {
   late String token;
   List<dynamic> comments = [];
+  List<dynamic> totalPatient = [];
+  List<dynamic> totalReview = [];
   Future<void> getComments() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token') ?? '';
@@ -31,10 +33,12 @@ class _DoctorDetailsState extends State<DoctorDetails> {
         .getCommentsForDoctor(widget.doctor?['doc_id'], token);
     final decodeData = json.decode(data);
     setState(() {
-      comments = decodeData.length == 0 ? ['no data'] : decodeData;
+      totalReview = decodeData['comment'];
+      comments = decodeData['comment'].length == 0
+          ? ['no data']
+          : decodeData['comment'];
+      totalPatient = decodeData['appointments'];
     });
-
-    // print(comments[0]);
   }
 
   @override
@@ -88,12 +92,18 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                                   height: 100,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(15),
-                                    child: const FittedBox(
-                                      // ignore: sort_child_properties_last
-                                      child: Image(
-                                        image: AssetImage('assets/user.jpg'),
-                                      ),
+                                    child: FittedBox(
                                       fit: BoxFit.cover,
+                                      child: Image(
+                                        image:
+                                            widget.doctor?['doctor_profile'] ==
+                                                    null
+                                                ? const AssetImage(
+                                                    'assets/user.jpg')
+                                                : NetworkImage(
+                                                    'http://10.0.2.2:8000/storage/${widget.doctor?['doctor_profile']}',
+                                                  ) as ImageProvider<Object>,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -133,7 +143,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                                     ),
                                     const SizedBox(height: 15),
                                     Text(
-                                      'Experience year : ${widget.doctor?['experience_year']}',
+                                      'Total Experience : ${widget.doctor?['experience_year']} year',
                                       style: GoogleFonts.rubik(
                                         textStyle: const TextStyle(
                                           fontSize: 15,
@@ -162,7 +172,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                                   children: [
                                     Column(children: [
                                       Text(
-                                        '127',
+                                        '${totalReview.length}',
                                         style: GoogleFonts.rubik(
                                           textStyle: const TextStyle(
                                             fontSize: 17,
@@ -194,7 +204,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                                     ),
                                     Column(children: [
                                       Text(
-                                        '127',
+                                        "${totalPatient.length}",
                                         style: GoogleFonts.rubik(
                                           textStyle: const TextStyle(
                                             fontSize: 17,
@@ -254,7 +264,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Experience',
+                                  'Bio data',
                                   style: GoogleFonts.rubik(
                                     textStyle: const TextStyle(
                                       fontSize: 18,
@@ -320,7 +330,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                                   ],
                                 ),
                                 const SizedBox(height: 15),
-                                comments.isEmpty
+                                comments.isEmpty == true
                                     ? const Column(
                                         children: [
                                           SizedBox(height: 10),

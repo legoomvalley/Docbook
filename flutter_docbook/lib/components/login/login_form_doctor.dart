@@ -70,7 +70,7 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
               hintText: 'Password',
               labelText: 'Password',
               filled: true,
-              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
+              fillColor: const Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.lock_outlined),
               prefixIconColor: Config.doctorTheme,
@@ -121,7 +121,7 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                   ),
                 ),
               ),
-              Spacer(),
+              const Spacer(),
             ],
           ),
           // Config.spaceSmall,
@@ -140,8 +140,8 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                     setState(() {
                       isLoading = true;
                     });
-                    final token = await DioProvider()
-                        .getTokenDoctor('london32@example.com', '123');
+                    final token = await DioProvider().getTokenDoctor(
+                        _emailController.text, _passwordController.text);
                     if (token) {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
@@ -166,6 +166,9 @@ class _LoginFormDoctorState extends State<LoginFormDoctor> {
                         }
                       }
                     } else {
+                      setState(() {
+                        isLoading = false;
+                      });
                       snackBar(context, 'Incorrect email or password',
                           Color.fromRGBO(244, 67, 54, 1), Duration(seconds: 4));
                     }

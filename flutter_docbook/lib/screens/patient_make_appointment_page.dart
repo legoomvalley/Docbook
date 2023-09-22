@@ -72,10 +72,14 @@ class _PatientMakeAppointmentState extends State<PatientMakeAppointment> {
                           height: 110,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: const FittedBox(
+                            child: FittedBox(
                               fit: BoxFit.cover,
                               child: Image(
-                                image: AssetImage('assets/user.jpg'),
+                                image: widget.doctor?['doctor_profile'] == null
+                                    ? const AssetImage('assets/user.jpg')
+                                    : NetworkImage(
+                                        'http://10.0.2.2:8000/storage/${widget.doctor?['doctor_profile']}',
+                                      ) as ImageProvider<Object>,
                               ),
                             ),
                           ),
@@ -96,7 +100,7 @@ class _PatientMakeAppointmentState extends State<PatientMakeAppointment> {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                'dr reviews',
+                                'Total experience : ${widget.doctor?['experience_year']} year',
                                 style: GoogleFonts.rubik(
                                   textStyle: const TextStyle(
                                     fontSize: 11,
@@ -265,11 +269,12 @@ class _PatientMakeAppointmentState extends State<PatientMakeAppointment> {
                             getDate,
                             getTime,
                             _diseaseController.text,
-                            widget.doctor?['id'],
+                            widget.doctor?['doc_id'],
+                            widget.doctor?['specialization_id'],
                             token!);
                         if (booking == 200) {
                           MyApp.navigatorKey.currentState!.pushNamed(
-                              'success_appointment',
+                              'appointment_msg',
                               arguments: 'Successfully booked');
                         }
                       }),

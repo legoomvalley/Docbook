@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
 import 'package:flutter_docbook/components/snackBar.dart';
+import 'package:flutter_docbook/main.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -40,12 +41,12 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
     {'name': 'Eye Specialist', 'index': 4}
   ];
   List<String> _statusItems = [
-    'Available',
-    'Not Available',
+    'available',
+    'not available',
   ];
   int? _selectedSpecializationItems = 1;
-  String? _selectedStatusItems = 'Available';
-
+  String? _selectedStatusItems = 'available';
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -87,13 +88,13 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           TextFormField(
             controller: _userNameController,
             cursorColor: Config.doctorTheme,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Username',
               labelText: 'Username',
               filled: true,
               fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
-              prefixIcon: const Icon(Icons.person_2_outlined),
+              prefixIcon: Icon(Icons.person_2_outlined),
               prefixIconColor: Config.doctorTheme,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -119,13 +120,13 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             cursorColor: Config.doctorTheme,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Email Address',
               labelText: 'Email',
               filled: true,
               fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
-              prefixIcon: const Icon(Icons.email_outlined),
+              prefixIcon: Icon(Icons.email_outlined),
               prefixIconColor: Config.doctorTheme,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -150,13 +151,13 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           TextFormField(
             controller: _mobileNumberController,
             cursorColor: Config.doctorTheme,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Mobile Number',
               labelText: 'Mobile Number',
               filled: true,
               fillColor: Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
-              prefixIcon: const Icon(Icons.phone_android_sharp),
+              prefixIcon: Icon(Icons.phone_android_sharp),
               prefixIconColor: Config.doctorTheme,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -180,7 +181,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           Config.spaceSmall,
           DropdownButtonFormField(
             value: _selectedSpecializationItems,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Specialization',
               labelText: 'Specialization',
               filled: true,
@@ -200,7 +201,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
             ),
             items: _specializationItems
                 .map((e) =>
-                    DropdownMenuItem(child: Text(e['name']), value: e['index']))
+                    DropdownMenuItem(value: e['index'], child: Text(e['name'])))
                 .toList(),
             onChanged: (val) {
               setState(() {
@@ -211,7 +212,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
           Config.spaceSmall,
           DropdownButtonFormField(
             value: _selectedStatusItems,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Status',
               labelText: 'Status',
               filled: true,
@@ -231,7 +232,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
               hintStyle: TextStyle(color: Colors.grey),
             ),
             items: _statusItems
-                .map((e) => DropdownMenuItem(child: Text(e), value: e))
+                .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                 .toList(),
             onChanged: (val) {
               setState(() {
@@ -249,7 +250,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
               hintText: 'Password',
               labelText: 'Password',
               filled: true,
-              fillColor: Color.fromRGBO(94, 94, 184, 0.3),
+              fillColor: const Color.fromRGBO(94, 94, 184, 0.3),
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.lock_outlined),
               prefixIconColor: Config.doctorTheme,
@@ -269,13 +270,13 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
                         color: Config.doctorTheme,
                       ),
               ),
-              enabledBorder: OutlineInputBorder(
+              enabledBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.transparent,
                 ),
               ),
-              focusedBorder: OutlineInputBorder(
+              focusedBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(color: Config.doctorTheme),
               ),
@@ -293,7 +294,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
             controller: _bioDataController,
             maxLines: 5,
             cursorColor: Config.doctorTheme,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Bio Data',
               labelText: 'Bio Data',
               filled: true,
@@ -331,7 +332,7 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
             controller: _experienceController,
             cursorColor: Config.doctorTheme,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Total Experience',
               labelText: 'Total Experience',
               filled: true,
@@ -383,13 +384,16 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
             builder: (context, auth, child) {
               return Button(
                 width: double.infinity,
-                title: 'Register',
+                title: isLoading ? 'Please wait' : 'Register',
                 elevation: 5,
-                disable: false,
+                disable: isLoading ? true : false,
                 color: Config.doctorTheme,
                 backgroundColor: Colors.indigo.shade100,
                 borderRadius: BorderRadius.circular(0),
                 onPressed: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
                   final userRegistration = await DioProvider().registerDoctor(
                     _fullNameController.text,
                     _userNameController.text,
@@ -401,52 +405,54 @@ class _RegisterFormDoctorState extends State<RegisterFormDoctor> {
                     _bioDataController.text,
                     _experienceController.text,
                   );
-                  print(userRegistration);
 
-                  if (userRegistration.statusCode < 300) {
-                    _emailErr = null;
-                    _userNameErr = null;
-                    _passwordErr = null;
+                  if (userRegistration == true) {
+                    setState(() {
+                      _emailErr = null;
+                      _userNameErr = null;
+                      _passwordErr = null;
+                    });
+                    MyApp.navigatorKey.currentState!.pushNamed('auth_doctor');
+                    setState(() {
+                      isLoading = false;
+                    });
                     snackBar(
                       context,
-                      'your registration has been sent, please wait for admin to approve, kindly check your email.',
-                      Color.fromRGBO(76, 175, 80, 1),
-                      Duration(seconds: 5),
+                      'your registration has been sent, please wait for admin to approve',
+                      const Color.fromRGBO(76, 175, 80, 1),
+                      const Duration(seconds: 5),
                     );
                     if (_formKey.currentState!.validate()) {}
-                  } else if (userRegistration.statusCode == 400) {
+                  } else if (userRegistration.statusCode == 400 ||
+                      _formKey.currentState!.validate()) {
                     setState(() {
-                      _emailErr = userRegistration?.data['email'] != null
+                      isLoading = false;
+                      _emailErr = userRegistration.data['email'] != null
                           ? userRegistration?.data['email'].join('\n')
                           : null;
-                      _userNameErr = userRegistration?.data['user_name'] != null
+                      _userNameErr = userRegistration.data['user_name'] != null
                           ? userRegistration?.data['user_name'].join('\n')
                           : null;
-                      _passwordErr = userRegistration?.data['password'] != null
+                      _passwordErr = userRegistration.data['password'] != null
                           ? userRegistration?.data['password'].join('\n')
                           : null;
                       if (_formKey.currentState!.validate()) {}
                     });
                   }
                 },
-                // onPressed: () {
-                //   Navigator.of(context).pushNamed('main_doctor');
-                // },
               );
             },
           ),
-          Container(
-            child: TextButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/');
-              },
-              child: Text(
-                'You\'re a patient?',
-                style: GoogleFonts.openSans(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed('/');
+            },
+            child: Text(
+              'You\'re a patient?',
+              style: GoogleFonts.openSans(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

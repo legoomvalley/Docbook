@@ -66,7 +66,7 @@ class DioProvider {
       );
 
       if (response.statusCode == 201 && response.data != '') {
-        return response;
+        return true;
       }
     } on DioException catch (error) {
       return error.response;
@@ -93,12 +93,12 @@ class DioProvider {
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
       if (response.statusCode == 200 && response.data != '') {
-        return response.data;
+        return response;
       } else {
         return 'Response data: ${response.data}';
       }
-    } catch (error) {
-      return error;
+    } on DioException catch (error) {
+      return error.response;
     }
   }
 
@@ -137,10 +137,10 @@ class DioProvider {
         // } else {
         return true;
       } else {
-        return response;
+        return false;
       }
-    } on DioException catch (error) {
-      return error.response;
+    } on DioException catch (_) {
+      return false;
     }
   }
 
@@ -191,14 +191,21 @@ class DioProvider {
   }
 
   // store booking details
-  Future<dynamic> bookAppointment(dynamic date, String time, String disease,
-      int doctor, String token) async {
+  Future<dynamic> bookAppointment(
+    dynamic date,
+    String time,
+    String disease,
+    int doctor,
+    int specialization,
+    String token,
+  ) async {
     try {
       var response = await Dio().post('http://10.0.2.2:8000/api/book',
           data: {
             'date': date,
             'time': time,
             'disease': disease,
+            'specialization': specialization,
             'doctor_id': doctor
           },
           options: Options(headers: {'Authorization': 'Bearer $token'}));
@@ -350,7 +357,7 @@ class DioProvider {
       if (response.statusCode == 200 && response.data != '') {
         return true;
       } else {
-        return 'Error';
+        return false;
       }
     } on DioException catch (error) {
       return error.response;

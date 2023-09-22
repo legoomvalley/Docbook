@@ -22,7 +22,7 @@ enum FilterStatus {
   all('All'),
   approved('Approved'),
   rejected('Rejected'),
-  pending('Pending'),
+  pending('pending'),
   today('Today'),
   completed('Completed');
 
@@ -321,7 +321,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                     ],
                                   ),
                                   Text(
-                                    appointment['patient_name'],
+                                    appointment['full_name'],
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -407,9 +407,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               AppointmentDetails(
-                                                  appointment: appointment,
-                                                  token: token,
-                                                  index: index),
+                                            appointment: appointment,
+                                            token: token,
+                                          ),
                                         ),
                                       );
                                     },

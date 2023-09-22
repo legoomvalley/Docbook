@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_docbook/components/button.dart';
+import 'package:flutter_docbook/components/snackBar.dart';
 import 'package:flutter_docbook/main.dart';
 import 'package:flutter_docbook/utils/config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/auth_model.dart';
 import '../../providers/dio_provider.dart';
@@ -26,6 +30,7 @@ class _RegisterFormPatientState extends State<RegisterFormPatient> {
   String? _userNameErr = '';
   String? _emailErr = '';
   String? _passwordErr = '';
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -217,12 +222,15 @@ class _RegisterFormPatientState extends State<RegisterFormPatient> {
             builder: (context, auth, child) {
               return Button(
                 width: double.infinity,
-                title: 'Register',
-                disable: false,
+                title: isLoading ? 'Please wait' : 'Register',
+                disable: isLoading ? true : false,
                 color: Config.primaryColor,
                 backgroundColor: Color.fromRGBO(239, 247, 255, 1),
                 borderRadius: BorderRadius.circular(0),
                 onPressed: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
                   final userRegistration = await DioProvider().registerPatient(
                     _fullNameController.text,
                     _userNameController.text,
@@ -231,23 +239,45 @@ class _RegisterFormPatientState extends State<RegisterFormPatient> {
                     _passwordController.text,
                   );
 
-                  // print(userRegistration.statusCode);
-
                   if (userRegistration.statusCode < 300) {
                     _emailErr = null;
                     _userNameErr = null;
                     _passwordErr = null;
-                    if (_formKey.currentState!.validate()) {}
                     final token = await DioProvider().getTokenPatient(
                         _emailController.text, _passwordController.text);
                     if (token) {
                       // auth.loginSuccess({}); //update login status
-                      // redirect to main page
-                      MyApp.navigatorKey.currentState!
-                          .pushNamed('main_patient');
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      final tokenValue = prefs.getString('token') ?? '';
+                      if (tokenValue.isNotEmpty && tokenValue != '') {
+                        //get user data
+                        final response =
+                            await DioProvider().getUserPatient(tokenValue);
+                        if (response != null) {
+                          setState(() {
+                            final user = json.decode(response);
+
+                            auth.loginSuccess(user, tokenValue);
+                          });
+                          snackBar(
+                              context,
+                              'registration successfull',
+                              const Color.fromRGBO(76, 175, 80, 1),
+                              const Duration(seconds: 4));
+                          MyApp.navigatorKey.currentState!
+                              .pushNamed('main_patient');
+                        }
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
                     }
-                  } else if (userRegistration.statusCode == 400) {
+                    if (_formKey.currentState!.validate()) {}
+                  } else if (userRegistration.statusCode == 400 ||
+                      _formKey.currentState!.validate()) {
                     setState(() {
+                      isLoading = false;
                       _emailErr = userRegistration?.data['email'] != null
                           ? userRegistration?.data['email'].join('\n')
                           : null;

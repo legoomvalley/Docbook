@@ -26,10 +26,14 @@ class DoctorCard extends StatelessWidget {
               children: [
                 Row(
                   children: <Widget>[
-                    const SizedBox(
+                    SizedBox(
                       child: CircleAvatar(
                         radius: 30,
-                        backgroundImage: AssetImage('assets/user.jpg'),
+                        backgroundImage: doctor['doctor_profile'] == null
+                            ? AssetImage('assets/user.jpg')
+                            : NetworkImage(
+                                'http://10.0.2.2:8000/storage/${doctor['doctor_profile']}',
+                              ) as ImageProvider<Object>,
                       ),
                     ),
                     Flexible(

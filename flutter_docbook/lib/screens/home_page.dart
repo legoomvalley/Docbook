@@ -20,7 +20,6 @@ class _HomePageState extends State<HomePage> {
   // this controller will store the value of the search bar
   final TextEditingController _searchController = TextEditingController();
   Map<String, dynamic> user = {};
-  Map<String, dynamic> doctors = {};
 
   List<dynamic> specializationItems = [
     {

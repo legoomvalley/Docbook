@@ -50,7 +50,10 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   @override
   void initState() {
     super.initState();
-    _additionalMsgController.text = widget.appointment?['remark'] ?? '';
+    _additionalMsgController.text =
+        widget.appointment?['remark'] == 'not updated yet'
+            ? ''
+            : widget.appointment?['remark'];
     selectedDate = DateConverter.stringToDate(widget.appointment?['date']);
     selectedTime = DateConverter.parseTimeOfDay(widget.appointment?['time']);
   }
