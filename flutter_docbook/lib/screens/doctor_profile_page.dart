@@ -85,6 +85,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
       setState(() {
         _pickedImage = File(pickedImage.path);
       });
+        print(_pickedImage);
     }
   }
 
