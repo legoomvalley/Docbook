@@ -46,7 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/book', [AppointmentController::class, 'storeDoctorMobile']);
     Route::post('/comments', [PatientController::class, 'storeComment']);
     Route::put('/patient-profile', [PatientController::class, 'update']);
-    Route::put('/appointment/{appointment}', [AppointmentController::class, 'updatePatientAppointment']);
+    Route::put('/patient/appointment/{appointment}', [AppointmentController::class, 'updatePatientAppointment']);
     Route::put('/appointment/{id}/status/', [AppointmentController::class, 'updatePatientAppointmentStatus']);
     Route::delete('/appointment/{appointment}', [AppointmentController::class, 'destroyPatientAppointment']);
     Route::post('/image', [UsersController::class, 'uploadProfileImage']);

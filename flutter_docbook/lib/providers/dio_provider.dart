@@ -273,7 +273,7 @@ class DioProvider {
   ) async {
     try {
       var response = await Dio().put(
-        'http://10.0.2.2:8000/api/appointment/$appointmentId',
+        'http://10.0.2.2:8000/api/patient/appointment/$appointmentId',
         data: {
           'date': date,
           'time': time,
@@ -286,8 +286,8 @@ class DioProvider {
       } else {
         return 'Error';
       }
-    } catch (error) {
-      return error;
+    } on DioException catch (error) {
+      return error.response;
     }
   }
 

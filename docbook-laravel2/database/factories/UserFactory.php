@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'type' => 'doctor',
+            'type' => 'patient',
             'password' => Hash::make('123'),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,

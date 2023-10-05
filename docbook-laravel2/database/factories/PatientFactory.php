@@ -21,7 +21,7 @@ class PatientFactory extends Factory
             'user_name' => $this->faker->unique()->sentence(1),
             'password' => Hash::make('123'),
             'phone_no' => $this->faker->phoneNumber(),
-            'patient_id' => $this->faker->unique()->numberBetween(39, 48),
+            'patient_id' => $this->faker->unique()->numberBetween(11, 20),
         ];
     }
 }

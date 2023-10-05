@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('patient_id')->unique();
+            $table->unsignedBigInteger('patient_id')->unique();
             $table->string('user_name')->unique()->nullable();
             $table->string('phone_no')->nullable();
+            $table->string('password');
+
             $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

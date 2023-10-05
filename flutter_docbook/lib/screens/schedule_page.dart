@@ -54,6 +54,26 @@ class _SchedulePageState extends State<SchedulePage> {
     getAppointments();
     super.initState;
   }
+  Future<List<dynamic>> fetchData() async {
+  try {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    
+    final response = await DioProvider().getAppointments(token);
+
+    if (response != 'Error') {
+      final decodeData = json.decode(response);
+      return decodeData;
+    } else {
+      // Handle the case where the API call returned an error
+      return [];
+    }
+  } catch (error) {
+    // Handle any errors that occur during the data fetching process
+    print('Error fetching data: $error');
+    return [];
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -150,21 +170,20 @@ class _SchedulePageState extends State<SchedulePage> {
           ),
           const SliverToBoxAdapter(child: Config.spaceSmall),
           FutureBuilder(
-              future: Future.delayed(const Duration(milliseconds: 100)),
+              future: fetchData(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 150),
-                        Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ],
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if(filteredSchedules.isEmpty){
+                    return SliverToBoxAdapter(
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 200),
+                      child: const Text(
+                        'no record',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   );
-                }
-                if (snapshot.connectionState == ConnectionState.done) {
+                  }else{
                   return SliverList(
                       delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
@@ -324,14 +343,16 @@ class _SchedulePageState extends State<SchedulePage> {
                     },
                     childCount: filteredSchedules.length,
                   ));
+                  }
                 } else {
-                  return SliverToBoxAdapter(
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 200),
-                      child: const Text(
-                        'no record',
-                        textAlign: TextAlign.center,
-                      ),
+                  return const SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 150),
+                        Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ],
                     ),
                   );
                 }

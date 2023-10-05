@@ -465,6 +465,7 @@ class _PatientUpdateAppointmentState extends State<PatientUpdateAppointment> {
                                           getTime,
                                           _diseaseController.text,
                                           token!);
+                                          print(booking);
                                   if (booking) {
                                     MyApp.navigatorKey.currentState!.pushNamed(
                                         'appointment_msg',

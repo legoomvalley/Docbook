@@ -238,7 +238,6 @@ class AppointmentController extends Controller
             'disease' => $request->input('disease'),
             'date' => Carbon::parse($request->input('date'))->format('Y-m-d'),
             'time' => $request->input('time'),
-            'remark' => $request->input('additional_message'),
         ]);
 
         return response()->json([
