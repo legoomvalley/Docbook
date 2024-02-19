@@ -12,7 +12,7 @@
             <div class="">
                 <main class="form-signin w-100 mx-auto mb-5 pt-5">
                     <form method="post"
-                        action="/dashboard/patients/{{  $appointment->patient->user_name }}/appointments/{{ $appointment->id }}">
+                        action="/dashboard/patients/{{  $patient->user_name }}/appointments/{{ $appointment->id }}">
                         @csrf
                         <h5 class="mb-3 fw-normal">Send Your respond to <span class="fw-bold text-body-tertiary">{{
                                 $appointment->full_name }}</span></h5>

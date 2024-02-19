@@ -15,6 +15,7 @@
     style="max-width: 1400px">
     <div class=" patientAppointmentHome col-sm-11 col-md-11 col-lg-9 col-xxl-7 col-xl-8 py-5">
         {{-- col-sm-12 col-md-10 col-lg-9 col-xl-5 --}}
+        {{-- auth section --}}
         {{-- appointment section --}}
         <main class="form-signin" style="z-index: 1000">
             <form action="appointment" method="POST">
@@ -84,6 +85,9 @@
                                 {{-- <option selected disabled>Select Specialization</option> --}}
                                 @foreach ($specializations as $specialization)
                                 <option value="{{ $specialization->id }}">{{ $specialization->name }}</option>
+                                @if($loop->iteration == 4)
+                                @break 
+                                @endif
                                 @endforeach
                             </select>
                             <label for="floatingInput">Select Specialization</label>

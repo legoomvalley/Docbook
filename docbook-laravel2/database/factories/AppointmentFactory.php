@@ -24,8 +24,8 @@ class AppointmentFactory extends Factory
             'specialization_id' => mt_rand(1, 4),
             'remark' => $this->faker->sentence(10),
             'status' => $this->faker->randomElement(['approved', 'not approved', 'pending', 'completed']),
-            'patient_id' => 13,
-            'doctor_id' => 9,
+            'patient_id' => 15,
+            'doctor_id' => 1,
         ];
     }
 }

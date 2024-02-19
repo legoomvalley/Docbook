@@ -48,7 +48,7 @@
                             </form>
                         </td>
                         <td class="align-middle text-center">
-                            {{$appointment->patient->phone_no }}
+                            {{$appointment->patient_phone_no }}
                         </td>
                         <td class="align-middle text-center">
                             {{date('d-m-Y', strtotime($appointment->date)) }}
@@ -61,7 +61,7 @@
                         </td>
                         <td class="align-middle text-center">
                             <a class="myBtn"
-                                href="/dashboard/patients/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit"
+                                href="/dashboard/patients/{{ $appointment->patient_user_name }}/appointments/{{ $appointment->id }}/edit"
                                 class=""><i class=" fa-sharp fa-regular fa-pen-to-square"></i></a>
                         </td>
                     </tr>

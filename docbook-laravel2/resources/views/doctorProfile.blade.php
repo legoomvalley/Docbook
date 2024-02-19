@@ -144,6 +144,9 @@
                                                 <option value="{{ $specialization->id }}">{{ $specialization->name
                                                     }}
                                                 </option>
+                                                @if($loop->iteration == 4)
+                                                @break 
+                                                @endif
                                                 @endforeach
                                             </select>
                                             <p class="text-danger"></p>

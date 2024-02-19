@@ -44,7 +44,7 @@
                             </form>
                         </td>
                         <td class="align-middle text-center">
-                            {{$appointment->patient->phone_no }}
+                            {{$appointment->patient_phone_no }}
                         </td>
                         <td class="align-middle text-center">
                             {{date('d/m/Y', strtotime($appointment->date)) }}

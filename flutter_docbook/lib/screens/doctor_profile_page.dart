@@ -80,7 +80,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
 
   Future<void> pickImage() async {
     final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 5);
     if (pickedImage != null) {
       setState(() {
         _pickedImage = File(pickedImage.path);
@@ -162,7 +162,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                           : user['profile_photo_path'] != null
                                               ? CircleAvatar(
                                                   radius: 50,
-                                                  backgroundImage: NetworkImage(
+                                                  backgroundImage:NetworkImage(
                                                     'http://10.0.2.2:8000/storage/${user['profile_photo_path']}',
                                                   ),
                                                 )

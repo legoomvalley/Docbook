@@ -46,7 +46,7 @@
                                             1}}</span> {{ $comment->comment }}</p>
                                     <div class="d-flex justify-content-start">
                                         <div class="d-flex flex-row align-items-center">
-                                            <p class="ms-2 text-secondary">- {{ $comment->patient->user_name }}</p>
+                                            <p class="ms-2 text-secondary">- {{ $comment->patient_user_name }}</p>
                                         </div>
                                     </div>
                                 </div>

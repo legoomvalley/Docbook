@@ -16,6 +16,9 @@
                     @foreach ($specializationName as $s)
                     <option value="{{ $s->id }}">{{ $s->name }}
                     </option>
+                    @if($loop->iteration == 4)
+                                @break 
+                                @endif
                     @endforeach
                 </select>
             </form>

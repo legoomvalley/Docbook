@@ -47,14 +47,14 @@
                                         </button>
                                     </form>
                                 </td>
-                                <td class="align-middle text-center">{{ $appointment->patient->phone_no }}</td>
+                                <td class="align-middle text-center">{{ $appointment->patient_phone_no }}</td>
                                 <td class="align-middle text-center">{{ date('d/m/Y',
                                     strtotime($appointment->date)) }}</td>
                                 <td class="align-middle text-center">{{ $appointment->time }}</td>
                                 <td class="align-middle text-center">{{ $appointment->disease }}</td>
                                 <td class="align-middle text-center">
                                     <a class="myBtn"
-                                        href="/dashboard/patients/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit"
+                                        href="/dashboard/patients/{{ $appointment->patient_user_name }}/appointments/{{ $appointment->id }}/edit"
                                         class=""><i class=" fa-sharp fa-regular fa-pen-to-square"></i></a>
                                 </td>
                             </tr>
@@ -97,14 +97,14 @@
                                     </form>
                                 </td>
                                 <td class="align-middle text-center">
-                                    {{ $appointment->patient->phone_no }}
+                                    {{ $appointment->patient_phone_no }}
                                 </td>
                                 <td class="align-middle text-center">
                                     {{ date('d/m/Y', strtotime($appointment->date)) }}
                                 </td>
                                 <td class="align-middle text-center">
                                     <a class="myBtn"
-                                        href="/dashboard/patients/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit"
+                                        href="/dashboard/patients/{{ $appointment->patient_user_name }}/appointments/{{ $appointment->id }}/edit"
                                         class=""><i class=" fa-sharp fa-regular fa-pen-to-square"></i></a>
                                 </td>
                             </tr>
@@ -157,7 +157,7 @@
                                         </form>
                                     </td>
                                     <td class="align-middle text-center">
-                                        {{ $appointment->patient->phone_no }}
+                                        {{ $appointment->patient_phone_no }}
                                     </td>
                                     <td class="align-middle text-center">
                                         {{ date('d/m/Y', strtotime($appointment->date)) }}
@@ -172,7 +172,7 @@
                                         {{ $appointment->status }}
                                     </td>
                                     <td class="align-middle text-center">
-                                        <a href=" /dashboard/patients/{{ $appointment->patient->user_name
+                                        <a href=" /dashboard/patients/{{ $appointment->patient_user_name
                                         }}/appointments/{{$appointment->id}}/edit">
                                             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
                                         </a>
@@ -217,7 +217,7 @@
                                         </form>
                                     </td>
                                     <td class="align-middle text-center">
-                                        {{ $appointment->patient->phone_no }}
+                                        {{ $appointment->patient_phone_no }}
                                     </td>
                                     <td class="align-middle text-center">
                                         {{ date('d/m/Y', strtotime($appointment->date)) }}
@@ -227,7 +227,7 @@
                                     </td>
                                     <td class="align-middle text-center">
                                     <td class="align-middle text-center">
-                                        <a href=" /dashboard/patients/{{ $appointment->patient->user_name
+                                        <a href=" /dashboard/patients/{{ $appointment->patient_user_name
                                             }}/appointments/{{$appointment->id}}/edit">
                                             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
                                         </a>
@@ -292,7 +292,7 @@
                                         </form>
                                     </td>
                                     <td class="align-middle text-center">
-                                        {{ $appointment->patient->phone_no }}
+                                        {{ $appointment->patient_phone_no }}
                                     </td>
                                     <td class="align-middle text-center">
                                         {{ $appointment->time }}
@@ -302,7 +302,7 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <a
-                                            href="/dashboard/patients/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit">
+                                            href="/dashboard/patients/{{ $appointment->patient_user_name }}/appointments/{{ $appointment->id }}/edit">
                                             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
                                         </a>
                                     </td>
@@ -346,7 +346,7 @@
                                         </form>
                                     </td>
                                     <td class="align-middle text-center">
-                                        {{ $appointment->patient->phone_no }}
+                                        {{ $appointment->patient_phone_no }}
                                     </td>
                                     <td class="align-middle text-center">
                                         {{ $appointment->time }}
@@ -356,7 +356,7 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <a
-                                            href="/dashboard/appointment-approve/{{ $appointment->patient->user_name }}/appointments/{{ $appointment->id }}/edit">
+                                            href="/dashboard/appointment-approve/{{ $appointment->patient_user_name }}/appointments/{{ $appointment->id }}/edit">
                                             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
                                         </a>
                                     </td>

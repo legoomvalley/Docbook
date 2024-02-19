@@ -138,7 +138,7 @@ class DoctorController extends Controller
             "title" => "review page",
             "container" => "generalContainer",
             "doctor" => $doctor,
-            "doctorComments" => Comment::where('doctor_id', $doctor->doc_id)->join('patients', 'patients.patient_id', '=', 'comments.patient_id')->simplePaginate(2)
+            "doctorComments" => Comment::where('doctor_id', $doctor->doc_id)->join('patients', 'patients.patient_id', '=', 'comments.patient_id')->select('comments.*','patients.user_name AS patient_user_name')->simplePaginate(2)
         ]);
     }
     public function comment(Doctor $doctor, Request $request)

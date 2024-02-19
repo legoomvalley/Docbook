@@ -52,7 +52,7 @@
                         </form>
                     </td>
                     <td class="align-middle text-center">
-                        {{$p->patient->phone_no }}
+                        {{$p->phone_no }}
                     </td>
                     <td class="align-middle text-center">
                         {{date('d/m/Y', strtotime($p->date)) }}
@@ -64,7 +64,7 @@
                         {{ $p->time}}
                     </td>
                     <td class="align-middle text-center">
-                        {{ $p->patient->user->email}}
+                        {{ $p->email}}
                     </td>
                 </tr>
                 @endforeach

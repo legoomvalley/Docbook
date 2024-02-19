@@ -26,15 +26,15 @@ class DashboardController extends Controller
             "container" => "generalContainer",
             "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
 
-            "requestedAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "pending")->paginate(2),
-            "requestedAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "pending")->latest()->get(),
+            "requestedAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "pending")->join('patients', 'patients.patient_id' ,'=', 'appointments.patient_id' )->select('appointments.*', 'patients.phone_no', 'patients.user_name AS patient_user_name', 'patients.phone_no AS patient_phone_no')->paginate(2),
+            "requestedAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "pending")->join('patients', 'patients.patient_id' ,'=', 'appointments.patient_id' )->select('appointments.*', 'patients.phone_no', 'patients.user_name AS patient_user_name', 'patients.phone_no AS patient_phone_no')->latest()->get(),
 
-            "cancelledAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'not approved')->paginate(2),
-            "cancelledAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'not approved')->latest()->get(),
+            "cancelledAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'not approved')->join('patients', 'patients.patient_id' ,'=', 'appointments.patient_id' )->select('appointments.*', 'patients.phone_no', 'patients.user_name AS patient_user_name', 'patients.phone_no AS patient_phone_no')->paginate(2),
+            "cancelledAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'not approved')->join('patients', 'patients.patient_id' ,'=', 'appointments.patient_id' )->select('appointments.*', 'patients.phone_no', 'patients.user_name AS patient_user_name', 'patients.phone_no AS patient_phone_no')->latest()->get(),
 
 
-            "todayAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('date', '=', $today)->where('status', '=', 'approved')->paginate(2),
-            "todayAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('date', '=', $today)->where('status', '=', 'approved')->latest()->get(),
+            "todayAppointment" => Appointment::where('doctor_id', $doctor['doc_id'])->where('date', '=', $today)->where('status', '=', 'approved')->join('patients', 'patients.patient_id' ,'=', 'appointments.patient_id' )->select('appointments.*', 'patients.phone_no', 'patients.user_name AS patient_user_name', 'patients.phone_no AS patient_phone_no')->paginate(2),
+            "todayAppointmentAll" => Appointment::where('doctor_id', $doctor['doc_id'])->where('date', '=', $today)->where('status', '=', 'approved')->join('patients', 'patients.patient_id' ,'=', 'appointments.patient_id' )->select('appointments.*', 'patients.phone_no', 'patients.user_name AS patient_user_name', 'patients.phone_no AS patient_phone_no')->latest()->get(),
         ]);
     }
     public function showDetails()
@@ -101,7 +101,7 @@ class DashboardController extends Controller
             "title" => "Request Appointment Page",
             "container" => "generalContainer",
             "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
-            "doctorAppointments" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "Pending")->paginate(7),
+            "doctorAppointments" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', "Pending")->join('patients', 'patients.patient_id' ,'=', 'appointments.patient_id' )->select('appointments.*', 'patients.user_name AS patient_user_name' ,'patients.phone_no AS patient_phone_no')->paginate(7),
         ]);
     }
     public function showAppointmentCancel()
@@ -112,7 +112,7 @@ class DashboardController extends Controller
             "title" => "Cancel Appointment Page",
             "container" => "generalContainer",
             "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
-            "doctorAppointments" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'Not Approved')->paginate(7),
+            "doctorAppointments" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'Not Approved')->join('patients', 'patients.patient_id' ,'=', 'appointments.patient_id' )->select('appointments.*', 'patients.user_name AS patient_user_name','patients.phone_no AS patient_phone_no')->paginate(7),
         ]);
     }
     public function showAppointmentApprove()
@@ -123,7 +123,7 @@ class DashboardController extends Controller
             "title" => "Approve Appointment Page",
             "container" => "generalContainer",
             "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
-            "doctorAppointments" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'Approved')->paginate(7),
+            "doctorAppointments" => Appointment::where('doctor_id', $doctor['doc_id'])->where('status', '=', 'Approved')->join('patients', 'patients.patient_id' ,'=', 'appointments.patient_id' )->select('appointments.*', 'patients.user_name AS patient_user_name','patients.phone_no AS patient_phone_no')->paginate(7),
         ]);
     }
     public function showAppointmentToday()
@@ -136,7 +136,7 @@ class DashboardController extends Controller
             "title" => "today Appointment Page",
             "container" => "generalContainer",
             "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
-            "doctorAppointments" => Appointment::where('doctor_id', $doctor['id'])->where('date', '=', $today)->paginate(7),
+            "doctorAppointments" => Appointment::where('doctor_id', $doctor['id'])->where('date', '=', $today)->join('patients', 'patients.patient_id' ,'=', 'appointments.patient_id' )->select('appointments.*', 'patients.user_name AS patient_user_name','patients.phone_no AS patient_phone_no')->paginate(7),
         ]);
     }
     public function showAppointmentName()
@@ -155,7 +155,10 @@ class DashboardController extends Controller
         return view('dashboard.name', [
             "title" => "Search Page",
             "container" => "generalContainer",
-            "patient" => $patient->where('doctor_id', $doctor->doc_id)->get(),
+            "patient" => $patient->where('doctor_id', $doctor->doc_id)
+            ->join('patients', 'patients.patient_id', '=', 'appointments.patient_id')
+            ->join('users', 'users.id', '=', 'appointments.patient_id')
+            ->select('appointments.*','patients.phone_no', 'users.email')->get(),
             "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
         ]);
     }
@@ -178,7 +181,10 @@ class DashboardController extends Controller
         return view('dashboard.date', [
             "title" => "Search Page",
             "container" => "generalContainer",
-            "patient" => $patient->where('doctor_id', $doctor->doc_id)->get(),
+            "patient" => $patient->where('doctor_id', $doctor->doc_id)
+            ->join('patients', 'patients.patient_id', '=', 'appointments.patient_id')
+            ->join('users', 'users.id', '=', 'appointments.patient_id')
+            ->select('appointments.*','patients.phone_no', 'users.email')->get(),
             "doctor" => Doctor::where('doctors.id', $doctor->id)->join('users', 'users.id', '=', 'doctors.doc_id')->first(),
             // "doctorAppointments" => Appointment::where('doctor_id', $patient['id'])->where('date', '=', $today)->paginate(7),
         ]);
