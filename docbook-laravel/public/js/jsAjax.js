@@ -170,7 +170,7 @@ $(function () {
         const id = $(this).data('id')
         console.log(id)
         $.ajax({
-            url: 'http://docbook-laravel2.test/patient-record',
+            url: 'http://docbook-laravel.test/patient-record',
             data: { id: id },
             method: 'post',
             headers: {
@@ -194,7 +194,7 @@ $(function () {
         const id = $(this).data('id')
         console.log(id)
         $.ajax({
-            url: 'http://docbook-laravel2.test/dashboard',
+            url: 'http://docbook-laravel.test/dashboard',
             data: { id: id },
             method: 'post',
             headers: {
@@ -217,7 +217,7 @@ $(function () {
     $('.displayDetailsCancel').on('click', function () {
         const id = $(this).data('id')
         $.ajax({
-            url: 'http://docbook-laravel2.test/dashboard',
+            url: 'http://docbook-laravel.test/dashboard',
             data: { id: id },
             method: 'post',
             headers: {
@@ -240,7 +240,7 @@ $(function () {
     $('.displayDetailsToday').on('click', function () {
         const id = $(this).data('id')
         $.ajax({
-            url: 'http://docbook-laravel2.test/dashboard',
+            url: 'http://docbook-laravel.test/dashboard',
             data: { id: id },
             method: 'post',
             headers: {
@@ -258,7 +258,7 @@ $(function () {
     $('.displayDetailsName').on('click', function () {
         const id = $(this).data('id')
         $.ajax({
-            url: 'http://docbook-laravel2.test/dashboard',
+            url: 'http://docbook-laravel.test/dashboard',
             data: { id: id },
             method: 'post',
             headers: {
@@ -282,7 +282,7 @@ $(function () {
     $('.displayDetailsDate').on('click', function () {
         const id = $(this).data('id')
         $.ajax({
-            url: 'http://docbook-laravel2.test/dashboard',
+            url: 'http://docbook-laravel.test/dashboard',
             data: { id: id },
             method: 'post',
             headers: {
@@ -304,7 +304,7 @@ $(function () {
     $('.displayDetailsTmpDoctor').on('click', function () {
         const id = $(this).data('id')
         $.ajax({
-            url: 'http://docbook-laravel2.test/admin/dashboard',
+            url: 'http://docbook-laravel.test/admin/dashboard',
             data: { id: id },
             method: 'post',
             headers: {
@@ -327,7 +327,7 @@ $(function () {
         const id = $(this).data('id')
 
         $.ajax({
-            url: 'http://docbook-laravel2.test/admin/dashboard/comment',
+            url: 'http://docbook-laravel.test/admin/dashboard/comment',
             data: { id: id },
             method: 'post',
             headers: {
@@ -344,7 +344,7 @@ $(function () {
         console.log(id)
 
         $.ajax({
-            url: 'http://docbook-laravel2.test/admin/dashboard/doctors',
+            url: 'http://docbook-laravel.test/admin/dashboard/doctors',
             data: { id: id },
             method: 'post',
             headers: {
